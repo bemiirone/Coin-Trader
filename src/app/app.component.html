@@ -1,23 +1,16 @@
 <div class="flex h-screen">
-  <div class="w-1/6 bg-gray-800 text-white p-4">
-    <!-- Sidebar content here -->
-    <h2 class="text-xl font-bold mb-4">Sidebar</h2>
-    <ul>
-      <li class="mb-2"><a href="#" class="hover:underline">Link 1</a></li>
-      <li class="mb-2"><a href="#" class="hover:underline">Link 2</a></li>
-      <li class="mb-2"><a href="#" class="hover:underline">Link 3</a></li>
-    </ul>
-  </div>
-  <div class="flex-1 bg-gray-100">
-    <!-- Main content here -->
+  <!-- Desktop Sidebar -->
+  <app-sidebar class="hidden md:block w-1/6"></app-sidebar> 
+
+  <section class="main flex-1 bg-gray-100">
     <div class="relative">
-      <div class="absolute top-0 left-0 right-0 bg-white shadow-md z-10 p-4">
-        <h1 class="text-xl font-bold">Floating Header</h1>
-      </div>
-      <div class="pt-16 p-4">
+      <app-header></app-header>
+      <div class="content pt-16">
         <router-outlet />
       </div>
     </div>
-  </div>
-</div>
+  </section>
 
+  <!-- Mobile Sidebar, anchored to the bottom -->
+  <app-sidebar [isMobile]="true"></app-sidebar>
+</div>
