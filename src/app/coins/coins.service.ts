@@ -1,12 +1,13 @@
-import { Injectable } from '@angular/core';
-import { CoinResponse } from './coins.model';
 import { HttpClient } from '@angular/common/http';
+import { Injectable } from '@angular/core';
 import { environment } from '../../environments/environment';
+import { CoinResponse } from './coins.model';
 
 @Injectable({
   providedIn: 'root'
 })
-export class ServiceService {
+
+export class CoinsService {
   constructor(private http: HttpClient) { }
   public getCoins() {
     const params = {
