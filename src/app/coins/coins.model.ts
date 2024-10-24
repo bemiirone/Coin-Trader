@@ -8,7 +8,7 @@ export interface CoinStatus {
   total_count: number;
 }
 
-interface CoinTag {
+export interface CoinTag {
   name: string;
 }
 

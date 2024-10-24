@@ -6,45 +6,36 @@ import { CoinData } from '../coins.model';
 export const coinsFeatureKey = 'coins';
 
 export interface State extends EntityState<CoinData> {
-  // additional entities state properties
+  loading: boolean;
+  error: string | null;
 }
 
 export const adapter: EntityAdapter<CoinData> = createEntityAdapter<CoinData>();
 
 export const initialState: State = adapter.getInitialState({
-  // additional entity state properties
+  loading: false,
+  error: null,
 });
 
 export const reducer = createReducer(
   initialState,
-  on(CoinsActions.addCoins, (state, action) =>
-    adapter.addOne(action.coins, state)
+  on(CoinsActions.loadCoinsSuccess, (state, { coinsSuccess }) =>
+    adapter.setAll(coinsSuccess, { ...state, loading: false })
   ),
-  on(CoinsActions.upsertCoins, (state, action) =>
-    adapter.upsertOne(action.coins, state)
+  on(CoinsActions.loadCoinsFailure, (state, { coinsFailure }) => ({
+    ...state,
+    error: coinsFailure.error_message,
+    loading: false,
+  })),
+  on(CoinsActions.addCoinsSuccess, (state, { coinsSuccess }) =>
+    adapter.addMany(coinsSuccess, state)
   ),
-  on(CoinsActions.addCoinsSuccess, (state, action) =>
-    adapter.addMany(action.coinsSuccess, state)
+  on(CoinsActions.updateCoinsSuccess, (state, { coinsSuccess }) =>
+    adapter.updateMany(coinsSuccess, state)
   ),
-  on(CoinsActions.upsertCoinsSuccess, (state, action) =>
-    adapter.upsertMany(action.coinsSuccess, state)
-  ),
-  on(CoinsActions.updateCoins, (state, action) =>
-    adapter.updateOne(action.coins, state)
-  ),
-  on(CoinsActions.updateCoinsSuccess, (state, action) =>
-    adapter.updateMany(action.coinsSuccess, state)
-  ),
-  on(CoinsActions.deleteCoins, (state, action) =>
-    adapter.removeOne(action.id, state)
-  ),
-  on(CoinsActions.deleteCoinsSuccess, (state, action) =>
-    adapter.removeMany(action.ids, state)
-  ),
-  on(CoinsActions.loadCoinsSuccess, (state, action) =>
-    adapter.setAll(action.coinsSuccess, state)
-  ),
-  on(CoinsActions.clearCoinsSuccess, (state) => adapter.removeAll(state))
+  on(CoinsActions.deleteCoinsSuccess, (state, { ids }) =>
+    adapter.removeMany(ids, state)
+  )
 );
 
 export const coinsFeature = createFeature({
