@@ -1,43 +1,36 @@
 import { createFeature, createReducer, on } from '@ngrx/store';
-import { EntityState, EntityAdapter, createEntityAdapter } from '@ngrx/entity';
 import { CoinsActions } from './coins.actions';
-import { CoinData, CoinResponse } from '../coins.model';
+import { CoinResponse } from '../coins.model';
 
 export const coinsFeatureKey = 'coins';
 
-export interface State extends EntityState<CoinResponse> {
+export interface State {
   loading: boolean;
   error: string | null;
-  data: CoinData[];
+  data: CoinResponse | null; // Storing the entire response here
 }
 
-export const adapter: EntityAdapter<CoinResponse> = createEntityAdapter<CoinResponse>();
-
-export const initialState: State = adapter.getInitialState({
+export const initialState: State = {
   loading: false,
   error: null,
-  data: [],
-});
+  data: null,
+};
 
 export const reducer = createReducer(
   initialState,
-  on(CoinsActions.loadCoinsSuccess, (state, { coinsSuccess }) =>
-    adapter.addOne(coinsSuccess, { ...state, loading: false })
-  ),
+  on(CoinsActions.loadCoinsSuccess, (state, { coinsSuccess }) => ({
+    ...state,
+    data: coinsSuccess, // Assign the entire response here
+    loading: false,
+  })),
   on(CoinsActions.loadCoinsFailure, (state, { coinsFailure }) => ({
     ...state,
     error: coinsFailure.error_message,
     loading: false,
-  })),
+  }))
 );
 
 export const coinsFeature = createFeature({
   name: coinsFeatureKey,
   reducer,
-  extraSelectors: ({ selectCoinsState }) => ({
-    ...adapter.getSelectors(selectCoinsState),
-  }),
 });
-
-export const { selectIds, selectEntities, selectAll, selectTotal } =
-  coinsFeature;

@@ -9,20 +9,19 @@ import { CoinResponse } from '../coins.model';
 
 @Injectable()
 export class CoinsEffects {
+  loadCoins$: any;
   constructor(
     private actions$: Actions,
     private coinsService: CoinsService
-  ) {}
-
-  loadCoins$ = createEffect(() =>
-    this.actions$.pipe(
-      ofType(CoinsActions.loadCoins), // Triggers when 'Load Coins' is dispatched
-      mergeMap(() =>
-        this.coinsService.getCoins().pipe(
-          map((response: CoinResponse) => CoinsActions.loadCoinsSuccess({ coinsSuccess: response })),
-          catchError((error) => of(CoinsActions.loadCoinsFailure({ coinsFailure: error })))
+  ) {
+    this.loadCoins$ = createEffect(() => this.actions$.pipe(
+      ofType(CoinsActions.loadCoins),
+      mergeMap(() => this.coinsService.getCoins()
+        .pipe(
+          map((coinsSuccess: CoinResponse) => CoinsActions.loadCoinsSuccess({ coinsSuccess })),
+          catchError((coinsFailure) => of(CoinsActions.loadCoinsFailure({ coinsFailure })))
         )
       )
-    )
-  );
+    ));
+  }
 }

@@ -7,7 +7,7 @@ import { provideEffects } from '@ngrx/effects';
 import { coinsFeature } from './coins/store/coins.reducer';
 import { CoinsEffects } from './coins/store/coins.effects';
 import { StoreDevtoolsModule } from '@ngrx/store-devtools';
-import { provideHttpClient } from '@angular/common/http';
+import { provideHttpClient, withFetch } from '@angular/common/http';
 
 const devtoolsOptions = {
   maxAge: 25, // Retains last 25 states
@@ -20,8 +20,8 @@ export const appConfig: ApplicationConfig = {
     provideStore({
       coins: coinsFeature.reducer,
     }),
-    // provideEffects([CoinsEffects]),
-    provideHttpClient(),
+    provideEffects([CoinsEffects]),
+    provideHttpClient(withFetch()),
     importProvidersFrom(StoreDevtoolsModule.instrument(devtoolsOptions)),
 ],
 };
