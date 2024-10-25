@@ -1,23 +1,28 @@
+// coins.effects.ts
 import { Injectable } from '@angular/core';
 import { Actions, createEffect, ofType } from '@ngrx/effects';
-import { catchError, map, concatMap } from 'rxjs/operators';
-import { Observable, EMPTY, of } from 'rxjs';
 import { CoinsActions } from './coins.actions';
+import { CoinsService } from '../coins.service';
+import { catchError, map, mergeMap } from 'rxjs/operators';
+import { of } from 'rxjs';
+import { CoinResponse } from '../coins.model';
 
 @Injectable()
 export class CoinsEffects {
-  loadCoinsSuccess$ = createEffect(() => {
-    return this.actions$.pipe(
-      ofType(CoinsActions.loadCoinsSuccess),
-      concatMap(() =>
-        /** An EMPTY observable only emits completion. Replace with your own observable API request */
-        EMPTY.pipe(
-          map((data) => CoinsActions.loadCoinsSuccess({ coinsSuccess: data })),
+  constructor(
+    private actions$: Actions,
+    private coinsService: CoinsService
+  ) {}
+
+  loadCoins$ = createEffect(() =>
+    this.actions$.pipe(
+      ofType(CoinsActions.loadCoins), // Triggers when 'Load Coins' is dispatched
+      mergeMap(() =>
+        this.coinsService.getCoins().pipe(
+          map((response: CoinResponse) => CoinsActions.loadCoinsSuccess({ coinsSuccess: response })),
           catchError((error) => of(CoinsActions.loadCoinsFailure({ coinsFailure: error })))
         )
       )
-    );
-  });
-
-  constructor(private actions$: Actions) {}
+    )
+  );
 }

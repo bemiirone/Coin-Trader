@@ -15,7 +15,7 @@ export class CoinsService {
       limit: '5000',
       convert: 'USD'
     };
-    return this.http.get<CoinResponse[]>(`${environment.cmcApi}`, {
+    return this.http.get<CoinResponse>(`${environment.cmcApi}`, {
       headers: {
       'X-CMC_PRO_API_KEY': `${environment.cmcApiKey}`
       },

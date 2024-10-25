@@ -1,13 +1,21 @@
 import { createActionGroup, emptyProps, props } from '@ngrx/store';
 import { Update } from '@ngrx/entity';
 
-import { CoinData, CoinStatus } from '../coins.model';
+import { CoinData, CoinResponse, CoinStatus } from '../coins.model';
 
 export const CoinsActions = createActionGroup({
   source: 'Coins/API',
   events: {
-    'Load CoinsSuccess': props<{ coinsSuccess: CoinData[] }>(),
+    // Action to trigger loading coins
+    'Load Coins': emptyProps(), 
+    
+    // Action dispatched when coins are successfully loaded
+    'Load CoinsSuccess': props<{ coinsSuccess: CoinResponse }>(),
+
+    // Action dispatched when loading coins fails
     'Load CoinsFailure': props<{ coinsFailure: CoinStatus }>(),
+
+    // Other actions
     'Add Coins': props<{ coins: CoinData }>(),
     'Upsert Coins': props<{ coins: CoinData }>(),
     'Add CoinsSuccess': props<{ coinsSuccess: CoinData[] }>(),

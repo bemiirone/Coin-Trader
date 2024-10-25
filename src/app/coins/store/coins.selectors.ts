@@ -1,21 +1,10 @@
-import { createFeatureSelector, createSelector } from '@ngrx/store';
-import { coinsFeature } from './coins.reducer';  // This is from the CLI-generated reducer
+import { createSelector, createFeatureSelector } from '@ngrx/store';
+// import { AppState } from '../state/app.state';
+import { State as CoinsState } from './coins.reducer';
 
-// Use pre-built selectors from coinsFeature
+export const selectCoinsState = createFeatureSelector<CoinsState>('coins');
 
-export const selectCoinsLoading = createSelector(
-  coinsFeature.selectCoinsState,
-  (state) => state.loading
-);
-
-export const selectCoinsError = createSelector(
-  coinsFeature.selectCoinsState,
-  (state) => state.error
-);
-
-export const selectAllCoins = coinsFeature.selectAll;
-
-export const selectTop10Coins = createSelector(
-  selectAllCoins,
-  (coins) => coins.filter(coin => coin.cmc_rank <= 10)
+export const selectCoinsResponse = createSelector(
+  selectCoinsState,
+  (state: CoinsState) => state.data
 );
