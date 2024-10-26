@@ -4,12 +4,14 @@ import { Actions, createEffect, ofType } from '@ngrx/effects';
 import { CoinsActions } from './coins.actions';
 import { CoinsService } from '../coins.service';
 import { catchError, map, mergeMap } from 'rxjs/operators';
-import { of } from 'rxjs';
+import { Observable, of } from 'rxjs';
 import { CoinResponse } from '../coins.model';
 
 @Injectable()
 export class CoinsEffects {
-  loadCoins$: any;
+  loadCoins$: Observable<
+  ReturnType<typeof CoinsActions.loadCoinsSuccess | typeof CoinsActions.loadCoinsFailure>
+>;
   constructor(
     private actions$: Actions,
     private coinsService: CoinsService

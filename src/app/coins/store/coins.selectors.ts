@@ -8,3 +8,11 @@ export const selectCoinData = createSelector(
   selectCoinsState,
   (state: CoinsState) => state.data?.data
 );
+export const selectCoinLoading = createSelector(
+  selectCoinsState,
+  (state: CoinsState) => state.loading
+);
+export const selectCoinError = createSelector(
+  selectCoinsState,
+  (state: CoinsState) => state.error
+);
