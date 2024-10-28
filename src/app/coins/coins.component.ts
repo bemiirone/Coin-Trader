@@ -29,7 +29,6 @@ export class CoinsComponent {
     this.loading$ = this.store.select(selectCoinLoading);
     this.error$ = this.store.select(selectCoinError);
     this.top50Coins$ = this.store.select(selectTopCoins(this.limit));
-    this.top50Coins$.subscribe( coins => console.log(coins));
   }
   selectTab(tab: string) {
     this.activeTab = tab;

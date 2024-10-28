@@ -16,7 +16,7 @@
 
 <div id="default-tab-content">
   <div *ngIf="activeTab === 'table'" class="p-4 rounded-lg bg-gray-100" id="table" role="tabpanel">
-      <app-table></app-table>
+      <app-table [coins$]="top50Coins$"></app-table>
   </div>
   <div *ngIf="activeTab === 'chart'" class="p-4 rounded-lg bg-gray-100" id="chart" role="tabpanel">
       <app-chart></app-chart>
