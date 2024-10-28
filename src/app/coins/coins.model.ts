@@ -19,7 +19,7 @@ export interface CoinData {
   slug: string;
   num_market_pairs: number;
   date_added: string;
-  tags: string[];
+  tags: CoinTag;
   max_supply: number;
   circulating_supply: number;
   total_supply: number;
@@ -49,8 +49,15 @@ export interface CoinData {
     };
   };
 }
-
 export interface CoinResponse {
   status: CoinStatus;
   data: CoinData[];
 }
+
+export type PickedCryptoData = Pick<CoinData, 'name'> & {
+  price: number;
+  percent_change_1h: number;
+  percent_change_24h: number;
+  percent_change_7d: number;
+  market_cap: number;
+};

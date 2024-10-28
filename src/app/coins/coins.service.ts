@@ -12,7 +12,7 @@ export class CoinsService {
   public getCoins() {
     const params = {
       start: '1',
-      limit: '5000',
+      limit: '500',
       convert: 'USD'
     };
     return this.http.get<CoinResponse>(`${environment.cmcApi}`, {
