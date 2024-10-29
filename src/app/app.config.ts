@@ -8,6 +8,7 @@ import { coinsFeature } from './coins/store/coins.reducer';
 import { CoinsEffects } from './coins/store/coins.effects';
 import { StoreDevtoolsModule } from '@ngrx/store-devtools';
 import { provideHttpClient, withFetch } from '@angular/common/http';
+import { provideCharts, withDefaultRegisterables } from 'ng2-charts';
 
 const devtoolsOptions = {
   maxAge: 25, // Retains last 25 states
@@ -23,5 +24,6 @@ export const appConfig: ApplicationConfig = {
     provideEffects([CoinsEffects]),
     provideHttpClient(withFetch()),
     importProvidersFrom(StoreDevtoolsModule.instrument(devtoolsOptions)),
+    provideCharts(withDefaultRegisterables()),
 ],
 };

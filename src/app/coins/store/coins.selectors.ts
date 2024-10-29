@@ -1,5 +1,4 @@
 import { createSelector, createFeatureSelector } from '@ngrx/store';
-// import { AppState } from '../state/app.state';
 import { State as CoinsState } from './coins.reducer';
 import exp from 'constants';
 import { CoinData, PickedCryptoData } from '../coins.model';
@@ -10,7 +9,7 @@ export const selectCoinData = createSelector(
   selectCoinsState,
   (state: CoinsState) => state.data?.data
 );
-// create a selector for top 50 coins using selectCoinData
+
 export function selectTopCoins(limit: number) {
   return createSelector(
     selectCoinData,

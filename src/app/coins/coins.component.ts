@@ -17,10 +17,10 @@ import { ChartComponent } from './chart/chart.component';
 })
 export class CoinsComponent {
   coins$: Observable<CoinData[]> = of([]);
-  top50Coins$: Observable<PickedCryptoData[]> = of([]);
+  topCoins$: Observable<PickedCryptoData[]> = of([]);
   loading$: Observable<boolean> = of(false);
   error$: Observable<string | null> = of(null);
-  limit = 50;
+  limit = 20;
   activeTab: string = 'table';
 
   constructor(private store: Store) {}
@@ -28,7 +28,7 @@ export class CoinsComponent {
     this.store.dispatch(CoinsActions.loadCoins());
     this.loading$ = this.store.select(selectCoinLoading);
     this.error$ = this.store.select(selectCoinError);
-    this.top50Coins$ = this.store.select(selectTopCoins(this.limit));
+    this.topCoins$ = this.store.select(selectTopCoins(this.limit));
   }
   selectTab(tab: string) {
     this.activeTab = tab;
