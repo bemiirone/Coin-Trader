@@ -41,8 +41,11 @@ export const reducer = createReducer(
   on(UserActions.deleteUsers,
     (state, action) => adapter.removeMany(action.ids, state)
   ),
-  on(UserActions.loadUsers,
+  on(UserActions.loadUsersSuccess,
     (state, action) => adapter.setAll(action.users, state)
+  ),
+  on(UserActions.loadUsersFailure,
+    state => adapter.removeAll(state)
   ),
   on(UserActions.clearUsers,
     state => adapter.removeAll(state)

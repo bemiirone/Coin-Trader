@@ -24,7 +24,7 @@ export const appConfig: ApplicationConfig = {
       coins: coinsFeature.reducer,
       users: usersFeature.reducer,
     }),
-    provideEffects([CoinsEffects]),
+    provideEffects([CoinsEffects, UserEffects]),
     provideHttpClient(withFetch()),
     importProvidersFrom(StoreDevtoolsModule.instrument(devtoolsOptions)),
     provideCharts(withDefaultRegisterables()),
