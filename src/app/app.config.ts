@@ -9,6 +9,8 @@ import { CoinsEffects } from './coins/store/coins.effects';
 import { StoreDevtoolsModule } from '@ngrx/store-devtools';
 import { provideHttpClient, withFetch } from '@angular/common/http';
 import { provideCharts, withDefaultRegisterables } from 'ng2-charts';
+import { usersFeature } from './users/store/user.reducer';
+import { UserEffects } from './users/store/user.effects';
 
 const devtoolsOptions = {
   maxAge: 25, // Retains last 25 states
@@ -20,6 +22,7 @@ export const appConfig: ApplicationConfig = {
     provideClientHydration(),
     provideStore({
       coins: coinsFeature.reducer,
+      users: usersFeature.reducer,
     }),
     provideEffects([CoinsEffects]),
     provideHttpClient(withFetch()),
