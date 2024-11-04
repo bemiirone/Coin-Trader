@@ -2,9 +2,9 @@
   <!-- Desktop Sidebar -->
   <app-sidebar class="hidden md:block w-1/8"></app-sidebar> 
 
-  <section class="main flex-1 bg-gray-100">
+  <section *ngIf="selectedUser$ | async as user" class="main flex-1 bg-gray-100">
     <div class="relative">
-      <app-header></app-header>
+      <app-header [user]="user"></app-header>
       <div class="content pt-16">
         <router-outlet />
       </div>
@@ -12,5 +12,5 @@
   </section>
 
   <!-- Mobile Sidebar, anchored to the bottom -->
-  <app-sidebar [isMobile]="true"></app-sidebar>
+  <app-sidebar [isMobile]="true" class="block md:hidden w-full fixed bottom-0"></app-sidebar>
 </div>

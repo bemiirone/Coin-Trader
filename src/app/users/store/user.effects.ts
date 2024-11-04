@@ -17,10 +17,7 @@ export class UserEffects {
         ofType(UserActions.loadUsers),
         mergeMap(() =>
           this.userService.getUsers().pipe(
-            map((users: User[]) => {
-              console.log('Users loaded:', users); // Check the response structure here
-              return UserActions.loadUsersSuccess({ users });
-            }),
+            map((users: User[]) => UserActions.loadUsersSuccess({ users })),
             catchError((error) => of(UserActions.loadUsersFailure({ error })))
           )
         )

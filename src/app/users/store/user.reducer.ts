@@ -5,7 +5,7 @@ import { UserActions } from './user.actions';
 
 export const usersFeatureKey = 'users';
 
-export interface State extends EntityState<User> {
+export interface UserState extends EntityState<User> {
   selectedUserId: string | null;
 }
 
@@ -13,7 +13,7 @@ export const adapter: EntityAdapter<User> = createEntityAdapter<User>({
   selectId: (user: User) => user._id,
 });
 
-export const initialState: State = adapter.getInitialState({
+export const initialState: UserState = adapter.getInitialState({
   selectedUserId: null,
 });
 
@@ -52,10 +52,10 @@ export const reducer = createReducer(
   on(UserActions.clearUsers,
     state => adapter.removeAll(state)
   ),
-  on(UserActions.selectUser,
-    (state, action) => ({
+  on(UserActions.setSelectedUserId,
+    (state, { id }) => ({
       ...state,
-      selectedUserId: action.id
+      selectedUserId: id
     })
   ),
 );
