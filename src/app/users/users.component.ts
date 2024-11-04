@@ -13,7 +13,7 @@ import { UserActions } from './store/user.actions';
 export class UsersComponent {
   constructor(private store: Store) {}
 
-  NgOnInit() {
+  ngOnInit() {
     this.store.dispatch(UserActions.loadUsers());
   }
 }

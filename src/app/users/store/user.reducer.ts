@@ -9,7 +9,9 @@ export interface State extends EntityState<User> {
   selectedUserId: string | null;
 }
 
-export const adapter: EntityAdapter<User> = createEntityAdapter<User>();
+export const adapter: EntityAdapter<User> = createEntityAdapter<User>({
+  selectId: (user: User) => user._id,
+});
 
 export const initialState: State = adapter.getInitialState({
   selectedUserId: null,
