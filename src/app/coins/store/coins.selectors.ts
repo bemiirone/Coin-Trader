@@ -1,13 +1,13 @@
 import { createSelector, createFeatureSelector } from '@ngrx/store';
-import { State as CoinsState } from './coins.reducer';
+import { CoinState } from './coins.reducer';
 import exp from 'constants';
 import { CoinData, PickedCryptoData } from '../coins.model';
 
-export const selectCoinsState = createFeatureSelector<CoinsState>('coins');
+export const selectCoinsState = createFeatureSelector<CoinState>('coins');
 
 export const selectCoinData = createSelector(
   selectCoinsState,
-  (state: CoinsState) => state.data?.data
+  (state: CoinState) => state.data?.data || []
 );
 
 export function selectTopCoins(limit: number) {
@@ -29,9 +29,9 @@ export function selectTopCoins(limit: number) {
 
 export const selectCoinLoading = createSelector(
   selectCoinsState,
-  (state: CoinsState) => state.loading
+  (state: CoinState) => state.loading
 );
 export const selectCoinError = createSelector(
   selectCoinsState,
-  (state: CoinsState) => state.error
+  (state: CoinState) => state.error
 );

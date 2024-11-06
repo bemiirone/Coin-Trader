@@ -1,5 +1,5 @@
 import { createFeatureSelector, createSelector } from '@ngrx/store';
-import { selectCoinData } from '../../coins/store/coins.selectors';
+import { selectCoinData, selectCoinError } from '../../coins/store/coins.selectors';
 import { selectSelectedUser } from '../../users/store/user.selectors';
 
 export const selectUserPortfolio = createSelector(
@@ -7,6 +7,8 @@ export const selectUserPortfolio = createSelector(
   selectCoinData,
   (user, coins) => {
     if (!user || !user.coin_ids) return [];
-    user.coin_ids.map((coinId) => coins?.find((coin) => coin.id === coinId));
+    return user.coin_ids
+      .map((coinId) => coins.find((coin) => coin.id === coinId))
+      .filter((coin) => coin);
   }
 );

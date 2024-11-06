@@ -3,7 +3,7 @@
   <div class="flex flex-col md:flex-row">
     <div class="flex-1 p-4">
       <app-card [title]="mainTitle">
-        <ng-container *ngIf="componentType === 'coins'">
+        <ng-container *ngIf="componentType === 'coins' else tradesList">
           <app-coins></app-coins>
         </ng-container>
       </app-card>
@@ -16,3 +16,6 @@
     </div>
   </div>
 </div>
+<ng-template #tradesList>
+  <app-trade-list></app-trade-list>
+</ng-template>

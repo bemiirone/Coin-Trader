@@ -4,13 +4,13 @@ import { CoinResponse } from '../coins.model';
 
 export const coinsFeatureKey = 'coins';
 
-export interface State {
+export interface CoinState {
   loading: boolean;
   error: string | null;
   data: CoinResponse | null; // Storing the entire response here
 }
 
-export const initialState: State = {
+export const initialState: CoinState = {
   loading: false,
   error: null,
   data: null,
@@ -18,11 +18,19 @@ export const initialState: State = {
 
 export const reducer = createReducer(
   initialState,
-  on(CoinsActions.loadCoinsSuccess, (state, { coinsSuccess }) => ({
+  on(CoinsActions.loadCoins, (state) => ({
     ...state,
-    data: coinsSuccess, // Assign the entire response here
-    loading: false,
+    loading: true,
+    error: null,
   })),
+  on(CoinsActions.loadCoinsSuccess, (state, { coinsSuccess }) => {
+    console.log('Coins loaded successfully:', coinsSuccess);  // Debug log for data structure
+    return {
+      ...state,
+      data: coinsSuccess,
+      loading: false,
+    };
+  }),
   on(CoinsActions.loadCoinsFailure, (state, { coinsFailure }) => ({
     ...state,
     error: coinsFailure.error_message,

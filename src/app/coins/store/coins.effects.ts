@@ -21,7 +21,7 @@ export class CoinsEffects {
       mergeMap(() => this.coinsService.getCoins()
         .pipe(
           map((coinsSuccess: CoinResponse) => CoinsActions.loadCoinsSuccess({ coinsSuccess })),
-          catchError((coinsFailure) => of(CoinsActions.loadCoinsFailure({ coinsFailure })))
+          catchError((coinsFailure) => of(CoinsActions.loadCoinsFailure({ coinsFailure: coinsFailure.error || 'Failed to load coins'})))
         )
       )
     ));
