@@ -63,6 +63,7 @@ export type PickedCryptoData = Pick<CoinData, 'name'> & {
 };
 
 export type TradedCryptoData = Pick<CoinData, 'name' | 'symbol'> & {
+  id: number;
   price: number;
   percent_change_24h: number;
   market_cap: number;

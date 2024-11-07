@@ -1,7 +1,7 @@
 import { createSelector, createFeatureSelector } from '@ngrx/store';
 import { CoinState } from './coins.reducer';
 import exp from 'constants';
-import { CoinData, PickedCryptoData } from '../coins.model';
+import { CoinData, PickedCryptoData, TradedCryptoData } from '../coins.model';
 
 export const selectCoinsState = createFeatureSelector<CoinState>('coins');
 
@@ -26,6 +26,21 @@ export function selectTopCoins(limit: number) {
     }
   );
 }
+
+export const selectCoinTrades = createSelector(
+  selectCoinData,
+  (coins: CoinData[] | undefined): TradedCryptoData[] => {
+    if (!coins) return [];
+    return coins.map((coin) => ({
+      id: coin.id,
+      name: coin.name,
+      symbol: coin.symbol,
+      price: coin.quote.USD.price,
+      percent_change_24h: coin.quote.USD.percent_change_24h,
+      market_cap: coin.quote.USD.market_cap,
+    }));
+  }
+);
 
 export const selectCoinLoading = createSelector(
   selectCoinsState,

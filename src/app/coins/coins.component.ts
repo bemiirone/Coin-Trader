@@ -25,7 +25,6 @@ export class CoinsComponent {
 
   constructor(private store: Store) {}
   ngOnInit() {
-    this.store.dispatch(CoinsActions.loadCoins());
     this.loading$ = this.store.select(selectCoinLoading);
     this.error$ = this.store.select(selectCoinError);
     this.topCoins$ = this.store.select(selectTopCoins(this.limit));

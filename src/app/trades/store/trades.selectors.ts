@@ -1,10 +1,10 @@
-import { createFeatureSelector, createSelector } from '@ngrx/store';
-import { selectCoinData, selectCoinError } from '../../coins/store/coins.selectors';
+import { createSelector } from '@ngrx/store';
+import { selectCoinTrades } from '../../coins/store/coins.selectors';
 import { selectSelectedUser } from '../../users/store/user.selectors';
 
 export const selectUserPortfolio = createSelector(
   selectSelectedUser,
-  selectCoinData,
+  selectCoinTrades,
   (user, coins) => {
     if (!user || !user.coin_ids) return [];
     return user.coin_ids

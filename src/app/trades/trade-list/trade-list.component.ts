@@ -1,4 +1,4 @@
-import { Observable, of } from 'rxjs';
+import { map, Observable, of } from 'rxjs';
 import { CommonModule } from '@angular/common';
 import { Component } from '@angular/core';
 import {selectUserPortfolio} from '../store/trades.selectors';
@@ -16,7 +16,7 @@ import { selectCoinLoading, selectCoinError } from '../../coins/store/coins.sele
   styleUrl: './trade-list.component.scss'
 })
 export class TradeListComponent {
-  trades$: Observable<any> = of([]);
+  trades$: Observable<TradedCryptoData[]> = of([]);
   loading$: Observable<boolean> = of(false);
   error$: Observable<string | null> = of(null);
 
@@ -24,10 +24,11 @@ export class TradeListComponent {
   }
 
   ngOnInit() {
-    this.store.dispatch(CoinsActions.loadCoins());
     this.loading$ = this.store.select(selectCoinLoading);
     this.error$ = this.store.select(selectCoinError);
-    this.trades$ = this.store.select(selectUserPortfolio);
+    this.trades$ = this.store.select(selectUserPortfolio).pipe(
+      map(trades => trades.filter((trade): trade is TradedCryptoData => trade !== undefined))
+    );
     this.trades$.subscribe(trades => {
       console.log('Trades:', trades);
     });

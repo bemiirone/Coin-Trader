@@ -8,6 +8,7 @@ import { selectAllUsers, selectSelectedUser } from './users/store/user.selectors
 import { Observable } from 'rxjs';
 import { User } from './users/user.model';
 import { CommonModule } from '@angular/common';
+import { CoinsActions } from './coins/store/coins.actions';
 
 @Component({
   selector: 'app-root',
@@ -24,6 +25,7 @@ export class AppComponent {
   }
 
   ngOnInit() {
+    this.store.dispatch(CoinsActions.loadCoins());
     this.users$ = this.store.select(selectAllUsers);
     this.selectedUser$ = this.store.select(selectSelectedUser);
     this.store.dispatch(UserActions.loadUsers());

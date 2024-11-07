@@ -1,1 +1,55 @@
-<p>trade-form works!</p>
+<div class="max-w-md mx-auto p-6 bg-white rounded-lg shadow-md">
+  <form [formGroup]="tradeForm" (ngSubmit)="onSubmit()">
+
+    <!-- Coin Selection -->
+    <div class="mb-4">
+      <label for="coin_id" class="block text-gray-700 font-medium mb-2">Select Coin</label>
+      <select formControlName="coin_id" id="coin_id" class="block w-full p-2 border border-gray-300 rounded">
+        <option value="" disabled>Select a coin</option>
+        <!-- Replace the following options with options dynamically populated from your Coins store -->
+        <option value="btc">Bitcoin (BTC)</option>
+        <option value="eth">Ethereum (ETH)</option>
+        <!-- Populate with actual coins -->
+      </select>
+    </div>
+
+    <!-- Order Type (Buy/Sell) -->
+    <div class="mb-4">
+      <label class="block text-gray-700 font-medium mb-2">Order Type</label>
+      <div class="flex items-center gap-4">
+        <label class="flex items-center">
+          <input type="radio" formControlName="order" value="buy" class="mr-2"> Buy
+        </label>
+        <label class="flex items-center">
+          <input type="radio" formControlName="order" value="sell" class="mr-2"> Sell
+        </label>
+      </div>
+    </div>
+
+    <!-- Currency Amount -->
+    <div class="mb-4">
+      <label for="currencyAmount" class="block text-gray-700 font-medium mb-2">Amount (Currency)</label>
+      <input type="number" formControlName="currencyAmount" (input)="calculateVolume()"
+             class="block w-full p-2 border border-gray-300 rounded" placeholder="Enter amount in currency">
+    </div>
+
+    <!-- Price per Coin (Read-Only) -->
+    <div class="mb-4">
+      <label for="price" class="block text-gray-700 font-medium mb-2">Price per Coin</label>
+      <input type="number" formControlName="price" readonly
+             class="block w-full p-2 border border-gray-300 rounded bg-gray-100">
+    </div>
+
+    <!-- Calculated Volume (Read-Only) -->
+    <div class="mb-4">
+      <label for="volume" class="block text-gray-700 font-medium mb-2">Volume (Coins)</label>
+      <input type="number" formControlName="volume" readonly
+             class="block w-full p-2 border border-gray-300 rounded bg-gray-100">
+    </div>
+
+    <!-- Submit Button -->
+    <button type="submit" class="w-full bg-blue-500 text-white py-2 rounded hover:bg-blue-600">Submit Trade</button>
+
+  </form>
+</div>
+

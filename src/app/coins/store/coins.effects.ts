@@ -2,10 +2,10 @@
 import { Injectable } from '@angular/core';
 import { Actions, createEffect, ofType } from '@ngrx/effects';
 import { CoinsActions } from './coins.actions';
-import { CoinsService } from '../coins.service';
 import { catchError, map, mergeMap } from 'rxjs/operators';
 import { Observable, of } from 'rxjs';
 import { CoinResponse } from '../coins.model';
+import { CoinsService } from '../../services/coin-market.service';
 
 @Injectable()
 export class CoinsEffects {
