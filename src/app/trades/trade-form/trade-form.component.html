@@ -6,10 +6,7 @@
       <label for="coin_id" class="block text-gray-700 font-medium mb-2">Select Coin</label>
       <select formControlName="coin_id" id="coin_id" class="block w-full p-2 border border-gray-300 rounded">
         <option value="" disabled>Select a coin</option>
-        <!-- Replace the following options with options dynamically populated from your Coins store -->
-        <option value="btc">Bitcoin (BTC)</option>
-        <option value="eth">Ethereum (ETH)</option>
-        <!-- Populate with actual coins -->
+        <option *ngFor="let coin of coins$ | async" [value]="coin.id">{{ coin.name }} ({{ coin.symbol }})</option>
       </select>
     </div>
 
@@ -29,7 +26,7 @@
     <!-- Currency Amount -->
     <div class="mb-4">
       <label for="currencyAmount" class="block text-gray-700 font-medium mb-2">Amount (Currency)</label>
-      <input type="number" formControlName="currencyAmount" (input)="calculateVolume()"
+      <input type="number" formControlName="currencyAmount"
              class="block w-full p-2 border border-gray-300 rounded" placeholder="Enter amount in currency">
     </div>
 
@@ -42,9 +39,10 @@
 
     <!-- Calculated Volume (Read-Only) -->
     <div class="mb-4">
-      <label for="volume" class="block text-gray-700 font-medium mb-2">Volume (Coins)</label>
-      <input type="number" formControlName="volume" readonly
-             class="block w-full p-2 border border-gray-300 rounded bg-gray-100">
+      <label class="block text-gray-700 font-medium mb-2">Volume (Coins)</label>
+      <input type="number"
+             [value]="(tradeForm.get('currencyAmount')?.value || 0) / ((selectedCoin$ | async)?.price || 1)"
+             class="block w-full p-2 border border-gray-300 rounded" disabled>
     </div>
 
     <!-- Submit Button -->

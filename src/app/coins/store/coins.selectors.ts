@@ -42,10 +42,16 @@ export const selectCoinTrades = createSelector(
   }
 );
 
+export const selectCoinById = (id: number) =>
+  createSelector(selectCoinTrades, (coins: TradedCryptoData[]) =>
+    coins.find((coin) => coin.id === id)
+);
+
 export const selectCoinLoading = createSelector(
   selectCoinsState,
   (state: CoinState) => state.loading
 );
+
 export const selectCoinError = createSelector(
   selectCoinsState,
   (state: CoinState) => state.error

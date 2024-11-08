@@ -1,6 +1,11 @@
 import { CommonModule } from '@angular/common';
 import { Component, OnInit } from '@angular/core';
 import { FormBuilder, FormGroup, FormsModule, ReactiveFormsModule, Validators } from '@angular/forms';
+import { Trade } from '../trades.model';
+import  { selectCoinTrades, selectCoinById } from '../../coins/store/coins.selectors';
+import { Store } from '@ngrx/store';
+import { TradedCryptoData } from '../../coins/coins.model';
+import { map, Observable, of, switchMap } from 'rxjs';
 
 @Component({
   standalone: true,
@@ -10,33 +15,50 @@ import { FormBuilder, FormGroup, FormsModule, ReactiveFormsModule, Validators } 
 })
 export class TradeFormComponent implements OnInit {
   tradeForm!: FormGroup;
+  coins$: Observable<TradedCryptoData[]> = of([]);
+  selectedCoin$!: Observable<TradedCryptoData | undefined>;
 
-  constructor(private fb: FormBuilder) {}
+  constructor(private fb: FormBuilder, private store: Store) {}
 
   ngOnInit(): void {
     this.tradeForm = this.fb.group({
       coin_id: ['', Validators.required],
       order: ['buy', Validators.required],
-      currencyAmount: [0, [Validators.required, Validators.min(1)]],
-      volume: [{ value: 0, disabled: true }], // Calculated based on currency amount
-      price: [{ value: 0, disabled: true }]   // Set this based on selected coin
+      currencyAmount: [0, [Validators.required, Validators.min(1)]]
     });
+
+    this.coins$ = this.store.select(selectCoinTrades);
+    this.selectedCoin$ = this.tradeForm.get('coin_id')!.valueChanges.pipe(
+      switchMap(coinId => this.store.select(selectCoinById(coinId)))
+    );
   }
 
   // Function to calculate volume when currency amount or price changes
-  calculateVolume(): void {
+  public calculateVolume(): void {
     const currencyAmount = this.tradeForm.get('currencyAmount')?.value;
-    const price = this.tradeForm.get('price')?.value;
-    if (price > 0) {
-      this.tradeForm.get('volume')?.setValue(currencyAmount / price);
-    }
+
+    this.selectedCoin$.pipe(
+      map(coin => coin?.price ?? 0),
+      map(price => currencyAmount / price)
+    ).subscribe(volume => {
+      this.tradeForm.get('volume')?.setValue(volume);
+    });
+  }
+
+  getSelectedCoin(coinId: number): void {
+    this.store.select(selectCoinById(coinId)).subscribe(coin => {
+      console.log('Selected coin:', coin);
+      if (coin) {
+        this.tradeForm.get('price')?.setValue(coin.price);
+      }
+    });
   }
 
   onSubmit(): void {
     if (this.tradeForm.valid) {
-      const tradeData = this.tradeForm.getRawValue();  // Get form data
+      const tradeData = this.tradeForm.getRawValue();
       console.log('Trade submitted:', tradeData);
-      // Submit the trade data to the backend here
+      // Submit trade data to backend here
     }
   }
 }
