@@ -25,16 +25,18 @@
 
     <!-- Currency Amount -->
     <div class="mb-4">
-      <label for="currencyAmount" class="block text-gray-700 font-medium mb-2">Amount (Currency)</label>
+      <label for="currencyAmount" class="block text-gray-700 font-medium mb-2">Amount ($)</label>
       <input type="number" formControlName="currencyAmount"
              class="block w-full p-2 border border-gray-300 rounded" placeholder="Enter amount in currency">
     </div>
 
-    <!-- Price per Coin (Read-Only) -->
-    <div class="mb-4">
+    <!-- Price per Coin  -->
+    <div *ngIf="selectedCoin$ | async as selectedCoin" class="mb-4">
       <label for="price" class="block text-gray-700 font-medium mb-2">Price per Coin</label>
-      <input type="number" formControlName="price" readonly
-             class="block w-full p-2 border border-gray-300 rounded bg-gray-100">
+      <input type="hidden" formControlName="price" 
+             class="block w-full p-2 border border-gray-300 rounded bg-gray-100"
+             [value]="selectedCoin.price">
+      <p class="p-2 bg-gray-100 rounded"> Coin Price: {{ selectedCoin.price | currency }}</p>
     </div>
 
     <!-- Calculated Volume (Read-Only) -->
@@ -44,9 +46,8 @@
              [value]="(tradeForm.get('currencyAmount')?.value || 0) / ((selectedCoin$ | async)?.price || 1)"
              class="block w-full p-2 border border-gray-300 rounded" disabled>
     </div>
-
-    <!-- Submit Button -->
     <button type="submit" class="w-full bg-blue-500 text-white py-2 rounded hover:bg-blue-600">Submit Trade</button>
+    <button type="button" (click)="clearForm()" class="w-full bg-gray-300 text-gray-700 py-2 rounded mt-2 hover:bg-gray-400">Clear Form</button>
 
   </form>
 </div>

@@ -5,7 +5,7 @@ import { Trade } from '../trades.model';
 import  { selectCoinTrades, selectCoinById } from '../../coins/store/coins.selectors';
 import { Store } from '@ngrx/store';
 import { TradedCryptoData } from '../../coins/coins.model';
-import { map, Observable, of, switchMap } from 'rxjs';
+import { map, Observable, of, switchMap, tap } from 'rxjs';
 
 @Component({
   standalone: true,
@@ -24,12 +24,14 @@ export class TradeFormComponent implements OnInit {
     this.tradeForm = this.fb.group({
       coin_id: ['', Validators.required],
       order: ['buy', Validators.required],
-      currencyAmount: [0, [Validators.required, Validators.min(1)]]
+      currencyAmount: [0, [Validators.required, Validators.min(1)]],
+      price: [0, [Validators.required, Validators.min(0.01)]],
     });
 
     this.coins$ = this.store.select(selectCoinTrades);
+
     this.selectedCoin$ = this.tradeForm.get('coin_id')!.valueChanges.pipe(
-      switchMap(coinId => this.store.select(selectCoinById(coinId)))
+      switchMap((coinId) => this.store.select(selectCoinById(+coinId)))
     );
   }
 
@@ -45,20 +47,15 @@ export class TradeFormComponent implements OnInit {
     });
   }
 
-  getSelectedCoin(coinId: number): void {
-    this.store.select(selectCoinById(coinId)).subscribe(coin => {
-      console.log('Selected coin:', coin);
-      if (coin) {
-        this.tradeForm.get('price')?.setValue(coin.price);
-      }
-    });
-  }
-
   onSubmit(): void {
     if (this.tradeForm.valid) {
       const tradeData = this.tradeForm.getRawValue();
       console.log('Trade submitted:', tradeData);
       // Submit trade data to backend here
     }
+  }
+  // a function to submit the clear form
+  clearForm(): void {
+    this.tradeForm.reset();
   }
 }
