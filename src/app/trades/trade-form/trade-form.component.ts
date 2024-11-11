@@ -6,6 +6,8 @@ import  { selectCoinTrades, selectCoinById } from '../../coins/store/coins.selec
 import { Store } from '@ngrx/store';
 import { TradedCryptoData } from '../../coins/coins.model';
 import { map, Observable, of, switchMap, tap } from 'rxjs';
+import { User } from '../../users/user.model';
+import { selectSelectedUser } from '../../users/store/user.selectors';
 
 @Component({
   standalone: true,
@@ -16,7 +18,9 @@ import { map, Observable, of, switchMap, tap } from 'rxjs';
 export class TradeFormComponent implements OnInit {
   tradeForm!: FormGroup;
   coins$: Observable<TradedCryptoData[]> = of([]);
+  coinData: TradedCryptoData = {} as TradedCryptoData;
   selectedCoin$!: Observable<TradedCryptoData | undefined>;
+  user: User | null = {} as User;
 
   constructor(private fb: FormBuilder, private store: Store) {}
 
@@ -29,14 +33,25 @@ export class TradeFormComponent implements OnInit {
     });
 
     this.coins$ = this.store.select(selectCoinTrades);
-
     this.selectedCoin$ = this.tradeForm.get('coin_id')!.valueChanges.pipe(
-      switchMap((coinId) => this.store.select(selectCoinById(+coinId)))
+      switchMap((coinId) => this.store.select(selectCoinById(+coinId))),
+      tap((coin) => {
+      if (coin) {
+        this.tradeForm.get('price')!.setValue(coin.price, { emitEvent: false });
+        this.coinData = coin;
+      }
+      })
     );
+    this.store.select(selectSelectedUser).subscribe((user) => {
+      this.user = user;
+    });
   }
 
-  // Function to calculate volume when currency amount or price changes
-  public calculateVolume(): void {
+  ngOnDestroy(): void {
+    this.store.select(selectSelectedUser).subscribe().unsubscribe();
+  }
+
+  calculateVolume(): void {
     const currencyAmount = this.tradeForm.get('currencyAmount')?.value;
 
     this.selectedCoin$.pipe(
@@ -49,12 +64,20 @@ export class TradeFormComponent implements OnInit {
 
   onSubmit(): void {
     if (this.tradeForm.valid) {
-      const tradeData = this.tradeForm.getRawValue();
-      console.log('Trade submitted:', tradeData);
-      // Submit trade data to backend here
+      const currencyAmount = this.tradeForm.get('currencyAmount')?.value || 0;
+      const coin = this.coinData;
+      const tradeData: Trade = {
+        ...this.tradeForm.getRawValue(),
+        user_id: this.user?._id,
+        symbol: coin.symbol,
+        volume: currencyAmount / coin.price,
+        date: new Date().toISOString() // timestamp
+      };
+      console.log('TradeData submitted:', tradeData);
+      // Submit tradeData as needed
     }
   }
-  // a function to submit the clear form
+
   clearForm(): void {
     this.tradeForm.reset();
   }

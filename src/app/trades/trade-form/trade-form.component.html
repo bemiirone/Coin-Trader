@@ -4,10 +4,16 @@
     <!-- Coin Selection -->
     <div class="mb-4">
       <label for="coin_id" class="block text-gray-700 font-medium mb-2">Select Coin</label>
-      <select formControlName="coin_id" id="coin_id" class="block w-full p-2 border border-gray-300 rounded">
+      <select formControlName="coin_id" id="coin_id" class="block w-full p-2 border rounded"
+              [ngClass]="{
+                'border-gray-300': !tradeForm.get('coin_id')?.invalid,
+                'border-red-500': tradeForm.get('coin_id')?.invalid && tradeForm.get('coin_id')?.touched
+              }">
         <option value="" disabled>Select a coin</option>
         <option *ngFor="let coin of coins$ | async" [value]="coin.id">{{ coin.name }} ({{ coin.symbol }})</option>
       </select>
+      <p *ngIf="tradeForm.get('coin_id')?.invalid && tradeForm.get('coin_id')?.touched" 
+         class="text-red-500 text-sm mt-1">Please select a coin.</p>
     </div>
 
     <!-- Order Type (Buy/Sell) -->
@@ -18,25 +24,33 @@
           <input type="radio" formControlName="order" value="buy" class="mr-2"> Buy
         </label>
         <label class="flex items-center">
-          <input type="radio" formControlName="order" value="sell" class="mr-2"> Sell
+          <input type="radio" formControlName="order" id="order" value="sell" class="mr-2"> Sell
         </label>
       </div>
+      <p *ngIf="tradeForm.get('order')?.invalid && tradeForm.get('order')?.touched" 
+         class="text-red-500 text-sm mt-1">Please select an order type.</p>
     </div>
 
     <!-- Currency Amount -->
     <div class="mb-4">
       <label for="currencyAmount" class="block text-gray-700 font-medium mb-2">Amount ($)</label>
-      <input type="number" formControlName="currencyAmount"
-             class="block w-full p-2 border border-gray-300 rounded" placeholder="Enter amount in currency">
+      <input type="number" formControlName="currencyAmount" id="currencyAmount"
+             class="block w-full p-2 border rounded" placeholder="Enter amount in currency"
+             [ngClass]="{
+               'border-gray-300': !tradeForm.get('currencyAmount')?.invalid,
+               'border-red-500': tradeForm.get('currencyAmount')?.invalid && tradeForm.get('currencyAmount')?.touched
+             }">
+      <p *ngIf="tradeForm.get('currencyAmount')?.invalid && tradeForm.get('currencyAmount')?.touched" 
+         class="text-red-500 text-sm mt-1">
+        Amount is required and must be at least $1.
+      </p>
     </div>
 
-    <!-- Price per Coin  -->
+    <!-- Price per Coin -->
     <div *ngIf="selectedCoin$ | async as selectedCoin" class="mb-4">
       <label for="price" class="block text-gray-700 font-medium mb-2">Price per Coin</label>
-      <input type="hidden" formControlName="price" 
-             class="block w-full p-2 border border-gray-300 rounded bg-gray-100"
-             [value]="selectedCoin.price">
-      <p class="p-2 bg-gray-100 rounded"> Coin Price: {{ selectedCoin.price | currency }}</p>
+      <input type="hidden" formControlName="price" id="price">
+      <p class="p-2 bg-gray-100 rounded">Coin Price: {{ selectedCoin.price | currency }}</p>
     </div>
 
     <!-- Calculated Volume (Read-Only) -->
@@ -46,9 +60,16 @@
              [value]="(tradeForm.get('currencyAmount')?.value || 0) / ((selectedCoin$ | async)?.price || 1)"
              class="block w-full p-2 border border-gray-300 rounded" disabled>
     </div>
-    <button type="submit" class="w-full bg-blue-500 text-white py-2 rounded hover:bg-blue-600">Submit Trade</button>
-    <button type="button" (click)="clearForm()" class="w-full bg-gray-300 text-gray-700 py-2 rounded mt-2 hover:bg-gray-400">Clear Form</button>
-
+    <!-- Submit Button -->
+    <button 
+      type="submit"
+      class="w-full py-2 rounded text-white 
+         bg-blue-500 hover:bg-blue-600 
+         disabled:bg-gray-400 disabled:cursor-not-allowed"
+          [disabled]="tradeForm.invalid">
+          Submit Trade
+    </button>
+    <button type="button" (click)="clearForm()" 
+            class="w-full bg-gray-300 text-gray-700 py-2 rounded mt-2 hover:bg-gray-400">Clear Form</button>
   </form>
 </div>
-

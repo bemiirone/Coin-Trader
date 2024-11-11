@@ -1,5 +1,5 @@
 export interface Trade {
-  id: string;
+  _id?: string;
   user_id: string;
   coin_id: number;
   symbol: string;
@@ -8,5 +8,5 @@ export interface Trade {
   price: number;
   date: string;
   volume: number;
-  order: string;
+  order: 'buy' | 'sell';
 }
