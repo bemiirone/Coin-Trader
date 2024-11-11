@@ -10,6 +10,8 @@ import {
   selectCoinError,
 } from '../coins/store/coins.selectors';
 import { selectUserPortfolio } from './store/trades.selectors';
+import { User } from '../users/user.model';
+import { selectSelectedUser } from '../users/store/user.selectors';
 
 @Component({
   selector: 'app-trades',
@@ -23,18 +25,11 @@ export class TradesComponent {
   portfolioTitle = 'Portfolio';
   componentType: ComponentType = ComponentType.Trades;
   trades$: Observable<any> = of([]);
-  loading$: Observable<boolean> = of(false);
-  error$: Observable<string | null> = of(null);
-
+  user$: Observable<User | null> = of({} as User);
   constructor(private store: Store) {}
 
   ngOnInit() {
-    this.store.dispatch(CoinsActions.loadCoins());
-    this.loading$ = this.store.select(selectCoinLoading);
-    this.error$ = this.store.select(selectCoinError);
-    this.trades$ = this.store.select(selectUserPortfolio);
-    this.trades$.subscribe((trades) => {
-      console.log('Trades:', trades);
-    });
+    // get selected user with user selector
+    this.user$ = this.store.select(selectSelectedUser);
   }
 }
