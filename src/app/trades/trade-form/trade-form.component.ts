@@ -18,6 +18,7 @@ import { map, Observable, of, switchMap, tap } from 'rxjs';
 import { User } from '../../users/user.model';
 import { selectSelectedUser } from '../../users/store/user.selectors';
 import { TradesService } from '../trades.service';
+import { TradeActions } from '../store/trades.actions';
 
 @Component({
   standalone: true,
@@ -87,15 +88,7 @@ export class TradeFormComponent implements OnInit {
         date: new Date().toISOString(),
       };
       console.log('TradeData submitted:', tradeData);
-      this.tradesService.addTrade(tradeData).subscribe({
-        next: (response) => {
-          console.log('Trade successfully submitted:', response);
-          this.clearForm();
-        },
-        error: (error) => {
-          console.error('Error submitting trade:', error);
-        }
-      });
+      this.store.dispatch(TradeActions.addTrade({ trade: tradeData }));
       this.clearForm();
     }
   }

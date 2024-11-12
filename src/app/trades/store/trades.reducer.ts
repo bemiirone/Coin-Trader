@@ -27,13 +27,17 @@ export const reducer = createReducer(
     error: null,
   })),
   on(TradeActions.loadTradesSuccess, (state, { trades }) => {
-    console.log('Trades loaded successfully:', trades); // Debug log for data structure
     return adapter.setAll(trades, { ...state, loading: false });
   }),
   on(TradeActions.loadTradesFailure, (state, { error }) => ({
     ...state,
     error,
     loading: false,
+  })),
+  on(TradeActions.addTradeSuccess, (state, { trade }) => adapter.addOne(trade, state)),
+  on(TradeActions.addTradeFailure, (state, { error }) => ({
+    ...state,
+    error,
   }))
 );
 

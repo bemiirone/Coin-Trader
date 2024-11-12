@@ -10,6 +10,7 @@ import { TradesService } from '../trades.service';
 @Injectable()
 export class TradesEffects {
   loadTrades$: Observable<ReturnType<typeof TradeActions.loadTradesSuccess | typeof TradeActions.loadTradesFailure>>;
+  addTrade$!: Observable<ReturnType<typeof TradeActions.addTradeSuccess | typeof TradeActions.addTradeFailure>>;
 
   constructor(private actions$: Actions, private tradesService: TradesService) {
     this.loadTrades$ = createEffect(() =>
@@ -22,6 +23,33 @@ export class TradesEffects {
           )
         )
       )
-    );``
+    );
+
+    this.addTrade$ = createEffect(() =>
+      this.actions$.pipe(
+        ofType(TradeActions.addTrade),
+        mergeMap(({ trade }) =>
+          this.tradesService.addTrade(trade).pipe(
+            map((addedTrade: Trade) => TradeActions.addTradeSuccess({ trade: addedTrade })),
+            catchError((error) => of(TradeActions.addTradeFailure({ error })))
+          )
+        )
+      )
+    );
+
+    // handle addTradeSuccess
+    this.addTrade$.pipe(
+      ofType(TradeActions.addTradeSuccess)
+    ).subscribe((action) => {
+      console.log('Trade added successfully:', action.trade);
+    });
+
+    // handle addTradeFailure
+    this.addTrade$.pipe(
+      ofType(TradeActions.addTradeFailure)
+    ).subscribe((action) => {
+      console.error('Failed to add trade:', action.error);
+    });
   }
+  
 }
