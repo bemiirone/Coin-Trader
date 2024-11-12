@@ -33,14 +33,14 @@
 
     <!-- Currency Amount -->
     <div class="mb-4">
-      <label for="currencyAmount" class="block text-gray-700 font-medium mb-2">Amount ($)</label>
-      <input type="number" formControlName="currencyAmount" id="currencyAmount"
+      <label for="amount" class="block text-gray-700 font-medium mb-2">Amount ($)</label>
+      <input type="number" formControlName="amount" id="amount"
              class="block w-full p-2 border rounded" placeholder="Enter amount in currency"
              [ngClass]="{
-               'border-gray-300': !tradeForm.get('currencyAmount')?.invalid,
-               'border-red-500': tradeForm.get('currencyAmount')?.invalid && tradeForm.get('currencyAmount')?.touched
+               'border-gray-300': !tradeForm.get('amount')?.invalid,
+               'border-red-500': tradeForm.get('amount')?.invalid && tradeForm.get('amount')?.touched
              }">
-      <p *ngIf="tradeForm.get('currencyAmount')?.invalid && tradeForm.get('currencyAmount')?.touched" 
+      <p *ngIf="tradeForm.get('amount')?.invalid && tradeForm.get('amount')?.touched" 
          class="text-red-500 text-sm mt-1">
         Amount is required and must be at least $1.
       </p>
@@ -57,7 +57,7 @@
     <div class="mb-4">
       <label class="block text-gray-700 font-medium mb-2">Volume (Coins)</label>
       <input type="number"
-             [value]="(tradeForm.get('currencyAmount')?.value || 0) / ((selectedCoin$ | async)?.price || 1)"
+             [value]="(tradeForm.get('amount')?.value || 0) / ((selectedCoin$ | async)?.price || 1)"
              class="block w-full p-2 border border-gray-300 rounded" disabled>
     </div>
     <!-- Submit Button -->

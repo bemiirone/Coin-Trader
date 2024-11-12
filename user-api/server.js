@@ -1,11 +1,13 @@
 // server.js
 require('dotenv').config();
+const cors = require('cors'); // Import cors package
 const express = require('express');
 const mongoose = require('mongoose');
 const app = express();
 
 // Middleware
 app.use(express.json());
+app.use(cors({ origin: 'http://localhost:4200' }));
 
 // Connect to MongoDB Atlas
 mongoose.connect(process.env.MONGODB_URI)
