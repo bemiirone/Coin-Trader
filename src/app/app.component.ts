@@ -1,3 +1,4 @@
+import { Trade } from './trades/trades.model';
 import { Component } from '@angular/core';
 import { RouterOutlet } from '@angular/router';
 import { HeaderComponent } from './header/header.component';
@@ -9,6 +10,7 @@ import { Observable } from 'rxjs';
 import { User } from './users/user.model';
 import { CommonModule } from '@angular/common';
 import { CoinsActions } from './coins/store/coins.actions';
+import { TradeActions } from './trades/store/trades.actions';
 
 @Component({
   selector: 'app-root',
@@ -31,6 +33,7 @@ export class AppComponent {
     this.store.dispatch(UserActions.loadUsers());
     const hardcodedUserId = '67239c55e0853b7bcf32d013'; 
     this.store.dispatch(UserActions.setSelectedUserId({ id: hardcodedUserId }));
+    this.store.dispatch(TradeActions.loadTrades());
   }
 
   getSelectedUser() {

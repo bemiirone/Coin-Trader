@@ -11,6 +11,8 @@ import { provideHttpClient, withFetch } from '@angular/common/http';
 import { provideCharts, withDefaultRegisterables } from 'ng2-charts';
 import { usersFeature } from './users/store/user.reducer';
 import { UserEffects } from './users/store/user.effects';
+import { TradesEffects } from './trades/store/trades.effects';
+import { tradesFeature } from './trades/store/trades.reducer';
 
 const devtoolsOptions = {
   maxAge: 25, // Retains last 25 states
@@ -23,8 +25,9 @@ export const appConfig: ApplicationConfig = {
     provideStore({
       coins: coinsFeature.reducer,
       users: usersFeature.reducer,
+      trades: tradesFeature.reducer,
     }),
-    provideEffects([CoinsEffects, UserEffects]),
+    provideEffects([CoinsEffects, UserEffects, TradesEffects]),
     provideHttpClient(withFetch()),
     importProvidersFrom(StoreDevtoolsModule.instrument(devtoolsOptions)),
     provideCharts(withDefaultRegisterables()),
