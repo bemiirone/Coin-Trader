@@ -17,8 +17,8 @@ import { TradedCryptoData } from '../../coins/coins.model';
 import { map, Observable, of, switchMap, tap } from 'rxjs';
 import { User } from '../../users/user.model';
 import { selectSelectedUser } from '../../users/store/user.selectors';
-import { TradesService } from '../trades.service';
 import { TradeActions } from '../store/trades.actions';
+import { selectTradeSuccess } from '../store/trades.selectors';
 
 @Component({
   standalone: true,
@@ -32,26 +32,42 @@ export class TradeFormComponent implements OnInit {
   coinData: TradedCryptoData = {} as TradedCryptoData;
   selectedCoin$!: Observable<TradedCryptoData | undefined>;
   user: User | null = {} as User;
+  success$!: Observable<boolean>;
 
   constructor(
     private fb: FormBuilder,
-    private store: Store,
-    private tradesService: TradesService
+    private store: Store
   ) {}
 
   ngOnInit(): void {
+    this.initFormSetUp();
+    this.initCoinPrice();
+    this.selectUser();
+    this.success$ = this.store.select(selectTradeSuccess);
+  }
+
+  selectUser(): void {
+    this.store.select(selectSelectedUser).subscribe((user) => {
+      this.user = user;
+    });
+  }
+
+  initFormSetUp(): void { 
     this.tradeForm = this.fb.group({
       coin_id: ['', Validators.required],
       order: ['buy', Validators.required],
       amount: [0, [Validators.required, Validators.min(1)]],
       price: [0, [Validators.required, Validators.min(0.01)]],
     });
+  }
 
+  initCoinPrice(): void {
     this.coins$ = this.store.select(selectCoinTrades);
     this.selectedCoin$ = this.tradeForm.get('coin_id')!.valueChanges.pipe(
       switchMap((coinId) => this.store.select(selectCoinById(+coinId))),
       tap((coin) => {
         if (coin) {
+          this.store.dispatch(TradeActions.resetTradeSuccess());
           this.tradeForm
             .get('price')!
             .setValue(coin.price, { emitEvent: false });
@@ -59,9 +75,6 @@ export class TradeFormComponent implements OnInit {
         }
       })
     );
-    this.store.select(selectSelectedUser).subscribe((user) => {
-      this.user = user;
-    });
   }
 
   ngOnDestroy(): void {
@@ -87,7 +100,6 @@ export class TradeFormComponent implements OnInit {
         volume: amount / coin.price,
         date: new Date().toISOString(),
       };
-      console.log('TradeData submitted:', tradeData);
       this.store.dispatch(TradeActions.addTrade({ trade: tradeData }));
       this.clearForm();
     }
