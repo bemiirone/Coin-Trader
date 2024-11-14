@@ -7,7 +7,7 @@ import { TradesComponent } from '../../trades/trades.component';
 import { TableComponent } from '../../coins/table/table.component';
 import { TradeListComponent } from '../../trades/trade-list/trade-list.component';
 import { User } from '../../users/user.model';
-import { TradedCryptoData } from '../../coins/coins.model';
+import { Trade } from '../../trades/trades.model';
 
 @Component({
   selector: 'app-layout',
@@ -28,5 +28,5 @@ export class LayoutComponent {
   @Input() sideTitle = 'Portfolio';
   @Input() componentType: ComponentType = {} as ComponentType;
   @Input() user: User | null  = {} as User;
-  @Input() trades: TradedCryptoData[] = [];
+  @Input() trades: Trade[] | null = [];
 }

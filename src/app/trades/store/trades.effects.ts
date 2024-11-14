@@ -36,20 +36,6 @@ export class TradesEffects {
         )
       )
     );
-
-    // handle addTradeSuccess
-    this.addTrade$.pipe(
-      ofType(TradeActions.addTradeSuccess)
-    ).subscribe((action) => {
-      console.log('Trade added successfully:', action.trade);
-    });
-
-    // handle addTradeFailure
-    this.addTrade$.pipe(
-      ofType(TradeActions.addTradeFailure)
-    ).subscribe((action) => {
-      console.error('Failed to add trade:', action.error);
-    });
   }
   
 }

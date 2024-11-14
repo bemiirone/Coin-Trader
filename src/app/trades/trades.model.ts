@@ -1,6 +1,6 @@
 export interface Trade {
   _id?: string;
-  user_id: string;
+  user_id?: string;
   coin_id: number;
   symbol: string;
   name: string;
