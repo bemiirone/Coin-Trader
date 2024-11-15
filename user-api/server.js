@@ -57,6 +57,27 @@ app.post('/api/users', async (req, res) => {
   }
 });
 
+app.patch('/:id', async (req, res) => {
+  const { id } = req.params;
+  const { portfolio_total } = req.body;
+
+  try {
+    const user = await User.findByIdAndUpdate(
+      id,
+      { portfolio_total },
+      { new: true } // Return the updated document
+    );
+
+    if (!user) {
+      return res.status(404).json({ error: 'User not found' });
+    }
+
+    res.json(user);
+  } catch (error) {
+    res.status(500).json({ error: 'Error updating portfolio total' });
+  }
+});
+
 // Trade Routes
 
 app.get('/api/trades', async (req, res) => {
