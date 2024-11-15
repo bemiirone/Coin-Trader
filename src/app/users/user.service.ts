@@ -27,4 +27,9 @@ export class UserService {
   deleteUser(id: string): Observable<void> {
     return this.http.delete<void>(`${this.apiUrl}/${id}`);
   }
+  
+  updateUserPortfolio(userId: string, portfolioTotal: number): Observable<User> {
+    return this.http.patch<User>(`/api/users/${userId}`, { portfolio_total: portfolioTotal });
+  }
+  
 }

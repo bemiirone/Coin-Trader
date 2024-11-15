@@ -10,6 +10,7 @@ import { User } from '../user.model';
 export class UserEffects {
   loadUsers$: Observable<ReturnType<typeof UserActions.loadUsersSuccess | typeof UserActions.loadUsersFailure>>;
   addUser$: Observable<ReturnType<typeof UserActions.addUserSuccess | typeof UserActions.addUserFailure>>;
+  updatePortfolioTotal$: Observable<{ type: string, user: User } | { type: string, error: string }>;
   constructor(private actions$: Actions, private userService: UserService) {
 
     this.loadUsers$ = createEffect(() =>
@@ -31,6 +32,18 @@ export class UserEffects {
           this.userService.addUser(action.user).pipe(
             map((user: User) => UserActions.addUserSuccess({ user })),
             catchError((error) => of(UserActions.addUserFailure({ error })))
+          )
+        )
+      )
+    );
+
+    this.updatePortfolioTotal$ = createEffect(() =>
+      this.actions$.pipe(
+        ofType(UserActions.updateUserPortfolioTotal),
+        mergeMap(({ userId, portfolioTotal }) =>
+          this.userService.updateUserPortfolio(userId, portfolioTotal).pipe(
+            map((updatedUser) => UserActions.updateUserPortfolioTotalSuccess({ user: updatedUser })),
+            catchError((error) => of(UserActions.updateUserPortfolioTotalFailure({ error })))
           )
         )
       )

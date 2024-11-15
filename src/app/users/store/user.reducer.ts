@@ -19,37 +19,10 @@ export const initialState: UserState = adapter.getInitialState({
 
 export const reducer = createReducer(
   initialState,
-  on(UserActions.addUser,
-    (state, action) => adapter.addOne(action.user, state)
-  ),
-  on(UserActions.upsertUser,
-    (state, action) => adapter.upsertOne(action.user, state)
-  ),
-  on(UserActions.addUsers,
-    (state, action) => adapter.addMany(action.users, state)
-  ),
-  on(UserActions.upsertUsers,
-    (state, action) => adapter.upsertMany(action.users, state)
-  ),
-  on(UserActions.updateUser,
-    (state, action) => adapter.updateOne(action.user, state)
-  ),
-  on(UserActions.updateUsers,
-    (state, action) => adapter.updateMany(action.users, state)
-  ),
-  on(UserActions.deleteUser,
-    (state, action) => adapter.removeOne(action.id, state)
-  ),
-  on(UserActions.deleteUsers,
-    (state, action) => adapter.removeMany(action.ids, state)
-  ),
   on(UserActions.loadUsersSuccess,
     (state, action) => adapter.setAll(action.users, state)
   ),
   on(UserActions.loadUsersFailure,
-    state => adapter.removeAll(state)
-  ),
-  on(UserActions.clearUsers,
     state => adapter.removeAll(state)
   ),
   on(UserActions.setSelectedUserId,
@@ -58,8 +31,22 @@ export const reducer = createReducer(
       selectedUserId: id
     })
   ),
+  on(UserActions.addUserSuccess,
+    (state, { user }) => adapter.addOne(user, state)
+  ),
+  on(UserActions.addUserFailure,
+    state => adapter.removeAll(state)
+  ),
+  on(UserActions.updateUserPortfolioTotal, (state, { userId, portfolioTotal }) =>
+    adapter.updateOne(
+      {
+        id: userId,
+        changes: { portfolio_total: portfolioTotal },
+      },
+      state
+    )
+  )
 );
-
 export const usersFeature = createFeature({
   name: usersFeatureKey,
   reducer,

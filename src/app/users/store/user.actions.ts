@@ -21,5 +21,8 @@ export const UserActions = createActionGroup({
     'Delete User': props<{ id: string }>(),
     'Delete Users': props<{ ids: string[] }>(),
     'Clear Users': emptyProps(),
+    'Update User Portfolio Total': props<{ userId: string, portfolioTotal: number }>(),
+    'Update User Portfolio Total Success': props<{ user: User }>(),
+    'Update User Portfolio Total Failure': props<{ error: string }>(),
   }
 });
