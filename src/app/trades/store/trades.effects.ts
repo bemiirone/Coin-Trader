@@ -13,6 +13,7 @@ export class TradesEffects {
   addTrade$!: Observable<ReturnType<typeof TradeActions.addTradeSuccess | typeof TradeActions.addTradeFailure>>;
 
   constructor(private actions$: Actions, private tradesService: TradesService) {
+    // Load trades effect
     this.loadTrades$ = createEffect(() =>
       this.actions$.pipe(
         ofType(TradeActions.loadTrades),
@@ -24,7 +25,7 @@ export class TradesEffects {
         )
       )
     );
-
+    // Add trade effect
     this.addTrade$ = createEffect(() =>
       this.actions$.pipe(
         ofType(TradeActions.addTrade),

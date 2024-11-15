@@ -16,6 +16,7 @@ export class CoinsEffects {
     private actions$: Actions,
     private coinsService: CoinsService
   ) {
+    // Load coins effect
     this.loadCoins$ = createEffect(() => this.actions$.pipe(
       ofType(CoinsActions.loadCoins),
       mergeMap(() => this.coinsService.getCoins()

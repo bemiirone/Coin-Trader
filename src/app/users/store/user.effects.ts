@@ -12,7 +12,7 @@ export class UserEffects {
   addUser$: Observable<ReturnType<typeof UserActions.addUserSuccess | typeof UserActions.addUserFailure>>;
   updatePortfolioTotal$: Observable<{ type: string, user: User } | { type: string, error: string }>;
   constructor(private actions$: Actions, private userService: UserService) {
-
+    // Load users effect
     this.loadUsers$ = createEffect(() =>
       this.actions$.pipe(
         ofType(UserActions.loadUsers),
@@ -24,7 +24,7 @@ export class UserEffects {
         )
       )
     );
-
+    // Add user effect
     this.addUser$ = createEffect(() =>
       this.actions$.pipe(
         ofType(UserActions.addUser),
@@ -36,7 +36,7 @@ export class UserEffects {
         )
       )
     );
-
+    // Update user portfolio total effect
     this.updatePortfolioTotal$ = createEffect(() =>
       this.actions$.pipe(
         ofType(UserActions.updateUserPortfolioTotal),

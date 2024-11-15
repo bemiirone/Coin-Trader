@@ -69,19 +69,15 @@ export const selectPortfolioPercentageDiff = createSelector(
   }
 );
 
-// Trade success
+// Trade success, error, and loading state
 export const selectTradeSuccess = createSelector(
   selectTradesState,
   (tradesState) => tradesState.success
 );
-
-// Trade error
 export const selectTradeError = createSelector(
   selectTradesState,
   (tradesState) => tradesState.error
 );
-
-// Trade loading
 export const selectTradeLoading = createSelector(
   selectTradesState,
   (tradesState) => tradesState.loading

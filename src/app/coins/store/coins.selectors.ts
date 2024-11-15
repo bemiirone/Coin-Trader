@@ -55,7 +55,6 @@ export const selectCoinLoading = createSelector(
   selectCoinsState,
   (state: CoinState) => state.loading
 );
-
 export const selectCoinError = createSelector(
   selectCoinsState,
   (state: CoinState) => state.error
