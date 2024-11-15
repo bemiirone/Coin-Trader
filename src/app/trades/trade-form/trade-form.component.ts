@@ -18,7 +18,7 @@ import { map, Observable, of, switchMap, tap } from 'rxjs';
 import { User } from '../../users/user.model';
 import { selectSelectedUser } from '../../users/store/user.selectors';
 import { TradeActions } from '../store/trades.actions';
-import { selectTradeSuccess } from '../store/trades.selectors';
+import { selectTradeLoading, selectTradeSuccess } from '../store/trades.selectors';
 
 @Component({
   standalone: true,
@@ -33,6 +33,7 @@ export class TradeFormComponent implements OnInit {
   selectedCoin$!: Observable<TradedCryptoData | undefined>;
   user: User | null = {} as User;
   success$!: Observable<boolean>;
+  isLoading$!: Observable<boolean>;
 
   constructor(
     private fb: FormBuilder,
@@ -44,6 +45,7 @@ export class TradeFormComponent implements OnInit {
     this.initCoinPrice();
     this.selectUser();
     this.success$ = this.store.select(selectTradeSuccess);
+    this.isLoading$ = this.store.select(selectTradeLoading);
   }
 
   selectUser(): void {

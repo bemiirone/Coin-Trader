@@ -10,6 +10,7 @@ export const selectCoinData = createSelector(
   (state: CoinState) => state.data?.data || []
 );
 
+//Top coins limited by limit
 export function selectTopCoins(limit: number) {
   return createSelector(
     selectCoinData,
@@ -27,6 +28,7 @@ export function selectTopCoins(limit: number) {
   );
 }
 
+// All coins
 export const selectCoinTrades = createSelector(
   selectCoinData,
   (coins: CoinData[] | undefined): TradedCryptoData[] => {
@@ -42,11 +44,13 @@ export const selectCoinTrades = createSelector(
   }
 );
 
+// Coin by id
 export const selectCoinById = (id: number) =>
   createSelector(selectCoinTrades, (coins: TradedCryptoData[]) =>
     coins.find((coin) => coin.id === id)
 );
 
+// Coin loading and error
 export const selectCoinLoading = createSelector(
   selectCoinsState,
   (state: CoinState) => state.loading

@@ -18,7 +18,6 @@ export const selectSelectedUserId = createSelector(
 export const selectSelectedUser = createSelector(
   selectUserEntities,
   selectSelectedUserId,
-  (userEntities, selectedUserId) => (selectedUserId ? userEntities[selectedUserId] ?? null : null) // Explicitly return null if not found
+  (userEntities, selectedUserId) => (selectedUserId ? userEntities[selectedUserId] ?? null : null)
 );
-
 

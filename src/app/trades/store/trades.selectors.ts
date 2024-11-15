@@ -14,7 +14,7 @@ export const selectTrades = createSelector(
   (tradesState) => tradesState.entities
 );
 
-// select selected trades filtered by user id
+// Trades filtered by user id
 export const selectUserTrades = createSelector(
   selectTrades,
   selectSelectedUser,
@@ -26,6 +26,7 @@ export const selectUserTrades = createSelector(
   }
 );
 
+// Trades filtered by coin id
 export const selectTradedCryptoData = createSelector(
   selectCoinTrades,
   (coins): Record<number, TradedCryptoData> => {
@@ -36,6 +37,7 @@ export const selectTradedCryptoData = createSelector(
   }
 );
 
+// Total value of the user's portfolio
 export const selectUserPortfolioValue = createSelector(
   selectUserTrades,
   selectTradedCryptoData,
@@ -53,18 +55,34 @@ export const selectUserPortfolioValue = createSelector(
     const sellValue = trades
       .filter(trade => trade.order === 'sell')
       .reduce((sum, trade) => sum + trade.amount, 0);
-
-    // Portfolio total is initial value + total buy value - total sell value
     return user.portfolio_total + buyValue - sellValue;
   }
 );
 
+// Trade deposit and portfolio percentage difference
+export const selectPortfolioPercentageDiff = createSelector(
+  selectUserPortfolioValue,
+  selectSelectedUser,
+  (portfolioValue, user) => {
+    if (!user) return 0;
+    return ((portfolioValue - user.deposit) / user.deposit) * 100;
+  }
+);
+
+// Trade success
 export const selectTradeSuccess = createSelector(
   selectTradesState,
   (tradesState) => tradesState.success
 );
 
+// Trade error
 export const selectTradeError = createSelector(
   selectTradesState,
   (tradesState) => tradesState.error
+);
+
+// Trade loading
+export const selectTradeLoading = createSelector(
+  selectTradesState,
+  (tradesState) => tradesState.loading
 );

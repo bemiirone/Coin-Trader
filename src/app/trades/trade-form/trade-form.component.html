@@ -67,7 +67,7 @@
       class="w-full py-2 rounded text-white 
          bg-blue-500 hover:bg-blue-600 
          disabled:bg-gray-400 disabled:cursor-not-allowed"
-          [disabled]="tradeForm.invalid">
+          [disabled]="tradeForm.invalid || (isLoading$ | async )">
           Submit Trade
     </button>
     <button type="button" (click)="clearForm()" 
