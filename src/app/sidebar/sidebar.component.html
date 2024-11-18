@@ -4,10 +4,14 @@
 }"
 class="bg-gray-800 text-white p-4">
   <!-- Hide the heading in mobile view -->
-  <h2 class="text-xl font-bold mb-4" *ngIf="!isMobile">CoinTrader</h2>
+   <ng-container *ngIf="!isMobile">
+    <h2 class="text-xl font-bold mb-4">
+      <a routerLink="/" class="hover:underline">CoinTrader</a>
+    </h2>
+   </ng-container>
+  
   <ul class="flex md:block" [ngClass]="{'justify-around': isMobile}">
-    <li class="mb-2"><a href="#" class="hover:underline">Link 1</a></li>
-    <li class="mb-2"><a href="#" class="hover:underline">Link 2</a></li>
-    <li class="mb-2"><a href="#" class="hover:underline">Link 3</a></li>
+    <li class="mb-2"><a routerLink="/coins" class="hover:underline">Coins</a></li>
+    <li class="mb-2"><a routerLink="/trades" class="hover:underline">Trades</a></li>
   </ul>
 </div>
