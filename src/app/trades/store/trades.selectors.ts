@@ -49,7 +49,9 @@ export const selectUserPortfolioValue = createSelector(
       .filter(trade => trade.order === 'buy')
       .reduce((sum, trade) => {
         const currentPrice = cryptoData[trade.coin_id]?.price || 0;
-        return sum + (trade.amount / trade.price) * currentPrice;
+        const initialCost = trade.amount; // Original cost of the buy trade
+        const currentValue = (initialCost / trade.price) * currentPrice; // Current value of the buy trade
+        return sum + (currentValue - initialCost); // Add profit/loss
       }, 0);
 
     const sellValue = trades

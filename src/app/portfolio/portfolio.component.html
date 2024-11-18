@@ -1,0 +1,9 @@
+<div class="text-3xl font-bold">
+  {{portfolioValue$ | async | currency}}
+</div>
+<ng-container *ngIf="yield$ | async as yield">
+<div class="text-2xl text-gray-500" [ngClass]="{ 'text-green-600': yield > 0 }">
+  {{yield | number:'1.2-2'}}%
+</div>
+</ng-container>
+

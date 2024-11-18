@@ -18,7 +18,7 @@ import { Trade } from './trades.model';
 })
 export class TradesComponent {
   title = 'My Trades';
-  portfolioTitle = 'Portfolio';
+  portfolioTitle = 'Portfolio value';
   componentType: ComponentType = ComponentType.Trades;
   trades$: Observable<Trade[]> = of([]);
   allTrades$: Observable<Trade[]> = of([]);

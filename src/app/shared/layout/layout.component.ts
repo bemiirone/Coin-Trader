@@ -8,6 +8,7 @@ import { TableComponent } from '../../coins/table/table.component';
 import { TradeListComponent } from '../../trades/trade-list/trade-list.component';
 import { User } from '../../users/user.model';
 import { Trade } from '../../trades/trades.model';
+import { PortfolioComponent } from '../../portfolio/portfolio.component';
 
 @Component({
   selector: 'app-layout',
@@ -19,13 +20,14 @@ import { Trade } from '../../trades/trades.model';
     TradesComponent,
     TradeListComponent,
     TableComponent,
+    PortfolioComponent
   ],
   templateUrl: './layout.component.html',
   styleUrl: './layout.component.scss',
 })
 export class LayoutComponent {
   @Input() mainTitle = '';
-  @Input() sideTitle = 'Portfolio';
+  @Input() sideTitle = 'Portfolio value';
   @Input() componentType: ComponentType = {} as ComponentType;
   @Input() user: User | null  = {} as User;
   @Input() trades: Trade[] | null = [];
