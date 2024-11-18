@@ -13,6 +13,7 @@ import { usersFeature } from './users/store/user.reducer';
 import { UserEffects } from './users/store/user.effects';
 import { TradesEffects } from './trades/store/trades.effects';
 import { tradesFeature } from './trades/store/trades.reducer';
+import { ModalModule } from 'ngx-bootstrap/modal';
 
 const devtoolsOptions = {
   maxAge: 25, // Retains last 25 states
@@ -29,7 +30,7 @@ export const appConfig: ApplicationConfig = {
     }),
     provideEffects([CoinsEffects, UserEffects, TradesEffects]),
     provideHttpClient(withFetch()),
-    importProvidersFrom(StoreDevtoolsModule.instrument(devtoolsOptions)),
+    importProvidersFrom([StoreDevtoolsModule.instrument(devtoolsOptions), ModalModule.forRoot()]),
     provideCharts(withDefaultRegisterables()),
 ],
 };

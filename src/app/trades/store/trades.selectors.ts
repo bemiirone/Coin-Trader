@@ -61,6 +61,18 @@ export const selectUserPortfolioValue = createSelector(
   }
 );
 
+// Calculate the value of the user's trades in USD
+export const selectUserTradesValue = createSelector(
+  selectUserTrades,
+  selectTradedCryptoData,
+  (trades, cryptoData) => {
+    return trades.reduce((sum, trade) => {
+      const currentPrice = cryptoData[trade.coin_id]?.price || 0;
+      return sum + trade.amount * currentPrice;
+    }, 0);
+  }
+);
+
 // Trade deposit and portfolio percentage difference
 export const selectPortfolioPercentageDiff = createSelector(
   selectUserPortfolioValue,
