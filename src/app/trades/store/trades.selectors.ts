@@ -88,6 +88,23 @@ export const selectPortfolioPercentageDiff = createSelector(
   }
 );
 
+// Top Trades
+export const selectTopTrades = (topN: number) => createSelector(
+  selectUserTrades,
+  selectTradedCryptoData,
+  (trades, cryptoData) => {
+    return trades
+      .map(trade => {
+        const currentPrice = cryptoData[trade.coin_id]?.price || 0;
+        const tradeValue = ((currentPrice - trade.price) / trade.price) * 100;
+        return { ...trade, value: tradeValue };
+      })
+      .sort((a, b) => b.value - a.value)
+      .slice(0, topN);
+  }
+);
+
+
 // Trade success, error, and loading state
 export const selectTradeSuccess = createSelector(
   selectTradesState,

@@ -16,4 +16,29 @@
     <dd class="text-lg font-bold text-gray-900">{{tradesValue$ | async | currency}}</dd>
   </div>
 </dl>
+<div class="text-xl font-bold mt-4">
+  Top Trades
+</div>
+<table class="min-w-full mt-2">
+  <thead>
+    <tr>
+      <th class="px-6 py-3 border-b-2 border-gray-300 text-left text-xs leading-4 font-medium text-gray-500 uppercase tracking-wider">
+        Name
+      </th>
+      <th class="px-6 py-3 border-b-2 border-gray-300 text-left text-xs leading-4 font-medium text-gray-500 uppercase tracking-wider">
+        % Change
+      </th>
+    </tr>
+  </thead>
+  <tbody>
+    <tr *ngFor="let trade of topTrades$ | async">
+      <td class="px-6 py-2 whitespace-no-wrap border-b border-gray-200">
+        {{trade.name}}
+      </td>
+      <td class="px-6 py-2 whitespace-no-wrap border-b border-gray-200" [ngClass]="{ 'text-green-600': trade.value > 0, 'text-red-600': trade.value < 0 }">
+        {{trade.value | number:'1.2-2'}}%
+      </td>
+    </tr>
+  </tbody>
+</table>
 
