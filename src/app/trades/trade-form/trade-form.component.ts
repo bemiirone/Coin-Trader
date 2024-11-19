@@ -19,12 +19,13 @@ import { User } from '../../users/user.model';
 import { selectSelectedUser } from '../../users/store/user.selectors';
 import { TradeActions } from '../store/trades.actions';
 import { selectTradeLoading, selectTradeSuccess } from '../store/trades.selectors';
+import { ModalComponent } from '../../shared/modal/modal.component';
 
 @Component({
   standalone: true,
   selector: 'app-trade-form',
   templateUrl: './trade-form.component.html',
-  imports: [CommonModule, FormsModule, ReactiveFormsModule],
+  imports: [CommonModule, FormsModule, ReactiveFormsModule, ModalComponent],
 })
 export class TradeFormComponent implements OnInit {
   tradeForm!: FormGroup;

@@ -31,7 +31,6 @@ export class TradeListComponent {
 
   openModal(): void {
     this.modalRef = this.modalService.show(TradeFormComponent, {
-      class: 'modal-lg bg-gray-900', 
       backdrop: true, // Adds a backdrop
     });
   }
