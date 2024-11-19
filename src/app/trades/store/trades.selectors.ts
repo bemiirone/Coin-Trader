@@ -37,45 +37,50 @@ export const selectTradedCryptoData = createSelector(
   }
 );
 
-// Total value of the user's portfolio
-export const selectUserPortfolioValue = createSelector(
-  selectUserTrades,
-  selectTradedCryptoData,
-  selectSelectedUser,
-  (trades, cryptoData, user) => {
-    if (!user) return 0;
-
-    const buyValue = trades
-      .filter(trade => trade.order === 'buy')
-      .reduce((sum, trade) => {
-        const currentPrice = cryptoData[trade.coin_id]?.price || 0;
-        const initialCost = trade.amount; // Original cost of the buy trade
-        const currentValue = (initialCost / trade.price) * currentPrice; // Current value of the buy trade
-        return sum + (currentValue - initialCost); // Add profit/loss
-      }, 0);
-
-    const sellValue = trades
-      .filter(trade => trade.order === 'sell')
-      .reduce((sum, trade) => sum + trade.amount, 0);
-    return user.portfolio_total + buyValue - sellValue;
-  }
-);
-
-// Calculate the value of the user's trades in USD
+// Calculate the value of the user's buy trades in USD
 export const selectUserTradesValue = createSelector(
   selectUserTrades,
   selectTradedCryptoData,
   (trades, cryptoData) => {
-    return trades.reduce((sum, trade) => {
-      const currentPrice = cryptoData[trade.coin_id]?.price || 0;
-      return sum + trade.amount * currentPrice;
-    }, 0);
+    return trades
+      .filter(trade => trade.order === 'buy')
+      .reduce((sum, trade) => {
+        const currentPrice = cryptoData[trade.coin_id]?.price || 0;
+        return sum + trade.volume * currentPrice;
+      }, 0);
   }
+);
+
+// Calculate the value of the user's sell trades in USD
+export const selectUserTradesSellValue = createSelector(
+  selectUserTrades,
+  selectTradedCryptoData,
+  (trades, cryptoData) => {
+    return trades
+      .filter(trade => trade.order === 'sell')
+      .reduce((sum, trade) => {
+        const currentPrice = cryptoData[trade.coin_id]?.price || 0;
+        return sum + trade.volume * currentPrice;
+      }, 0);
+  }
+);
+
+// Cash balance of the user
+export const selectUserCash = createSelector(
+  selectSelectedUser,
+  (user) => user?.cash || 0
+);
+
+// Total value of cash and buy trades
+export const selectUserPortfolioTotal = createSelector(
+  selectUserTradesValue,
+  selectUserCash,
+  (tradesValue, cash) => tradesValue + cash
 );
 
 // Trade deposit and portfolio percentage difference
 export const selectPortfolioPercentageDiff = createSelector(
-  selectUserPortfolioValue,
+  selectUserPortfolioTotal,
   selectSelectedUser,
   (portfolioValue, user) => {
     if (!user) return 0;
