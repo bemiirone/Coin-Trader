@@ -37,11 +37,11 @@ export const reducer = createReducer(
   on(UserActions.addUserFailure,
     state => adapter.removeAll(state)
   ),
-  on(UserActions.updateUserPortfolioTotal, (state, { userId, portfolioTotal }) =>
+  on(UserActions.updateUserPortfolio, (state, { userId, portfolioTotal, cash }) =>
     adapter.updateOne(
       {
         id: userId,
-        changes: { portfolio_total: portfolioTotal },
+        changes: { portfolio_total: portfolioTotal, cash },
       },
       state
     )

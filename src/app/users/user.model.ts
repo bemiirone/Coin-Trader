@@ -6,4 +6,5 @@ export interface User {
   admin: boolean;
   portfolio_total: number;
   deposit: number;
+  cash: number;
 }

@@ -26,12 +26,11 @@ export class TradeListComponent {
   ngOnInit() {
     this.loading$ = this.store.select(selectCoinLoading);
     this.error$ = this.store.select(selectCoinError);
-    console.log('Trades List', this.trades);
   }
 
   openModal(): void {
     this.modalRef = this.modalService.show(TradeFormComponent, {
-      backdrop: true, // Adds a backdrop
+      backdrop: true,
     });
   }
 

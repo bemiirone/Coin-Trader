@@ -28,8 +28,8 @@ export class UserService {
     return this.http.delete<void>(`${this.apiUrl}/${id}`);
   }
   
-  updateUserPortfolio(userId: string, portfolioTotal: number): Observable<User> {
-    return this.http.patch<User>(`/api/users/${userId}`, { portfolio_total: portfolioTotal });
+  updateUserPortfolioAndCash(userId: string, portfolioTotal: number, cash: number): Observable<User> {
+    return this.http.patch<User>(`/api/users/${userId}`, { portfolio_total: portfolioTotal, cash });
   }
   
 }

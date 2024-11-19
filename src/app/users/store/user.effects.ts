@@ -36,14 +36,14 @@ export class UserEffects {
         )
       )
     );
-    // Update user portfolio total effect
+    // Update user portfolio total and cash effect
     this.updatePortfolioTotal$ = createEffect(() =>
       this.actions$.pipe(
-        ofType(UserActions.updateUserPortfolioTotal),
-        mergeMap(({ userId, portfolioTotal }) =>
-          this.userService.updateUserPortfolio(userId, portfolioTotal).pipe(
-            map((updatedUser) => UserActions.updateUserPortfolioTotalSuccess({ user: updatedUser })),
-            catchError((error) => of(UserActions.updateUserPortfolioTotalFailure({ error })))
+        ofType(UserActions.updateUserPortfolio),
+        mergeMap(({ userId, portfolioTotal, cash }) =>
+          this.userService.updateUserPortfolioAndCash(userId, portfolioTotal, cash).pipe(
+            map((updatedUser) => UserActions.updateUserPortfolioSuccess({ user: updatedUser })),
+            catchError((error) => of(UserActions.updateUserPortfolioFailure({ error })))
           )
         )
       )

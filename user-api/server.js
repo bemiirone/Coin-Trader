@@ -59,12 +59,12 @@ app.post('/api/users', async (req, res) => {
 
 app.patch('/:id', async (req, res) => {
   const { id } = req.params;
-  const { portfolio_total } = req.body;
+  const { portfolio_total, cash } = req.body;
 
   try {
     const user = await User.findByIdAndUpdate(
       id,
-      { portfolio_total },
+      { portfolio_total, cash },
       { new: true } // Return the updated document
     );
 
@@ -74,7 +74,7 @@ app.patch('/:id', async (req, res) => {
 
     res.json(user);
   } catch (error) {
-    res.status(500).json({ error: 'Error updating portfolio total' });
+    res.status(500).json({ error: 'Error updating portfolio total and cash' });
   }
 });
 
