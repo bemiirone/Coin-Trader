@@ -18,7 +18,9 @@ mongoose.connect(process.env.MONGODB_URI)
 const userSchema = new mongoose.Schema({
   name: String,
   email: String,
-  password: String, // Note: For production, hash passwords before storing!
+  password: String,
+  portfolio_total: Number,
+  cash: Number,
 });
 
 // Trade Schema and Model
@@ -57,7 +59,7 @@ app.post('/api/users', async (req, res) => {
   }
 });
 
-app.patch('/:id', async (req, res) => {
+app.patch('/api/users/:id', async (req, res) => {
   const { id } = req.params;
   const { portfolio_total, cash } = req.body;
 
@@ -65,15 +67,17 @@ app.patch('/:id', async (req, res) => {
     const user = await User.findByIdAndUpdate(
       id,
       { portfolio_total, cash },
-      { new: true } // Return the updated document
+      { new: true }
     );
 
     if (!user) {
+      console.log('User not found');
       return res.status(404).json({ error: 'User not found' });
     }
-
+    console.log('Successfully updated user:', user); // Debugging log
     res.json(user);
   } catch (error) {
+    console.error('Error updating portfolio total and cash:', error); // Debugging log
     res.status(500).json({ error: 'Error updating portfolio total and cash' });
   }
 });

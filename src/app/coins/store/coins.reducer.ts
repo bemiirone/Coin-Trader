@@ -24,7 +24,6 @@ export const reducer = createReducer(
     error: null,
   })),
   on(CoinsActions.loadCoinsSuccess, (state, { coinsSuccess }) => {
-    console.log('Coins loaded successfully:', coinsSuccess);  // Debug log for data structure
     return {
       ...state,
       data: coinsSuccess,

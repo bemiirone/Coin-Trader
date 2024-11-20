@@ -6,6 +6,7 @@ import {
   mergeMap,
   Observable,
   of,
+  tap,
   withLatestFrom,
 } from 'rxjs';
 import { TradeActions } from './trades.actions';
@@ -83,14 +84,14 @@ export class TradesEffects {
 
           const updatedCash =
             trade.order === 'buy'
-              ? cash - trade.amount // Deduct the buy amount from cash
-              : cash + trade.amount; // Add the sell amount to cash
+              ? cash - trade.amount 
+              : cash + trade.amount; 
 
-          const tradeValue = trade.volume * trade.price; // Original value of the trade
+          const tradeValue = trade.volume * trade.price;
           const updatedPortfolioTotal =
             trade.order === 'buy'
-              ? portfolioValue + tradeValue // Add buy value to portfolio
-              : portfolioValue - tradeValue; // Subtract sell value from portfolio
+              ? portfolioValue + tradeValue 
+              : portfolioValue - tradeValue; 
 
           return this.userService
             .updateUserPortfolioAndCash(
@@ -106,6 +107,9 @@ export class TradesEffects {
                   cash: updatedCash,
                 })
               ),
+              tap(() => {
+                this.store.dispatch(TradeActions.loadTrades());
+              }),
               catchError((error) =>
                 of(
                   UserActions.updateUserPortfolioFailure({

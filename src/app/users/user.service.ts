@@ -29,7 +29,7 @@ export class UserService {
   }
   
   updateUserPortfolioAndCash(userId: string, portfolioTotal: number, cash: number): Observable<User> {
-    return this.http.patch<User>(`/api/users/${userId}`, { portfolio_total: portfolioTotal, cash });
+    return this.http.patch<User>(`${this.apiUrl}/${userId}`, { portfolio_total: portfolioTotal, cash });
   }
   
 }

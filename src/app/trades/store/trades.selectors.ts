@@ -38,6 +38,21 @@ export const selectTradedCryptoData = createSelector(
 );
 
 // Calculate the value of the user's buy trades in USD
+
+// Calculate the value of the user's sell trades in USD
+export const selectUserTradesSellValue = createSelector(
+  selectUserTrades,
+  selectTradedCryptoData,
+  (trades, cryptoData) => {
+    return trades
+    .filter(trade => trade.order === 'sell')
+    .reduce((sum, trade) => {
+      const currentPrice = cryptoData[trade.coin_id]?.price || 0;
+      return sum + trade.volume * currentPrice;
+    }, 0);
+  }
+);
+
 export const selectUserTradesValue = createSelector(
   selectUserTrades,
   selectTradedCryptoData,
@@ -51,18 +66,9 @@ export const selectUserTradesValue = createSelector(
   }
 );
 
-// Calculate the value of the user's sell trades in USD
-export const selectUserTradesSellValue = createSelector(
-  selectUserTrades,
-  selectTradedCryptoData,
-  (trades, cryptoData) => {
-    return trades
-      .filter(trade => trade.order === 'sell')
-      .reduce((sum, trade) => {
-        const currentPrice = cryptoData[trade.coin_id]?.price || 0;
-        return sum + trade.volume * currentPrice;
-      }, 0);
-  }
+export const selectUserTradesTotal = createSelector(
+  selectSelectedUser,
+  (user) => user?.portfolio_total || 0
 );
 
 // Cash balance of the user

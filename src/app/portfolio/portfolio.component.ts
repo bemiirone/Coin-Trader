@@ -19,6 +19,7 @@ interface TradeV extends Trade {
 })
 export class PortfolioComponent {
   constructor(private store: Store) {}
+  tradeNumber = 8;
   portfolioValue$: Observable<number> = of(0);
   yield$: Observable<number> = of(0);
   cashBalance$: Observable<number> = of(0);
@@ -30,7 +31,6 @@ export class PortfolioComponent {
     this.yield$ = this.store.select(selectPortfolioPercentageDiff);
     this.cashBalance$ = this.store.select(selectUserCash);
     this.tradesValue$ = this.store.select(selectUserTradesValue);
-    this.topTrades$ = this.store.select(selectTopTrades(5));
-    this.topTrades$.subscribe(trades => console.log(trades));
+    this.topTrades$ = this.store.select(selectTopTrades(this.tradeNumber));
   }
 }
