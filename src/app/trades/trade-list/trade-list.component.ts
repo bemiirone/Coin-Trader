@@ -6,6 +6,8 @@ import { selectCoinLoading, selectCoinError } from '../../coins/store/coins.sele
 import { Trade } from '../trades.model';
 import { BsModalService, BsModalRef } from 'ngx-bootstrap/modal';
 import { TradeFormComponent } from '../trade-form/trade-form.component';
+import { User } from '../../users/user.model';
+import { selectSelectedUser } from '../../users/store/user.selectors';
 
 @Component({
   selector: 'app-trade-list',
@@ -16,6 +18,7 @@ import { TradeFormComponent } from '../trade-form/trade-form.component';
 })
 export class TradeListComponent {
   @Input() trades: Trade[] | null = [];
+  @Input()user: User | null = {} as User;
   loading$: Observable<boolean> = of(false);
   error$: Observable<string | null> = of(null);
   modalRef: BsModalRef | null = null;
@@ -28,10 +31,23 @@ export class TradeListComponent {
     this.error$ = this.store.select(selectCoinError);
   }
 
+
   openModal(): void {
+    if (!this.user) {
+      console.error('User data not available!');
+      return;
+    }
+
     this.modalRef = this.modalService.show(TradeFormComponent, {
       backdrop: true,
+      initialState: {
+        user: this.user,
+        trades: this.trades,
+      },
     });
   }
 
+  ngOnDestroy(): void {
+    this.store.select(selectSelectedUser).subscribe().unsubscribe();
+  }
 }

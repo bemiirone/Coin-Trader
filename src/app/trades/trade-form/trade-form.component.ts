@@ -1,5 +1,5 @@
 import { CommonModule } from '@angular/common';
-import { Component, OnInit } from '@angular/core';
+import { Component, Input, OnInit } from '@angular/core';
 import {
   FormBuilder,
   FormGroup,
@@ -21,6 +21,7 @@ import { TradeActions } from '../store/trades.actions';
 import { selectTradeLoading, selectTradeSuccess } from '../store/trades.selectors';
 import { ModalComponent } from '../../shared/modal/modal.component';
 
+
 @Component({
   standalone: true,
   selector: 'app-trade-form',
@@ -28,11 +29,12 @@ import { ModalComponent } from '../../shared/modal/modal.component';
   imports: [CommonModule, FormsModule, ReactiveFormsModule, ModalComponent],
 })
 export class TradeFormComponent implements OnInit {
+  @Input() user: User | null = {} as User;
+  @Input() trades: Trade[] | null = [];
   tradeForm!: FormGroup;
   coins$: Observable<TradedCryptoData[]> = of([]);
   coinData: TradedCryptoData = {} as TradedCryptoData;
   selectedCoin$!: Observable<TradedCryptoData | undefined>;
-  user: User | null = {} as User;
   success$!: Observable<boolean>;
   isLoading$!: Observable<boolean>;
 
@@ -44,22 +46,15 @@ export class TradeFormComponent implements OnInit {
   ngOnInit(): void {
     this.initFormSetUp();
     this.initCoinPrice();
-    this.selectUser();
     this.success$ = this.store.select(selectTradeSuccess);
     this.isLoading$ = this.store.select(selectTradeLoading);
-  }
-
-  selectUser(): void {
-    this.store.select(selectSelectedUser).subscribe((user) => {
-      this.user = user;
-    });
   }
 
   initFormSetUp(): void { 
     this.tradeForm = this.fb.group({
       coin_id: ['', Validators.required],
       order: ['buy', Validators.required],
-      amount: [0, [Validators.required, Validators.min(1)]],
+      amount: [0, [Validators.required, Validators.min(1), this.cashValidator()]], 
       price: [0, [Validators.required, Validators.min(0.01)]],
     });
   }
@@ -91,6 +86,16 @@ export class TradeFormComponent implements OnInit {
     this.tradeForm.get('volume')?.setValue(volume);
   }
 
+  cashValidator() {
+    return (control: any) => {
+      const value = control.value;
+      if ((value > (this.user?.cash ?? 0) && this.tradeForm.get('order')?.value === 'buy')) {
+        return { insufficientFunds: true };
+      }
+      return null;
+    };
+  }
+
   onSubmit(): void {
     if (this.tradeForm.valid) {
       const amount = this.tradeForm.get('amount')?.value || 0;
@@ -103,7 +108,8 @@ export class TradeFormComponent implements OnInit {
         volume: amount / coin.price,
         date: new Date().toISOString(),
       };
-      this.store.dispatch(TradeActions.addTrade({ trade: tradeData }));
+      // this.store.dispatch(TradeActions.addTrade({ trade: tradeData }));
+      console.log('tradeData', tradeData);
       this.clearForm();
     }
   }

@@ -41,10 +41,13 @@
                'border-gray-300': !tradeForm.get('amount')?.invalid,
                'border-red-500': tradeForm.get('amount')?.invalid && tradeForm.get('amount')?.touched
              }">
-      <p *ngIf="tradeForm.get('amount')?.invalid && tradeForm.get('amount')?.touched" 
+      <p *ngIf="tradeForm.get('amount')?.invalid && tradeForm.get('amount')?.touched && !tradeForm.get('amount')?.hasError('insufficientFunds')" 
          class="text-red-500 text-sm mt-1">
         Amount is required and must be at least $1.
       </p>
+      <div *ngIf="tradeForm.get('amount')?.hasError('insufficientFunds')" class="text-red-500 text-sm mt-1">
+        You do not have enough cash. ({{ user?.cash | currency }})
+      </div>
     </div>
 
     <!-- Price per Coin -->
