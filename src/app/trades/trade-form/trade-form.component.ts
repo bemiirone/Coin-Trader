@@ -18,7 +18,7 @@ import { map, Observable, of, switchMap, tap } from 'rxjs';
 import { User } from '../../users/user.model';
 import { selectSelectedUser } from '../../users/store/user.selectors';
 import { TradeActions } from '../store/trades.actions';
-import { selectTradeLoading, selectTradeSuccess } from '../store/trades.selectors';
+import { selectTradeLoading, selectTradeSuccess, selectUserAccumulatedTrades } from '../store/trades.selectors';
 import { ModalComponent } from '../../shared/modal/modal.component';
 
 
@@ -37,6 +37,9 @@ export class TradeFormComponent implements OnInit {
   selectedCoin$!: Observable<TradedCryptoData | undefined>;
   success$!: Observable<boolean>;
   isLoading$!: Observable<boolean>;
+  accumulatedTrade$: Observable<Trade> = of({} as Trade);
+  isBuy = false;
+  isSell = false;
 
   constructor(
     private fb: FormBuilder,
@@ -52,12 +55,13 @@ export class TradeFormComponent implements OnInit {
 
   initFormSetUp(): void { 
     this.tradeForm = this.fb.group({
-      coin_id: ['', Validators.required],
-      order: ['buy', Validators.required],
+      coin_id: [{ value: '', disabled: true }, Validators.required],
+      order: ['', Validators.required],
       amount: [0, [Validators.required, Validators.min(1), this.cashValidator()]], 
       price: [0, [Validators.required, Validators.min(0.01)]],
     });
   }
+  
 
   initCoinPrice(): void {
     this.coins$ = this.store.select(selectCoinTrades);
@@ -70,13 +74,22 @@ export class TradeFormComponent implements OnInit {
             .get('price')!
             .setValue(coin.price, { emitEvent: false });
           this.coinData = coin;
+          if (this.tradeForm.get('order')?.value === 'sell') {
+            this.setAccumulatedTrade();
+          }
         }
       })
     );
-  }
 
-  ngOnDestroy(): void {
-    this.store.select(selectSelectedUser).subscribe().unsubscribe();
+    this.tradeForm.get('order')!.valueChanges.subscribe((order) => {
+      if (order) {
+        this.tradeForm.get('coin_id')!.enable();
+        this.isBuy = order === 'buy';
+        this.isSell = order === 'sell';
+      } else {
+        this.tradeForm.get('coin_id')!.disable();
+      }
+    });
   }
 
   calculateVolume(): void {
@@ -96,6 +109,11 @@ export class TradeFormComponent implements OnInit {
     };
   }
 
+  setAccumulatedTrade(): void {
+    const coinId = this.tradeForm.get('coin_id')?.value;
+    this.accumulatedTrade$ = this.store.select(selectUserAccumulatedTrades(+coinId));
+  }
+
   onSubmit(): void {
     if (this.tradeForm.valid) {
       const amount = this.tradeForm.get('amount')?.value || 0;
@@ -108,12 +126,17 @@ export class TradeFormComponent implements OnInit {
         volume: amount / coin.price,
         date: new Date().toISOString(),
       };
-      // this.store.dispatch(TradeActions.addTrade({ trade: tradeData }));
-      console.log('tradeData', tradeData);
+      this.accumulatedTrade$.subscribe((trade) => {
+        console.log('accumulatedTrade', trade);
+      });
       this.clearForm();
     }
   }
 
+  ngOnDestroy(): void {
+    this.tradeForm.get('order')?.valueChanges.subscribe().unsubscribe();
+  }
+  
   clearForm(): void {
     this.tradeForm.reset();
   }

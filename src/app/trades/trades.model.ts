@@ -9,4 +9,5 @@ export interface Trade {
   date: string;
   volume: number;
   order: 'buy' | 'sell';
+  value?: number;
 }

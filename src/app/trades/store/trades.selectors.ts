@@ -110,6 +110,29 @@ export const selectTopTrades = (topN: number) => createSelector(
   }
 );
 
+export const selectUserAccumulatedTrades = (coinId: number) => createSelector(
+  selectUserTrades,
+  selectTradedCryptoData,
+  (trades, cryptoData) => {
+    const accumulatedTrade = trades
+      .filter(trade => trade.coin_id === coinId)
+      .reduce((acc, trade) => {
+        if (trade.order === 'buy') {
+          acc.volume += trade.volume;
+        } else if (trade.order === 'sell') {
+          acc.volume -= trade.volume;
+        }
+        acc.name = trade.name;
+        return acc;
+      }, { volume: 0, value: 0, name: '' } as Trade);
+
+    const currentPrice = cryptoData[coinId]?.price || 0;
+    accumulatedTrade.value = accumulatedTrade.volume * currentPrice;
+
+    return accumulatedTrade;
+  }
+);
+
 
 // Trade success, error, and loading state
 export const selectTradeSuccess = createSelector(

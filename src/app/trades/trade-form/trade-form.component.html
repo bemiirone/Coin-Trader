@@ -3,20 +3,8 @@
     <div *ngIf="success$ | async" class="mb-4 p-4 bg-green-100 border border-green-400 text-green-700 rounded">
       Trade submitted successfully!
     </div>
-    <div class="mb-4">
-      <label for="coin_id" class="block text-gray-700 font-medium mb-2">Select Coin</label>
-      <select formControlName="coin_id" id="coin_id" class="block w-full p-2 border rounded"
-              [ngClass]="{
-                'border-gray-300': !tradeForm.get('coin_id')?.invalid,
-                'border-red-500': tradeForm.get('coin_id')?.invalid && tradeForm.get('coin_id')?.touched
-              }">
-        <option value="" disabled>Select a coin</option>
-        <option *ngFor="let coin of coins$ | async" [value]="coin.id">{{ coin.name }} ({{ coin.symbol }})</option>
-      </select>
-      <p *ngIf="tradeForm.get('coin_id')?.invalid && tradeForm.get('coin_id')?.touched" 
-         class="text-red-500 text-sm mt-1">Please select a coin.</p>
-    </div>
 
+    
     <!-- Order Type (Buy/Sell) -->
     <div class="mb-4">
       <label class="block text-gray-700 font-medium mb-2">Order Type</label>
@@ -29,9 +17,39 @@
         </label>
       </div>
       <p *ngIf="tradeForm.get('order')?.invalid && tradeForm.get('order')?.touched" 
-         class="text-red-500 text-sm mt-1">Please select an order type.</p>
+      class="text-red-500 text-sm mt-1">Please select an order type.</p>
+    </div>
+    
+    <!-- Coin Selection buy -->
+    <div class="mb-4" *ngIf="isBuy">
+      <label for="coin_id" class="block text-gray-700 font-medium mb-2">Select Coin</label>
+      <select formControlName="coin_id" id="coin_id" class="block w-full p-2 border rounded"
+              [ngClass]="{
+                'border-gray-300': !tradeForm.get('coin_id')?.invalid,
+                'border-red-500': tradeForm.get('coin_id')?.invalid && tradeForm.get('coin_id')?.touched
+              }">
+        <option value="" disabled>Select a coin to buy</option>
+        <option *ngFor="let coin of coins$ | async" [value]="coin.id">{{ coin.name }} ({{ coin.symbol }})</option>
+      </select>
+      <p *ngIf="tradeForm.get('coin_id')?.invalid && tradeForm.get('coin_id')?.touched" 
+         class="text-red-500 text-sm mt-1">Please select a coin.</p>
     </div>
 
+    <!-- Coin Selection sell -->
+    <div class="mb-4" *ngIf="isSell">
+      <label for="coin_id" class="block text-gray-700 font-medium mb-2">Select Coin</label>
+      <select formControlName="coin_id" id="coin_id" class="block w-full p-2 border rounded"
+              [ngClass]="{
+                'border-gray-300': !tradeForm.get('coin_id')?.invalid,
+                'border-red-500': tradeForm.get('coin_id')?.invalid && tradeForm.get('coin_id')?.touched
+              }">
+        <option value="" disabled>Select a to sell</option>
+        <option *ngFor="let coin of coins$ | async" [value]="coin.id">{{ coin.name }} ({{ coin.symbol }})</option>
+      </select>
+      <p *ngIf="tradeForm.get('coin_id')?.invalid && tradeForm.get('coin_id')?.touched" 
+         class="text-red-500 text-sm mt-1">Please select a coin.</p>
+    </div>
+    
     <!-- Currency Amount -->
     <div class="mb-4">
       <label for="amount" class="block text-gray-700 font-medium mb-2">Amount ($)</label>

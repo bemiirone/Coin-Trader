@@ -35,7 +35,7 @@
       <td class="px-6 py-2 whitespace-no-wrap border-b border-gray-200">
         {{trade.name}}
       </td>
-      <td class="px-6 py-2 whitespace-no-wrap border-b border-gray-200" [ngClass]="{ 'text-green-600': trade.value > 0, 'text-red-600': trade.value < 0 }">
+      <td class="px-6 py-2 whitespace-no-wrap border-b border-gray-200" [ngClass]="{ 'text-green-600': trade.value! > 0, 'text-red-600': trade.value! < 0 }">
         {{trade.value | number:'1.2-2'}}%
       </td>
     </tr>
