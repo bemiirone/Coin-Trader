@@ -26,6 +26,12 @@ export const selectUserTrades = createSelector(
   }
 );
 
+// Trades filtered by buy order
+export const selectUserBuyTrades = createSelector(
+  selectUserTrades,
+  (trades) => trades.filter(trade => trade.order === 'buy')
+);
+
 // Trades filtered by coin id
 export const selectTradedCryptoData = createSelector(
   selectCoinTrades,
@@ -37,9 +43,7 @@ export const selectTradedCryptoData = createSelector(
   }
 );
 
-// Calculate the value of the user's buy trades in USD
-
-// Calculate the value of the user's sell trades in USD
+// value of the user's sell trades in USD
 export const selectUserTradesSellValue = createSelector(
   selectUserTrades,
   selectTradedCryptoData,
@@ -53,7 +57,8 @@ export const selectUserTradesSellValue = createSelector(
   }
 );
 
-export const selectUserTradesValue = createSelector(
+// value of the user's buy trades in USD
+export const selectUserBuyTradesValue = createSelector(
   selectUserTrades,
   selectTradedCryptoData,
   (trades, cryptoData) => {
@@ -66,6 +71,7 @@ export const selectUserTradesValue = createSelector(
   }
 );
 
+// Total value of the user's trades in USD
 export const selectUserTradesTotal = createSelector(
   selectSelectedUser,
   (user) => user?.portfolio_total || 0
@@ -79,7 +85,7 @@ export const selectUserCash = createSelector(
 
 // Total value of cash and buy trades
 export const selectUserPortfolioTotal = createSelector(
-  selectUserTradesValue,
+  selectUserBuyTradesValue,
   selectUserCash,
   (tradesValue, cash) => tradesValue + cash
 );

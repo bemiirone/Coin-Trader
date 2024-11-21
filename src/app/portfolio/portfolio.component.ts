@@ -1,7 +1,7 @@
 import { Component } from '@angular/core';
 import { Store } from '@ngrx/store';
 import { Observable, of } from 'rxjs';
-import { selectPortfolioPercentageDiff, selectTopTrades, selectUserCash, selectUserPortfolioTotal, selectUserTradesValue } from '../trades/store/trades.selectors';
+import { selectPortfolioPercentageDiff, selectTopTrades, selectUserCash, selectUserPortfolioTotal, selectUserBuyTradesValue } from '../trades/store/trades.selectors';
 import { CommonModule } from '@angular/common';
 import { Trade } from '../trades/trades.model';
 
@@ -27,7 +27,7 @@ export class PortfolioComponent {
     this.portfolioValue$ = this.store.select(selectUserPortfolioTotal);
     this.yield$ = this.store.select(selectPortfolioPercentageDiff);
     this.cashBalance$ = this.store.select(selectUserCash);
-    this.tradesValue$ = this.store.select(selectUserTradesValue);
+    this.tradesValue$ = this.store.select(selectUserBuyTradesValue);
     this.topTrades$ = this.store.select(selectTopTrades(this.tradeNumber));
   }
 }

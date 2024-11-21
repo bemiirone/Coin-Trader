@@ -15,7 +15,7 @@ import { TradesService } from '../trades.service';
 import { Store } from '@ngrx/store';
 import { UserActions } from '../../users/store/user.actions';
 import { selectSelectedUser } from '../../users/store/user.selectors';
-import { selectUserTradesValue, selectUserCash } from './trades.selectors';
+import { selectUserBuyTradesValue, selectUserCash } from './trades.selectors';
 import { UserService } from '../../users/user.service';
 
 @Injectable()
@@ -70,7 +70,7 @@ export class TradesEffects {
         ofType(TradeActions.addTradeSuccess),
         withLatestFrom(
           this.store.select(selectSelectedUser),
-          this.store.select(selectUserTradesValue), // Current portfolio value
+          this.store.select(selectUserBuyTradesValue), // Current portfolio value
           this.store.select(selectUserCash) // Current cash balance
         ),
         mergeMap(([{ trade }, user, portfolioValue, cash]) => {

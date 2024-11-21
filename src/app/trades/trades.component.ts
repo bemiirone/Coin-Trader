@@ -4,7 +4,7 @@ import { CommonModule } from '@angular/common';
 import { LayoutComponent } from '../shared/layout/layout.component';
 import { Store } from '@ngrx/store';
 import { Observable, of, tap } from 'rxjs';
-import { selectTrades, selectUserTrades } from './store/trades.selectors';
+import { selectTrades, selectUserBuyTrades, selectUserTrades } from './store/trades.selectors';
 import { User } from '../users/user.model';
 import { selectSelectedUser } from '../users/store/user.selectors';
 import { Trade } from './trades.model';
@@ -27,6 +27,6 @@ export class TradesComponent {
 
   ngOnInit() {
     this.user$ = this.store.select(selectSelectedUser);
-    this.trades$ = this.store.select(selectUserTrades)
+    this.trades$ = this.store.select(selectUserBuyTrades)
   }
 }

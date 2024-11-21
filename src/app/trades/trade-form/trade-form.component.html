@@ -43,8 +43,8 @@
                 'border-gray-300': !tradeForm.get('coin_id')?.invalid,
                 'border-red-500': tradeForm.get('coin_id')?.invalid && tradeForm.get('coin_id')?.touched
               }">
-        <option value="" disabled>Select a to sell</option>
-        <option *ngFor="let coin of coins$ | async" [value]="coin.id">{{ coin.name }} ({{ coin.symbol }})</option>
+        <option value="" disabled>Select a coin to sell</option>
+        <option *ngFor="let trade of trades" [value]="trade._id">{{ trade.name }} ({{ trade.symbol }})</option>
       </select>
       <p *ngIf="tradeForm.get('coin_id')?.invalid && tradeForm.get('coin_id')?.touched" 
          class="text-red-500 text-sm mt-1">Please select a coin.</p>
