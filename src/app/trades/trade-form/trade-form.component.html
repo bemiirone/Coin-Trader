@@ -30,6 +30,7 @@
       </select>
       <p *ngIf="tradeForm.get('coin_id')?.invalid && tradeForm.get('coin_id')?.touched" 
          class="text-red-500 text-sm mt-1">Please select a coin.</p>
+         <div class="mt-4 text-green-700"> Your Cash balance is {{ user?.cash | currency }}</div>
     </div>
 
     <!-- Coin Selection sell -->

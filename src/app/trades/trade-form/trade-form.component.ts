@@ -73,18 +73,14 @@ export class TradeFormComponent implements OnInit {
       switchMap((coinId) => this.store.select(selectCoinById(+coinId))),
       tap((coin) => {
         if (coin) {
+          this.accumulatedTrade = {} as Trade;
           this.store.dispatch(TradeActions.resetTradeSuccess());
           this.tradeForm
             .get('price')!
             .setValue(coin.price, { emitEvent: false });
           this.coinData = coin;
           if (this.tradeForm.get('order')?.value === 'sell') {
-            this.accumulatedTrade.value = 0;
             this.setAccumulatedTrade();
-            console.log('accumulatedTrade value', this.accumulatedTrade.value);
-            this.tradeForm
-              .get('price')!
-              .setValue(coin.price, { emitEvent: false });
           }
         }
       })
@@ -107,7 +103,7 @@ export class TradeFormComponent implements OnInit {
           this.accumulatedTradeValidator(), // Add accumulatedTradeValidator
         ]);
       } else {
-        this.isSell = true;
+        this.isBuy = true;
         coinIdControl?.setValue(null); // Reset coin_id
         coinIdControl?.enable(); // Enable for selection
         amountControl?.setValidators([
