@@ -1,3 +1,11 @@
-<ng-container *ngIf="{ user: user$ | async, trades: trades$ | async } as data">
-  <app-layout [componentType]="componentType" [mainTitle]="title" [user]="data.user" [trades]="data.trades"></app-layout>
+<ng-container *ngIf="{
+   user: user$ | async, 
+   trades: trades$ | async, 
+   } as data">
+  <app-layout 
+    [componentType]="componentType" 
+    [mainTitle]="title" 
+    [user]="data.user" 
+    [trades]="data.trades">
+  </app-layout>
 </ng-container>

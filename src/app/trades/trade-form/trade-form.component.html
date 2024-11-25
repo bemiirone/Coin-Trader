@@ -3,9 +3,6 @@
     <div *ngIf="success$ | async" class="mb-4 p-4 bg-green-100 border border-green-400 text-green-700 rounded">
       Trade submitted successfully!
     </div>
-
-    
-    <!-- Order Type (Buy/Sell) -->
     <div class="mb-4">
       <label class="block text-gray-700 font-medium mb-2">Order Type</label>
       <div class="flex items-center gap-4">
@@ -44,8 +41,9 @@
                 'border-red-500': tradeForm.get('coin_id')?.invalid && tradeForm.get('coin_id')?.touched
               }">
         <option value="" disabled>Select a coin to sell</option>
-        <option *ngFor="let trade of trades" [value]="trade._id">{{ trade.name }} ({{ trade.symbol }})</option>
+        <option *ngFor="let trade of trades" [value]="trade.coin_id">{{ trade.name }} ({{ trade.symbol }})</option>
       </select>
+      <div class="mt-4 text-green-700" *ngIf="accumulatedTrade?.value"> Your accumulated {{ accumulatedTrade.name }} value {{ accumulatedTrade.value | currency }}</div>
       <p *ngIf="tradeForm.get('coin_id')?.invalid && tradeForm.get('coin_id')?.touched" 
          class="text-red-500 text-sm mt-1">Please select a coin.</p>
     </div>
@@ -65,6 +63,9 @@
       </p>
       <div *ngIf="tradeForm.get('amount')?.hasError('insufficientFunds')" class="text-red-500 text-sm mt-1">
         You do not have enough cash. ({{ user?.cash | currency }})
+      </div>
+      <div *ngIf="tradeForm.get('amount')?.hasError('insufficientCoins')" class="text-red-500 text-sm mt-1">
+        Your sell price is more than your {{accumulatedTrade.name}} value. ({{ accumulatedTrade?.value | currency }})
       </div>
     </div>
 
@@ -89,7 +90,7 @@
          bg-blue-500 hover:bg-blue-600 
          disabled:bg-gray-400 disabled:cursor-not-allowed"
           [disabled]="tradeForm.invalid || (isLoading$ | async )">
-          Submit Trade
+          Submit Trade {{ tradeForm.invalid }}
     </button>
     <button type="button" (click)="clearForm()" 
             class="w-full bg-gray-300 text-gray-700 py-2 rounded mt-2 hover:bg-gray-400">Clear Form</button>
