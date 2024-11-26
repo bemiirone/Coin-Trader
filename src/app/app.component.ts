@@ -38,7 +38,6 @@ export class AppComponent {
 
   getSelectedUser() {
     this.selectedUser$.subscribe(user => {
-      console.log('Selected user:', user);
     });
   }
 }

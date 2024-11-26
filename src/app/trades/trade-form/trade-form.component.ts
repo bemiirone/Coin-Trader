@@ -95,28 +95,28 @@ export class TradeFormComponent implements OnInit {
       if (order === 'sell') {
         this.isSell = true;
         this.isBuy = false;
-        coinIdControl?.setValue(null); // Reset coin_id
-        coinIdControl?.enable(); // Enable for selection
+        coinIdControl?.setValue(null); 
+        coinIdControl?.enable(); 
         amountControl?.setValidators([
           Validators.required,
           Validators.min(1),
           this.cashValidator(),
-          this.accumulatedTradeValidator(), // Add accumulatedTradeValidator
+          this.accumulatedTradeValidator(), 
         ]);
       } else if (order === 'buy'){
         this.isBuy = true;
         this.isSell = false
-        coinIdControl?.setValue(null); // Reset coin_id
-        coinIdControl?.enable(); // Enable for selection
+        coinIdControl?.setValue(null); 
+        coinIdControl?.enable(); 
         amountControl?.setValidators([
           Validators.required,
           Validators.min(1),
-          this.cashValidator(), // Remove accumulatedTradeValidator for buy
+          this.cashValidator(), 
         ]);
       }
   
-      amountControl?.updateValueAndValidity(); // Revalidate the control
-      coinIdControl?.updateValueAndValidity(); // Revalidate the control  
+      amountControl?.updateValueAndValidity(); 
+      coinIdControl?.updateValueAndValidity(); 
     });
   }
   
@@ -135,7 +135,7 @@ export class TradeFormComponent implements OnInit {
   accumulatedTradeValidator(): ValidatorFn {
     return (control: AbstractControl): ValidationErrors | null => {
       const value = control.value;
-      const order = this.tradeForm?.get('order')?.value; // Use safe access
+      const order = this.tradeForm?.get('order')?.value; 
       if (order === 'sell') {
         const accumulatedTradeValue = this.accumulatedTrade?.value || 0;
         if (value > accumulatedTradeValue) {
@@ -166,7 +166,6 @@ export class TradeFormComponent implements OnInit {
         date: new Date().toISOString(),
       };
       this.store.dispatch(TradeActions.addTrade({ trade: tradeData }));
-      console.log('tradeData', tradeData);
       
       this.clearForm();
     }
