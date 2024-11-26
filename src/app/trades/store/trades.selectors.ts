@@ -26,10 +26,19 @@ export const selectUserTrades = createSelector(
   }
 );
 
-// Trades filtered by buy order
+// Trades filtered by buy order and unique names
 export const selectUserBuyTrades = createSelector(
   selectUserTrades,
-  (trades) => trades.filter(trade => trade.order === 'buy')
+  (trades) => {
+    const seenNames = new Set<string>();
+    return trades
+      .filter(trade => trade.order === 'buy' && !seenNames.has(trade.name) && seenNames.add(trade.name));
+  }
+);
+
+export const selectUserSellTrades = createSelector(
+  selectUserTrades,
+  (trades) => trades.filter(trade => trade.order === 'sell')
 );
 
 // Trades filtered by coin id
