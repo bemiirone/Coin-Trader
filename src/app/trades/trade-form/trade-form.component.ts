@@ -20,7 +20,7 @@ import { TradedCryptoData } from '../../coins/coins.model';
 import { Observable, of, switchMap, tap } from 'rxjs';
 import { User } from '../../users/user.model';
 import { TradeActions } from '../store/trades.actions';
-import { selectTradeLoading, selectTradeSuccess, selectUserAccumulatedTrades } from '../store/trades.selectors';
+import { selectTradeLoading, selectTrades, selectTradeSuccess, selectUserAccumulatedTrades, selectUserBuyTrades } from '../store/trades.selectors';
 import { ModalComponent } from '../../shared/modal/modal.component';
 
 
@@ -32,7 +32,7 @@ import { ModalComponent } from '../../shared/modal/modal.component';
 })
 export class TradeFormComponent implements OnInit {
   @Input() user: User | null = {} as User;
-  @Input() trades: Trade[] | null = [];
+  trades$!: Observable<Trade[]>;
   tradeForm!: FormGroup;
   coins$: Observable<TradedCryptoData[]> = of([]);
   coinData: TradedCryptoData = {} as TradedCryptoData;
@@ -52,6 +52,7 @@ export class TradeFormComponent implements OnInit {
     this.initFormSetUp();
     this.initCoinPrice();
     this.registerOrderChange();
+    this.trades$ = this.store.select(selectUserBuyTrades);
     this.success$ = this.store.select(selectTradeSuccess);
     this.isLoading$ = this.store.select(selectTradeLoading);
   }

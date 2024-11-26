@@ -42,7 +42,7 @@
                 'border-red-500': tradeForm.get('coin_id')?.invalid && tradeForm.get('coin_id')?.touched
               }">
         <option  value="" disabled>Select a coin to sell</option>
-        <option *ngFor="let trade of trades" [value]="trade.coin_id">{{ trade.name }} ({{ trade.symbol }})</option>
+        <option *ngFor="let trade of trades$ | async" [value]="trade.coin_id">{{ trade.name }} ({{ trade.symbol }})</option>
       </select>
       <div class="mt-4 text-green-700" *ngIf="accumulatedTrade?.value"> Your accumulated {{ accumulatedTrade.name }} value {{ accumulatedTrade.value | currency }}</div>
       <p *ngIf="tradeForm.get('coin_id')?.invalid && tradeForm.get('coin_id')?.touched" 
@@ -91,7 +91,7 @@
          bg-blue-500 hover:bg-blue-600 
          disabled:bg-gray-400 disabled:cursor-not-allowed"
           [disabled]="tradeForm.invalid || (isLoading$ | async )">
-          Submit Trade {{ tradeForm.invalid }}
+          Submit Trade
     </button>
     <button type="button" (click)="clearForm()" 
             class="w-full bg-gray-300 text-gray-700 py-2 rounded mt-2 hover:bg-gray-400">Clear Form</button>

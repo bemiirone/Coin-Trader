@@ -42,7 +42,6 @@ export class TradeListComponent {
       backdrop: true,
       initialState: {
         user: this.user,
-        trades: this.trades,
       },
     });
   }
