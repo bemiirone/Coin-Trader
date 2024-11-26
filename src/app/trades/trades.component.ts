@@ -27,6 +27,6 @@ export class TradesComponent {
 
   ngOnInit() {
     this.user$ = this.store.select(selectSelectedUser);
-    this.trades$ = this.store.select(selectUserBuyTrades)
+    this.trades$ = this.store.select(selectUserTrades)
   }
 }

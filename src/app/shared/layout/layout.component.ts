@@ -27,7 +27,7 @@ import { PortfolioComponent } from '../../portfolio/portfolio.component';
 })
 export class LayoutComponent {
   @Input() mainTitle = '';
-  @Input() sideTitle = 'Portfolio value';
+  @Input() sideTitle = 'Account value';
   @Input() componentType: ComponentType = {} as ComponentType;
   @Input() user: User | null  = {} as User;
   @Input() trades: Trade[] | null = [];

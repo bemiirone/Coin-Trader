@@ -13,10 +13,12 @@
     </tr>
   </thead>
   <tbody class="text-gray-700 text-sm font-light">
-    <tr *ngFor="let trade of trades" class="border-b border-gray-200 hover:bg-gray-100">
+    <tr *ngFor="let trade of trades" 
+        class="border-b border-gray-200 hover:bg-gray-100" 
+        [ngClass]="{'bg-green-100': trade.order === 'buy', 'bg-red-100': trade.order === 'sell'}" >
       <td class="py-3 px-6 text-left">{{ trade.date | date:'short' }}</td>
-      <td class="py-3 px-6 text-right">{{ trade.name }}</td>
-      <td class="py-3 px-6 text-right">
+      <td class="py-3 px-6 text-left">{{ trade.name }}</td>
+      <td class="py-3 px-6 text-left">
         {{ trade.order === 'buy' ? 'Buy' : 'Sell' }}
       </td>
       <td class="py-3 px-6 text-right">
