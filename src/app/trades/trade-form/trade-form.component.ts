@@ -94,6 +94,7 @@ export class TradeFormComponent implements OnInit {
   
       if (order === 'sell') {
         this.isSell = true;
+        this.isBuy = false;
         coinIdControl?.setValue(null); // Reset coin_id
         coinIdControl?.enable(); // Enable for selection
         amountControl?.setValidators([
@@ -102,8 +103,9 @@ export class TradeFormComponent implements OnInit {
           this.cashValidator(),
           this.accumulatedTradeValidator(), // Add accumulatedTradeValidator
         ]);
-      } else {
+      } else if (order === 'buy'){
         this.isBuy = true;
+        this.isSell = false
         coinIdControl?.setValue(null); // Reset coin_id
         coinIdControl?.enable(); // Enable for selection
         amountControl?.setValidators([

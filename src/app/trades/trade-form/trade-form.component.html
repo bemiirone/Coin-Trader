@@ -41,7 +41,7 @@
                 'border-gray-300': !tradeForm.get('coin_id')?.invalid,
                 'border-red-500': tradeForm.get('coin_id')?.invalid && tradeForm.get('coin_id')?.touched
               }">
-        <option value="" disabled>Select a coin to sell</option>
+        <option  value="" disabled>Select a coin to sell</option>
         <option *ngFor="let trade of trades" [value]="trade.coin_id">{{ trade.name }} ({{ trade.symbol }})</option>
       </select>
       <div class="mt-4 text-green-700" *ngIf="accumulatedTrade?.value"> Your accumulated {{ accumulatedTrade.name }} value {{ accumulatedTrade.value | currency }}</div>
