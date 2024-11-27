@@ -174,6 +174,7 @@ export class TradeFormComponent implements OnInit {
 
   ngOnDestroy(): void {
     this.tradeForm.get('order')?.valueChanges.subscribe().unsubscribe();
+    this.store.select(this.setAccumulatedTrade).subscribe().unsubscribe();
   }
   
   clearForm(): void {
