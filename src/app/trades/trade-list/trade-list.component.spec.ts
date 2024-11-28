@@ -8,9 +8,8 @@ import { Trade } from '../trades.model';
 import { User } from '../../users/user.model';
 import { selectCoinLoading, selectCoinError } from '../../coins/store/coins.selectors';
 import { selectSelectedUser } from '../../users/store/user.selectors';
-import { TradeFormComponent } from '../trade-form/trade-form.component';
 
-fdescribe('TradeListComponent', () => {
+describe('TradeListComponent', () => {
   let component: TradeListComponent;
   let fixture: ComponentFixture<TradeListComponent>;
   let store: MockStore;

@@ -30,9 +30,9 @@ export const reducer = createReducer(
       loading: false,
     };
   }),
-  on(CoinsActions.loadCoinsFailure, (state, { coinsFailure }) => ({
+  on(CoinsActions.loadCoinsFailure, (state, { error }) => ({
     ...state,
-    error: coinsFailure.error_message,
+    error: error,
     loading: false,
   }))
 );

@@ -9,6 +9,5 @@ import { User } from '../users/user.model';
   styleUrl: './header.component.scss'
 })
 export class HeaderComponent {
-  @Input() user!: User;
-
+  @Input() user: User = {} as User;
 }

@@ -13,7 +13,7 @@ export const CoinsActions = createActionGroup({
     'Load CoinsSuccess': props<{ coinsSuccess: CoinResponse }>(),
 
     // Action dispatched when loading coins fails
-    'Load CoinsFailure': props<{ coinsFailure: CoinStatus }>(),
+    'Load CoinsFailure': props<{ error: string }>(),
 
     // Other actions
     'Add Coins': props<{ coins: CoinData }>(),

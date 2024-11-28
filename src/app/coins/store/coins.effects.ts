@@ -10,21 +10,31 @@ import { CoinsService } from '../../services/coin-market.service';
 @Injectable()
 export class CoinsEffects {
   loadCoins$: Observable<
-  ReturnType<typeof CoinsActions.loadCoinsSuccess | typeof CoinsActions.loadCoinsFailure>
->;
-  constructor(
-    private actions$: Actions,
-    private coinsService: CoinsService
-  ) {
+    ReturnType<
+      | typeof CoinsActions.loadCoinsSuccess
+      | typeof CoinsActions.loadCoinsFailure
+    >
+  >;
+  constructor(private actions$: Actions, private coinsService: CoinsService) {
     // Load coins effect
-    this.loadCoins$ = createEffect(() => this.actions$.pipe(
-      ofType(CoinsActions.loadCoins),
-      mergeMap(() => this.coinsService.getCoins()
-        .pipe(
-          map((coinsSuccess: CoinResponse) => CoinsActions.loadCoinsSuccess({ coinsSuccess })),
-          catchError((coinsFailure) => of(CoinsActions.loadCoinsFailure({ coinsFailure: coinsFailure.error || 'Failed to load coins'})))
+    this.loadCoins$ = createEffect(() =>
+      this.actions$.pipe(
+        ofType(CoinsActions.loadCoins),
+        mergeMap(() =>
+          this.coinsService.getCoins().pipe(
+            map((coinsSuccess: CoinResponse) =>
+              CoinsActions.loadCoinsSuccess({ coinsSuccess })
+            ),
+            catchError((error) =>
+              of(
+                CoinsActions.loadCoinsFailure({
+                  error: error.message || 'Failed to load coins',
+                })
+              )
+            )
+          )
         )
       )
-    ));
+    );
   }
 }

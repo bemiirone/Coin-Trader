@@ -8,10 +8,6 @@ export interface CoinStatus {
   total_count: number;
 }
 
-export interface CoinTag {
-  name: string;
-}
-
 export interface CoinData {
   id: number;
   name: string;
@@ -19,7 +15,7 @@ export interface CoinData {
   slug: string;
   num_market_pairs: number;
   date_added: string;
-  tags: CoinTag;
+  tags: string[];
   max_supply: number;
   circulating_supply: number;
   total_supply: number;
@@ -31,22 +27,7 @@ export interface CoinData {
   tvl_ratio: number | null;
   last_updated: string;
   quote: {
-    USD: {
-      price: number;
-      volume_24h: number;
-      volume_change_24h: number;
-      percent_change_1h: number;
-      percent_change_24h: number;
-      percent_change_7d: number;
-      percent_change_30d: number;
-      percent_change_60d: number;
-      percent_change_90d: number;
-      market_cap: number;
-      market_cap_dominance: number;
-      fully_diluted_market_cap: number;
-      tvl: number | null;
-      last_updated: string;
-    };
+    USD: USD;
   };
 }
 export interface CoinResponse {
@@ -68,3 +49,18 @@ export type TradedCryptoData = Pick<CoinData, 'name' | 'symbol'> & {
   percent_change_24h: number;
   market_cap: number;
 };
+
+export interface USD {
+  price: number;
+  volume_24h?: number; // Make optional
+  volume_change_24h?: number; // Make optional
+  percent_change_1h: number;
+  percent_change_24h: number;
+  percent_change_7d: number;
+  percent_change_30d?: number; // Make optional
+  percent_change_60d?: number; // Make optional
+  percent_change_90d?: number; // Make optional
+  market_cap: number;
+  last_updated?: string; // Make optional
+}
+
