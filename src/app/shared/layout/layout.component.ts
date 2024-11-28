@@ -17,7 +17,6 @@ import { PortfolioComponent } from '../../portfolio/portfolio.component';
     CoinsComponent,
     CardComponent,
     CommonModule,
-    TradesComponent,
     TradeListComponent,
     TableComponent,
     PortfolioComponent

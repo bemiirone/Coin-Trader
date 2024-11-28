@@ -1,4 +1,4 @@
-import { Trade } from './trades/trades.model';
+
 import { Component } from '@angular/core';
 import { RouterOutlet } from '@angular/router';
 import { HeaderComponent } from './header/header.component';
@@ -36,8 +36,5 @@ export class AppComponent {
     this.store.dispatch(TradeActions.loadTrades());
   }
 
-  getSelectedUser() {
-    this.selectedUser$.subscribe(user => {
-    });
-  }
+  
 }

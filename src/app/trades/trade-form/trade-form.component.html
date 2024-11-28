@@ -66,7 +66,7 @@
         You do not have enough cash. ({{ user?.cash | currency }})
       </div>
       <div *ngIf="tradeForm.get('amount')?.hasError('insufficientCoins')" class="text-red-500 text-sm mt-1">
-        Your sell price is more than your {{accumulatedTrade.name}} value. ({{ accumulatedTrade?.value | currency }})
+        Your sell price is more than your {{accumulatedTrade.name}} value. ({{ accumulatedTrade.value | currency }})
       </div>
     </div>
 

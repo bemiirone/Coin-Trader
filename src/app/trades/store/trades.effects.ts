@@ -59,7 +59,7 @@ export class TradesEffects {
             map((addedTrade: Trade) =>
               TradeActions.addTradeSuccess({ trade: addedTrade })
             ),
-            catchError((error) => of(TradeActions.addTradeFailure({ error })))
+            catchError((error) => of(TradeActions.addTradeFailure({ error: error.message })))
           )
         )
       )

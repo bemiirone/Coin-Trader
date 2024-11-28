@@ -1,8 +1,7 @@
 import { CommonModule } from '@angular/common';
 import { Component } from '@angular/core';
 import { Store } from '@ngrx/store';
-import { CoinsActions } from './store/coins.actions';
-import { filter, Observable, of } from 'rxjs';
+import { Observable, of } from 'rxjs';
 import { CoinData, PickedCryptoData } from './coins.model';
 import {selectCoinError, selectCoinLoading, selectTopCoins } from './store/coins.selectors';
 import { TableComponent } from './table/table.component';
