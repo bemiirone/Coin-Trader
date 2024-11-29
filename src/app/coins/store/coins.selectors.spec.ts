@@ -1,8 +1,7 @@
 import { selectTopCoins } from './coins.selectors';
 import { CoinData, PickedCryptoData } from '../coins.model';
-import { createSelector } from '@ngrx/store';
 
-fdescribe('selectTopCoins', () => {
+describe('selectTopCoins', () => {
   const mockState = {
     coins: {
       data: {

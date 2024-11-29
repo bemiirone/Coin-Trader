@@ -1,8 +1,7 @@
 import { TestBed, ComponentFixture } from '@angular/core/testing';
 import { TradeListComponent } from './trade-list.component';
 import { provideMockStore, MockStore } from '@ngrx/store/testing';
-import { Store } from '@ngrx/store';
-import { BsModalService, BsModalRef } from 'ngx-bootstrap/modal';
+import { BsModalService} from 'ngx-bootstrap/modal';
 import { of } from 'rxjs';
 import { Trade } from '../trades.model';
 import { User } from '../../users/user.model';
