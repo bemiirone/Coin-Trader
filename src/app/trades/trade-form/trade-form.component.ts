@@ -17,10 +17,10 @@ import {
 } from '../../coins/store/coins.selectors';
 import { Store } from '@ngrx/store';
 import { TradedCryptoData } from '../../coins/coins.model';
-import { Observable, of, switchMap, tap } from 'rxjs';
+import { Observable, of, switchMap, take, tap } from 'rxjs';
 import { User } from '../../users/user.model';
 import { TradeActions } from '../store/trades.actions';
-import { selectTradeLoading, selectTrades, selectTradeSuccess, selectUserAccumulatedTrades, selectUserBuyTrades } from '../store/trades.selectors';
+import { selectTradeLoading, selectTradeSuccess, selectUserAccumulatedTrades, selectUserBuyTrades } from '../store/trades.selectors';
 import { ModalComponent } from '../../shared/modal/modal.component';
 
 
@@ -149,7 +149,7 @@ export class TradeFormComponent implements OnInit {
 
   setAccumulatedTrade(): void {
     const coinId = this.tradeForm.get('coin_id')?.value;
-    this.store.select(selectUserAccumulatedTrades(+coinId)).subscribe((trade) => {
+    this.store.select(selectUserAccumulatedTrades(+coinId)).pipe(take(1)).subscribe((trade) => {
       this.accumulatedTrade = trade;
     });
   }
@@ -174,7 +174,6 @@ export class TradeFormComponent implements OnInit {
 
   ngOnDestroy(): void {
     this.tradeForm.get('order')?.valueChanges.subscribe().unsubscribe();
-    this.store.select(this.setAccumulatedTrade).subscribe().unsubscribe();
   }
   
   clearForm(): void {
