@@ -40,33 +40,3 @@ A simple Crypto coin trading app. Utilising MEAN stack technology
   cd ../backend
   npm install
   ```
-
-### Running the Application
-1. Start the backend server:
-  ```bash
-  cd backend
-  npm start
-  ```
-2. Start the frontend server:
-  ```bash
-  cd ../frontend
-  npm start
-  ```
-
-### Testing
-- Run unit tests:
-  ```bash
-  npm test
-  ```
-- Run end-to-end tests:
-  ```bash
-  npm run e2e
-  ```
-
-### Deployment
-- Build the frontend:
-  ```bash
-  cd frontend
-  npm run build
-  ```
-
