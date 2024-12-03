@@ -1,6 +1,6 @@
 # CoinTrader
 
-A simple Crypto coin trading app. Utilising Angular 18
+A simple Crypto coin trading app. Utilising MEAN stack technology
 
 ## Technical Description
 
