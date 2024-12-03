@@ -20,7 +20,7 @@
       <td class="py-3 px-6 text-right" [ngClass]="{ 'text-red-500': coin.percent_change_24h < 0, 'text-green-700': coin.percent_change_24h > 0 }">
         {{ coin.percent_change_24h | number: '1.2-2' }}%
       </td>
-      <td class="py-3 px-6 text-right" [ngClass]="{ 'text-red-500': coin.percent_change_7d < 0, 'text-green-700': coin.percent_change_24h > 0 }">
+      <td class="py-3 px-6 text-right" [ngClass]="{ 'text-red-500': coin.percent_change_7d < 0, 'text-green-700': coin.percent_change_7d > 0 }">
         {{ coin.percent_change_7d | number: '1.2-2' }}%
       </td>
       <td class="py-3 px-6 text-right">${{ coin.market_cap | number: '1.0-0' }}</td>
