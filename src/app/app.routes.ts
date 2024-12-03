@@ -7,6 +7,5 @@ export const routes: Routes = [
   {path: '', redirectTo: 'coins', pathMatch: 'full'},
   {path: 'coins', component: DashboardComponent},
   {path: 'trades', component: TradesComponent},
-  {path: 'form', component: TradeFormComponent}
-
+  {path: 'form', component: TradeFormComponent},
 ];
