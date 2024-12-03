@@ -8,7 +8,7 @@ A simple Crypto coin trading app. Utilising Angular 18
 - **Framework**: Angular 18
 - **Language**: TypeScript
 - **State Management**: NgRx
-- **Testing: Jasmine
+- **Testing**: Jasmine
 - **Styling**: TailwindCSS
 
 ### Backend
