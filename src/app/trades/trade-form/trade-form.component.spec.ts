@@ -10,8 +10,30 @@ describe('TradeFormComponent', () => {
   const initialMockState = {
     trades: {
       entities: {
-        1: { _id: '1', user_id: 'user1', coin_id: 101, symbol: 'BTC', name: 'Bitcoin', amount: 100000, price: 50000, date: '2024-11-28T12:00:00Z', volume: 2, order: 'buy' },
-        2: { _id: '2', user_id: 'user1', coin_id: 101, symbol: 'BTC', name: 'Bitcoin', amount: 60000, price: 60000, date: '2024-11-28T13:00:00Z', volume: 1, order: 'sell' },
+        1: {
+          _id: '1',
+          user_id: 'user1',
+          coin_id: 101,
+          symbol: 'BTC',
+          name: 'Bitcoin',
+          amount: 100000,
+          price: 50000,
+          date: '2024-11-28T12:00:00Z',
+          volume: 2,
+          order: 'buy',
+        },
+        2: {
+          _id: '2',
+          user_id: 'user1',
+          coin_id: 101,
+          symbol: 'BTC',
+          name: 'Bitcoin',
+          amount: 60000,
+          price: 60000,
+          date: '2024-11-28T13:00:00Z',
+          volume: 1,
+          order: 'sell',
+        },
       },
       ids: ['1', '2'],
       loading: false,
@@ -20,7 +42,15 @@ describe('TradeFormComponent', () => {
     },
     users: {
       entities: {
-        user1: { _id: 'user1', name: 'Test User', email: '', portfolio_total: 1000, deposit: 500, cash: 500, admin: false },
+        user1: {
+          _id: 'user1',
+          name: 'Test User',
+          email: '',
+          portfolio_total: 1000,
+          deposit: 500,
+          cash: 500,
+          admin: false,
+        },
       },
       ids: ['user1'],
       selectedUserId: 'user1',
@@ -30,9 +60,8 @@ describe('TradeFormComponent', () => {
   beforeEach(async () => {
     await TestBed.configureTestingModule({
       imports: [TradeFormComponent],
-      providers: [provideMockStore({ initialState: initialMockState })]
-    })
-    .compileComponents();
+      providers: [provideMockStore({ initialState: initialMockState })],
+    }).compileComponents();
 
     store = TestBed.inject(MockStore);
     fixture = TestBed.createComponent(TradeFormComponent);
@@ -113,13 +142,13 @@ describe('TradeFormComponent', () => {
     component.tradeForm.get('order')?.setValue('buy');
     const cashValidator = component.cashValidator();
 
-    const mockControl1 = { value: 150 }; 
+    const mockControl1 = { value: 150 };
     expect(cashValidator(mockControl1)).toEqual({ insufficientFunds: true });
-    
-    const mockControl2 = { value: 50 }; 
+
+    const mockControl2 = { value: 50 };
     expect(cashValidator(mockControl2)).toBeNull();
-  
-    const mockControl3 = { value: 100 }; 
+
+    const mockControl3 = { value: 100 };
     expect(cashValidator(mockControl3)).toBeNull();
   });
 

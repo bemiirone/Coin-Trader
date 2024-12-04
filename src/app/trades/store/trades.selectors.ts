@@ -114,12 +114,14 @@ export const selectTopTrades = (topN: number) => createSelector(
   selectUserTrades,
   selectTradedCryptoData,
   (trades, cryptoData) => {
+    console.log('user trades in selectTopTrades selector:', trades); // Add debug log
     return trades
       .map(trade => {
         const currentPrice = cryptoData[trade.coin_id]?.price || 0;
         const tradeValue = ((currentPrice - trade.price) / trade.price) * 100;
         return { ...trade, value: tradeValue };
       })
+      .filter(trade => trade.order === 'buy')
       .sort((a, b) => b.value - a.value)
       .slice(0, topN);
   }
