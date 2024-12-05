@@ -1,4 +1,4 @@
-import { ComponentFixture, fakeAsync, TestBed, tick } from '@angular/core/testing';
+import { ComponentFixture, TestBed } from '@angular/core/testing';
 import { PortfolioComponent } from './portfolio.component';
 import { provideMockStore, MockStore } from '@ngrx/store/testing';
 import { of } from 'rxjs';
@@ -9,8 +9,6 @@ import {
   selectUserPortfolioTotal,
   selectUserBuyTradesValue,
 } from '../trades/store/trades.selectors';
-import exp from 'constants';
-import e from 'express';
 
 describe('PortfolioComponent', () => {
   let component: PortfolioComponent;
