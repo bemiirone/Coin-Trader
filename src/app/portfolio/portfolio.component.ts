@@ -16,7 +16,7 @@ import { Trade } from '../trades/trades.model';
 })
 export class PortfolioComponent {
   constructor(private store: Store) {}
-  tradeNumber = 8;
+  tradeNumber = 10;
   portfolioValue$: Observable<number> = of(0);
   yield$: Observable<number> = of(0);
   cashBalance$: Observable<number> = of(0);
