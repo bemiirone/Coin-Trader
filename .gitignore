@@ -45,3 +45,4 @@ src/environments
 package-lock.json
 user-api/node_modules
 .env
+update.js

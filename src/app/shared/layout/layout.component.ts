@@ -1,9 +1,8 @@
 import { CardComponent } from './../card/card.component';
-import { Component, input, Input } from '@angular/core';
+import { Component, Input } from '@angular/core';
 import { CoinsComponent } from '../../coins/coins.component';
 import { CommonModule } from '@angular/common';
 import { ComponentType } from '../shared-model';
-import { TradesComponent } from '../../trades/trades.component';
 import { TableComponent } from '../../coins/table/table.component';
 import { TradeListComponent } from '../../trades/trade-list/trade-list.component';
 import { User } from '../../users/user.model';
