@@ -31,5 +31,9 @@ export class UserService {
   updateUserPortfolioAndCash(userId: string, portfolioTotal: number, cash: number): Observable<User> {
     return this.http.patch<User>(`${this.apiUrl}/${userId}`, { portfolio_total: portfolioTotal, cash });
   }
+
+  login(email: string, password: string): Observable<{ user: User; token: string }> {
+    return this.http.post<{ user: User; token: string }>(`${this.apiUrl}/login`, { email, password });
+}
   
 }

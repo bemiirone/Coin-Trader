@@ -3,7 +3,6 @@ import { Component, Input } from '@angular/core';
 import { CoinsComponent } from '../../coins/coins.component';
 import { CommonModule } from '@angular/common';
 import { ComponentType } from '../shared-model';
-import { TableComponent } from '../../coins/table/table.component';
 import { TradeListComponent } from '../../trades/trade-list/trade-list.component';
 import { User } from '../../users/user.model';
 import { Trade } from '../../trades/trades.model';
@@ -17,7 +16,6 @@ import { PortfolioComponent } from '../../portfolio/portfolio.component';
     CardComponent,
     CommonModule,
     TradeListComponent,
-    TableComponent,
     PortfolioComponent
   ],
   templateUrl: './layout.component.html',
