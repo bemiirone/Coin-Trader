@@ -3,6 +3,9 @@ require('dotenv').config();
 const cors = require('cors'); // Import cors package
 const express = require('express');
 const mongoose = require('mongoose');
+const bcrypt = require('bcrypt');
+const jwt = require('jsonwebtoken');
+const SECRET_KEY = "test_secret_key"; 
 const app = express();
 
 // Middleware
@@ -79,6 +82,45 @@ app.patch('/api/users/:id', async (req, res) => {
   } catch (error) {
     console.error('Error updating portfolio total and cash:', error); // Debugging log
     res.status(500).json({ error: 'Error updating portfolio total and cash' });
+  }
+});
+
+// Register
+app.post('/api/register', async (req, res) => {
+  const { name, email, password } = req.body;
+  const hashedPassword = await bcrypt.hash(password, 10);
+  const newUser = new User({ name, email, password: hashedPassword });
+  await newUser.save();
+  res.status(201).send({ message: 'User registered successfully' });
+});
+
+// Login
+app.post('/api/login', async (req, res) => {
+  const { email, password } = req.body;
+  const user = await User.findOne({ email });
+  if (!user || !(await bcrypt.compare(password, user.password))) {
+      return res.status(401).send({ message: 'Invalid credentials' });
+  }
+  const token = jwt.sign({ id: user._id, admin: user.admin }, SECRET_KEY, { expiresIn: '1h' });
+  res.send({ token, user });
+});
+
+const authenticate = (req, res, next) => {
+  const token = req.headers['authorization']?.split(' ')[1];
+  if (!token) return res.status(403).send({ message: 'No token provided' });
+  jwt.verify(token, SECRET_KEY, (err, decoded) => {
+      if (err) return res.status(401).send({ message: 'Unauthorized' });
+      req.userId = decoded.id;
+      next();
+  });
+};
+
+app.get('/api/protected-route', authenticate, (req, res) => {
+  try {
+    res.send({ message: 'You have access' });
+  } catch (error) {
+    console.error('Error accessing protected route:', error);
+    res.status(500).send({ message: 'Error accessing protected route' });
   }
 });
 
