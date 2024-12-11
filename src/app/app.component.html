@@ -4,7 +4,7 @@
 
   <section *ngIf="selectedUser$ | async as user" class="main flex-1 bg-gray-100">
     <div class="relative">
-      <app-header [user]="user"></app-header>
+      <app-header></app-header>
       <div class="content pt-16">
         <router-outlet />
       </div>

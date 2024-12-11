@@ -1,4 +1,26 @@
 <div class="absolute top-0 left-0 right-0 bg-white shadow-md z-10 p-4">
-  <h1 class="text-xl font-bold block md:hidden">CoinTrader</h1>
-  <h1 class=" user-name text-l text-gray-500 inline-block md:block">{{user.name}}</h1>
+  <ng-container *ngIf="user$ | async as user; else loggedOut">
+    <h1 class="text-l text-gray-500 inline-block md:block">Welcome, {{ user.name }}</h1>
+  </ng-container>
+  <ng-template #loggedOut>
+    <form [formGroup]="loginForm" (ngSubmit)="onLogin()" class="flex gap-2">
+      <input
+        type="email"
+        formControlName="email"
+        placeholder="Email"
+        required
+        class="border p-2 rounded"
+      />
+      <input
+        type="password"
+        formControlName="password"
+        placeholder="Password"
+        required
+        class="border p-2 rounded"
+      />
+      <button type="submit" class="bg-blue-500 text-white p-2 rounded" [disabled]="loginForm.invalid">
+        Login
+      </button>
+    </form>
+  </ng-template>
 </div>

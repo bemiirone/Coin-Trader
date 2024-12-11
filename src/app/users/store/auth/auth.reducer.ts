@@ -30,3 +30,8 @@ export const authReducer = createReducer(
   })),
   on(AuthActions.logout, () => initialState)
 );
+
+export const authFeature = {
+  name: authFeatureKey,
+  reducer: authReducer,
+};

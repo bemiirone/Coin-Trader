@@ -114,7 +114,6 @@ export const selectTopTrades = (topN: number) => createSelector(
   selectUserTrades,
   selectTradedCryptoData,
   (trades, cryptoData) => {
-    console.log('user trades in selectTopTrades selector:', trades); // Add debug log
     return trades
       .map(trade => {
         const currentPrice = cryptoData[trade.coin_id]?.price || 0;
