@@ -1,6 +1,7 @@
 <div class="absolute top-0 left-0 right-0 bg-white shadow-md z-10 p-4">
   <ng-container *ngIf="user$ | async as user; else loggedOut">
     <h1 class="text-l text-gray-500 inline-block md:block">Welcome, {{ user.name }}</h1>
+    <a href="#" (click)="onLogout()" class="text-blue-500 text-sm hover:underline">Logout</a>
   </ng-container>
   <ng-template #loggedOut>
     <form [formGroup]="loginForm" (ngSubmit)="onLogin()" class="flex gap-2">

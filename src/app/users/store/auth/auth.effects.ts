@@ -9,7 +9,7 @@ import { CoinsActions } from '../../../coins/store/coins.actions';
 @Injectable()
 export class AuthEffects {
   login$: Observable<ReturnType<typeof AuthActions.loginSuccess | typeof AuthActions.loginFailure>>;
-  logout$: Observable<ReturnType<typeof AuthActions.logout>>;
+  logout$: Observable<ReturnType<typeof AuthActions.logoutSuccess>>;
   initializeAuth$: Observable<ReturnType<typeof AuthActions.loginSuccess | typeof AuthActions.noop>>;
   constructor(private actions$: Actions, private userService: UserService, private store: Store) {
 
@@ -37,7 +37,7 @@ export class AuthEffects {
           localStorage.removeItem('authUser');
           localStorage.removeItem('authToken');
         }),
-        map(() => AuthActions.logout())
+        map(() => AuthActions.logoutSuccess())
       )
     );
 

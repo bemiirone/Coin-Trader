@@ -28,7 +28,7 @@ export const authReducer = createReducer(
     ...state,
     error: error as string,
   })),
-  on(AuthActions.logout, () => initialState)
+  on(AuthActions.logoutSuccess, () => initialState)
 );
 
 export const authFeature = {
