@@ -5,12 +5,12 @@ import { HeaderComponent } from './header/header.component';
 import { SidebarComponent } from './sidebar/sidebar.component';
 import { Store } from '@ngrx/store';
 import { UserActions } from './users/store/user.actions';
-import { selectAllUsers, selectSelectedUser } from './users/store/user.selectors';
-import { Observable } from 'rxjs';
+import { Observable, tap } from 'rxjs';
 import { User } from './users/user.model';
 import { CommonModule } from '@angular/common';
 import { CoinsActions } from './coins/store/coins.actions';
 import { TradeActions } from './trades/store/trades.actions';
+import { selectAuthUser } from './users/store/auth/auth.selectors';
 
 @Component({
   selector: 'app-root',
@@ -22,19 +22,27 @@ import { TradeActions } from './trades/store/trades.actions';
 export class AppComponent {
   users$!: Observable<User[]>;
   selectedUser$!: Observable<User | null>;
+  authUser$!: Observable<User | null>;
+  authUserId: string | null = null;
 
   constructor(private store: Store) {
   }
 
   ngOnInit() {
     this.store.dispatch(CoinsActions.loadCoins());
-    this.users$ = this.store.select(selectAllUsers);
-    this.selectedUser$ = this.store.select(selectSelectedUser);
     this.store.dispatch(UserActions.loadUsers());
-    const hardcodedUserId = '67239c55e0853b7bcf32d013'; 
-    this.store.dispatch(UserActions.setSelectedUserId({ id: hardcodedUserId }));
+    this.store.select(selectAuthUser).pipe(
+      tap(user => {
+        if (user) {
+          this.authUserId = user._id;
+          this.store.dispatch(UserActions.setSelectedUserId({ id: this.authUserId }));
+        }
+      }),
+    ).subscribe();
     this.store.dispatch(TradeActions.loadTrades());
   }
 
-  
+  ngOnDestroy() {
+    this.store.select(selectAuthUser).subscribe().unsubscribe();
+  }
 }

@@ -10,7 +10,9 @@
 
     <div class="w-full md:w-1/4 p-4 bg-gray-100">
       <app-card [title]="sideTitle">
-        <app-portfolio></app-portfolio>
+        <ng-container *ngIf="authUser$ | async else welcome" >
+          <app-portfolio></app-portfolio>
+        </ng-container>
       </app-card>
     </div>
   </div>
@@ -18,3 +20,8 @@
 <ng-template #tradesList>
   <app-trade-list [trades]="trades" [user]="user"></app-trade-list>
 </ng-template>
+
+<ng-template #welcome>
+  <h1>Welcome to CoinTrader</h1>
+</ng-template>
+

@@ -8,6 +8,7 @@ import { selectTrades, selectUserBuyTrades, selectUserTrades } from './store/tra
 import { User } from '../users/user.model';
 import { selectSelectedUser } from '../users/store/user.selectors';
 import { Trade } from './trades.model';
+import { selectAuthUser } from '../users/store/auth/auth.selectors';
 
 @Component({
   selector: 'app-trades',
@@ -26,7 +27,7 @@ export class TradesComponent {
   constructor(private store: Store) {}
 
   ngOnInit() {
-    this.user$ = this.store.select(selectSelectedUser);
+    this.user$ = this.store.select(selectAuthUser);
     this.trades$ = this.store.select(selectUserTrades)
   }
 }
