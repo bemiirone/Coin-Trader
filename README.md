@@ -20,3 +20,5 @@ A simple Crypto coin trading app. Utilising MEAN stack technology
 - Portfolio management
 - Trade execution and history tracking
 - Responsive design for mobile and desktop
+- User Authentication: JWT
+
