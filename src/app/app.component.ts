@@ -30,12 +30,9 @@ export class AppComponent {
   }
 
   ngOnInit() {
-    // Dispatch actions
     this.store.dispatch(CoinsActions.loadCoins());
     this.store.dispatch(UserActions.loadUsers());
     this.store.dispatch(TradeActions.loadTrades());
-
-    // Select observables
     this.authUser$ = this.store.select(selectAuthUser);
 
     this.authUser$

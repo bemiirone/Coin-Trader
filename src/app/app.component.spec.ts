@@ -44,10 +44,10 @@ describe('AppComponent', () => {
   const mockActivatedRoute = {
     snapshot: {
       paramMap: {
-        get: (key: string) => '123', // Mock a route param like 'id' = '123'
+        get: (key: string) => '123', 
       },
     },
-    queryParams: of({}), // If queryParams are used, return an observable
+    queryParams: of({}),
   };
 
   beforeEach(async () => {
@@ -93,7 +93,6 @@ describe('AppComponent', () => {
     component.ngOnInit();
     fixture.detectChanges();
 
-    // Assert that setSelectedUserId was dispatched
     expect(dispatchSpy).toHaveBeenCalledWith(
       UserActions.setSelectedUserId({ id: '123' })
     );
