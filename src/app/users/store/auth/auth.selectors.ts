@@ -9,5 +9,5 @@ export const selectAuthToken = createSelector(
 );
 export const selectAuthUser = createSelector(
   selectAuthState,
-  (state: AuthState) => state.user
+  (state: AuthState) => state?.user || null
 );

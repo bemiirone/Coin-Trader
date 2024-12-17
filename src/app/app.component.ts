@@ -5,7 +5,7 @@ import { HeaderComponent } from './header/header.component';
 import { SidebarComponent } from './sidebar/sidebar.component';
 import { Store } from '@ngrx/store';
 import { UserActions } from './users/store/user.actions';
-import { Observable, tap } from 'rxjs';
+import { filter, Observable, Subject, takeUntil, tap } from 'rxjs';
 import { User } from './users/user.model';
 import { CommonModule } from '@angular/common';
 import { CoinsActions } from './coins/store/coins.actions';
@@ -24,25 +24,33 @@ export class AppComponent {
   selectedUser$!: Observable<User | null>;
   authUser$!: Observable<User | null>;
   authUserId: string | null = null;
+  private destroy$ = new Subject<void>();
 
   constructor(private store: Store) {
   }
 
   ngOnInit() {
+    // Dispatch actions
     this.store.dispatch(CoinsActions.loadCoins());
     this.store.dispatch(UserActions.loadUsers());
-    this.store.select(selectAuthUser).pipe(
-      tap(user => {
-        if (user) {
-          this.authUserId = user._id;
-          this.store.dispatch(UserActions.setSelectedUserId({ id: this.authUserId }));
-        }
-      }),
-    ).subscribe();
     this.store.dispatch(TradeActions.loadTrades());
+
+    // Select observables
+    this.authUser$ = this.store.select(selectAuthUser);
+
+    this.authUser$
+      .pipe(
+        filter((user): user is User => !!user), // Ensure user is defined
+        tap((user) => {
+          this.store.dispatch(UserActions.setSelectedUserId({ id: user._id }));
+        }),
+        takeUntil(this.destroy$)
+      )
+      .subscribe(); 
   }
 
   ngOnDestroy() {
-    this.store.select(selectAuthUser).subscribe().unsubscribe();
+    this.destroy$.next();
+    this.destroy$.complete();
   }
 }

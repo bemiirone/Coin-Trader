@@ -1,93 +1,99 @@
 import { TestBed } from '@angular/core/testing';
-import { provideMockStore, MockStore } from '@ngrx/store/testing';
-import { TradesComponent } from './trades.component';
-import { Store } from '@ngrx/store';
-import { selectSelectedUser } from '../users/store/user.selectors';
-import { User } from '../users/user.model';
+import { HttpClientTestingModule, HttpTestingController } from '@angular/common/http/testing';
+import { TradesService } from './trades.service';
 import { Trade } from './trades.model';
-import { By } from '@angular/platform-browser';
-import { of } from 'rxjs';
-import { selectUserTrades } from './store/trades.selectors';
-import { BsModalService } from 'ngx-bootstrap/modal';
+describe('TradesService', () => {
+  let service: TradesService;
+  let httpMock: HttpTestingController;
 
-fdescribe('TradesComponent', () => {
-  let component: TradesComponent;
-  let store: MockStore;
-  let fixture: any;
-
-  const mockUser: User = {
-    _id: '1',
-    name: 'User One',
-    email: 'user1@example.com',
-    password: 'password1',
-    admin: false,
-    portfolio_total: 1000,
-    deposit: 500,
-    cash: 500,
-  };
-
-  const mockTrades: Trade[] = [
-    {
-      _id: '1',
-      user_id: '1',
-      coin_id: 1,
-      symbol: 'BTC',
-      name: 'Bitcoin',
-      amount: 0.5,
-      price: 30000,
-      date: new Date().toISOString(),
-      volume: 15000,
-      order: 'buy',
-    },
-    {
-      _id: '2',
-      user_id: '1',
-      coin_id: 2,
-      symbol: 'ETH',
-      name: 'Ethereum',
-      amount: 1,
-      price: 2000,
-      date: new Date().toISOString(),
-      volume: 2000,
-      order: 'buy',
-    },
-  ];
-
-  beforeEach(async () => {
-    await TestBed.configureTestingModule({
-      imports: [TradesComponent],
-      providers: [
-        provideMockStore({
-          initialState: {}, // Mock the initial store state
-        }),
-        BsModalService,
-      ],
-    }).compileComponents();
-
-    store = TestBed.inject(MockStore);
-    fixture = TestBed.createComponent(TradesComponent);
-    component = fixture.componentInstance;
-
-    // Mock selectors
-    store.overrideSelector(selectSelectedUser, mockUser);
-    store.overrideSelector(selectUserTrades, mockTrades);
+  beforeEach(() => {
+    TestBed.configureTestingModule({
+      imports: [HttpClientTestingModule],
+      providers: [TradesService]
+    });
+    service = TestBed.inject(TradesService);
+    httpMock = TestBed.inject(HttpTestingController);
   });
 
-  it('should create the component', () => {
-    expect(component).toBeTruthy();
+  afterEach(() => {
+    httpMock.verify();
   });
 
-  it('should select user and trades from the store on initialization', () => {
-    // Subscribe to observables and verify values
-    component.ngOnInit();
+  it('should be created', () => {
+    expect(service).toBeTruthy();
+  });
 
-    component.user$.subscribe((user) => {
-      expect(user).toEqual(mockUser);
+  it('should fetch trades', () => {
+    const dummyTrades: Trade[] = [
+      {
+        _id: '1', symbol: 'BTC', price: 50000,
+        coin_id: 1,
+        name: '',
+        amount: 100,
+        date: '',
+        volume: 200,
+        order: 'buy'
+      },
+      {
+        _id: '2', symbol: 'ETH', price: 4000,
+        coin_id: 2,
+        name: '',
+        amount: 50,
+        date: '',
+        volume: 100,
+        order: 'buy'
+      }
+    ];
+
+    service.getTrades().subscribe(trades => {
+      expect(trades.length).toBe(2);
+      expect(trades).toEqual(dummyTrades);
     });
 
-    component.trades$.subscribe((trades) => {
-      expect(trades).toEqual(mockTrades);
-    });
+    const req = httpMock.expectOne(service['apiUrl']);
+    expect(req.request.method).toBe('GET');
+    req.flush(dummyTrades);
   });
 
+  it('should add a trade', () => {
+    const newTrade: Trade = {
+      _id: '3', symbol: 'LTC', price: 200,
+      coin_id: 0,
+      name: '',
+      amount: 0,
+      date: '',
+      volume: 0,
+      order: 'buy'
+    };
+
+    service.addTrade(newTrade).subscribe(trade => {
+      expect(trade).toEqual(newTrade);
+    });
+
+    const req = httpMock.expectOne(service['apiUrl']);
+    expect(req.request.method).toBe('POST');
+    req.flush(newTrade);
+  });
+
+  it('should update a trade', () => {
+    const updatedTrade: Partial<Trade> = { price: 55000 };
+
+    service.updateTrade('1', updatedTrade).subscribe(trade => {
+      expect(trade.price).toBe(55000);
+    });
+
+    const req = httpMock.expectOne(`${service['apiUrl']}/1`);
+    expect(req.request.method).toBe('PUT');
+    req.flush({ ...updatedTrade, id: '1', symbol: 'BTC', quantity: 1 });
+  });
+
+  it('should delete a trade', () => {
+    service.deleteTrade('1').subscribe(response => {
+      expect(response).toBeNull();
+    });
+
+    const req = httpMock.expectOne(`${service['apiUrl']}/1`);
+    expect(req.request.method).toBe('DELETE');
+    req.flush(null);
+  });
 });

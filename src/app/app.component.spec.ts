@@ -1,72 +1,101 @@
 import { TestBed } from '@angular/core/testing';
-import { provideMockStore, MockStore } from '@ngrx/store/testing';
+import { MockStore, provideMockStore } from '@ngrx/store/testing';
 import { AppComponent } from './app.component';
 import { CoinsActions } from './coins/store/coins.actions';
 import { UserActions } from './users/store/user.actions';
 import { TradeActions } from './trades/store/trades.actions';
-import { selectAllUsers, selectSelectedUser } from './users/store/user.selectors';
-import { ActivatedRoute } from '@angular/router';
+import { selectAuthUser } from './users/store/auth/auth.selectors';
+import { User } from './users/user.model';
+import { Store } from '@ngrx/store';
+import { ActivatedRoute, RouterOutlet } from '@angular/router';
+import { HeaderComponent } from './header/header.component';
+import { SidebarComponent } from './sidebar/sidebar.component';
+import { CommonModule } from '@angular/common';
 import { of } from 'rxjs';
 
 describe('AppComponent', () => {
   let store: MockStore;
+  let fixture: any;
   let component: AppComponent;
-  let mockActivatedRoute: any;
 
-  const mockUsers = [
-    { _id: '1', name: 'User One', email: 'user1@example.com', password: 'password1', admin: false, portfolio_total: 1000, deposit: 500, cash: 500 },
-    { _id: '2', name: 'User Two', email: 'user2@example.com', password: 'password2', admin: false, portfolio_total: 2000, deposit: 1000, cash: 1000 },
-  ];
-  const mockSelectedUser = { _id: '1', name: 'User One', email: 'user1@example.com', password: 'password1', admin: false, portfolio_total: 1000, deposit: 500, cash: 500 };
+  const initialState = {
+    auth: {
+      user: {
+        _id: '123',
+        name: 'Test User',
+        email: 'test@test.com',
+      } as User,
+      token: 'mock-token',
+      error: null,
+    },
+  };
 
-  const initialState = {};
+  const mockUser: User = {
+    _id: '123',
+    name: 'Test User',
+    email: 'test@test.com',
+    password: '',
+    admin: false,
+    portfolio_total: 0,
+    deposit: 0,
+    cash: 0,
+  };
+
+  const mockActivatedRoute = {
+    snapshot: {
+      paramMap: {
+        get: (key: string) => '123', // Mock a route param like 'id' = '123'
+      },
+    },
+    queryParams: of({}), // If queryParams are used, return an observable
+  };
 
   beforeEach(async () => {
-    mockActivatedRoute = {
-      params: of({}),
-      queryParams: of({}),
-    };
-
     await TestBed.configureTestingModule({
-      imports: [AppComponent],
+      imports: [
+        AppComponent,
+        RouterOutlet,
+        HeaderComponent,
+        SidebarComponent,
+        CommonModule,
+      ],
       providers: [
-        provideMockStore({}),
+        provideMockStore({ initialState }),
         { provide: ActivatedRoute, useValue: mockActivatedRoute },
       ],
     }).compileComponents();
 
     store = TestBed.inject(MockStore);
-
-    // Mock selectors
-    store.overrideSelector(selectAllUsers, mockUsers);
-    store.overrideSelector(selectSelectedUser, mockSelectedUser);
-
-    const fixture = TestBed.createComponent(AppComponent);
+    fixture = TestBed.createComponent(AppComponent);
     component = fixture.componentInstance;
+
+    fixture.detectChanges();
   });
 
   it('should create the component', () => {
     expect(component).toBeTruthy();
   });
 
-  it('should dispatch load actions and set observables on ngOnInit', () => {
-    const spyDispatch = spyOn(store, 'dispatch').and.callThrough();
+  it('should dispatch load actions on ngOnInit', () => {
+    const dispatchSpy = spyOn(store, 'dispatch');
 
     component.ngOnInit();
 
-    expect(spyDispatch).toHaveBeenCalledWith(CoinsActions.loadCoins());
-    expect(spyDispatch).toHaveBeenCalledWith(UserActions.loadUsers());
-    expect(spyDispatch).toHaveBeenCalledWith(
-      UserActions.setSelectedUserId({ id: '67239c55e0853b7bcf32d013' })
+    expect(dispatchSpy).toHaveBeenCalledWith(CoinsActions.loadCoins());
+    expect(dispatchSpy).toHaveBeenCalledWith(UserActions.loadUsers());
+    expect(dispatchSpy).toHaveBeenCalledWith(TradeActions.loadTrades());
+  });
+
+  it('should dispatch setSelectedUserId when authUser emits', () => {
+    const dispatchSpy = spyOn(store, 'dispatch');
+
+    store.overrideSelector(selectAuthUser, mockUser);
+    component.ngOnInit();
+    fixture.detectChanges();
+
+    // Assert that setSelectedUserId was dispatched
+    expect(dispatchSpy).toHaveBeenCalledWith(
+      UserActions.setSelectedUserId({ id: '123' })
     );
-    expect(spyDispatch).toHaveBeenCalledWith(TradeActions.loadTrades());
-
-    component.users$.subscribe((users) => {
-      expect(users).toEqual(mockUsers);
-    });
-
-    component.selectedUser$.subscribe((user) => {
-      expect(user).toEqual(mockSelectedUser);
-    });
   });
 });

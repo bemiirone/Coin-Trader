@@ -4,8 +4,9 @@ import { TradesComponent } from './trades.component';
 import { selectUserTrades } from './store/trades.selectors';
 import { selectSelectedUser } from '../users/store/user.selectors';
 import { BsModalService } from 'ngx-bootstrap/modal';
+import { selectAuthUser } from '../users/store/auth/auth.selectors';
 
-fdescribe('TradesComponent', () => {
+describe('TradesComponent', () => {
   let component: TradesComponent;
   let fixture: ComponentFixture<TradesComponent>;
   let store: MockStore;
@@ -51,8 +52,11 @@ fdescribe('TradesComponent', () => {
 
   it('should select user on init', () => {
     const spy = spyOn(store, 'select').and.callThrough();
+  
     component.ngOnInit();
-    expect(spy).toHaveBeenCalledWith(selectSelectedUser);
+    expect(spy).toHaveBeenCalledWith(selectAuthUser);
+    expect(spy).toHaveBeenCalledWith(selectUserTrades);
+    expect(spy.calls.count()).toBe(2);
   });
 
   it('should select user trades on init', () => {
