@@ -2,7 +2,6 @@ import { ComponentFixture, TestBed } from '@angular/core/testing';
 import { provideMockStore, MockStore } from '@ngrx/store/testing';
 import { TradesComponent } from './trades.component';
 import { selectUserTrades } from './store/trades.selectors';
-import { selectSelectedUser } from '../users/store/user.selectors';
 import { BsModalService } from 'ngx-bootstrap/modal';
 import { selectAuthUser } from '../users/store/auth/auth.selectors';
 

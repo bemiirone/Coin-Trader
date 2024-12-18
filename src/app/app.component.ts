@@ -37,7 +37,7 @@ export class AppComponent {
 
     this.authUser$
       .pipe(
-        filter((user): user is User => !!user), // Ensure user is defined
+        filter((user): user is User => !!user),
         tap((user) => {
           this.store.dispatch(UserActions.setSelectedUserId({ id: user._id }));
         }),
