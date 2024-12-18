@@ -5,7 +5,7 @@ import { HeaderComponent } from './header/header.component';
 import { SidebarComponent } from './sidebar/sidebar.component';
 import { Store } from '@ngrx/store';
 import { UserActions } from './users/store/user.actions';
-import { filter, Observable, Subject, takeUntil, tap } from 'rxjs';
+import { catchError, filter, Observable, Subject, takeUntil, tap } from 'rxjs';
 import { User } from './users/user.model';
 import { CommonModule } from '@angular/common';
 import { CoinsActions } from './coins/store/coins.actions';
@@ -40,6 +40,10 @@ export class AppComponent {
         filter((user): user is User => !!user),
         tap((user) => {
           this.store.dispatch(UserActions.setSelectedUserId({ id: user._id }));
+        }),
+        catchError((error) => {
+          console.error('Error occurred:', error);
+          return [];
         }),
         takeUntil(this.destroy$)
       )
