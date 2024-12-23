@@ -13,7 +13,8 @@
     </tr>
   </thead>
   <tbody class="text-gray-700 text-sm font-light">
-    <tr *ngFor="let trade of trades" 
+    @for (trade of trades; track trade._id) {
+      <tr  
         class="border-b border-gray-200 hover:bg-gray-100" 
         [ngClass]="{'bg-green-100': trade.order === 'buy', 'bg-red-100': trade.order === 'sell'}" >
       <td class="py-3 px-6 text-left">{{ trade.date | date:'short' }}</td>
@@ -31,6 +32,8 @@
         {{ trade.volume }}
       </td>
     </tr>
+    }
+    
   </tbody>
 </table>
 

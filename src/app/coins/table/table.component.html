@@ -11,7 +11,8 @@
     </tr>
   </thead>
   <tbody class="text-gray-700 text-sm font-light">
-    <tr *ngFor="let coin of coins" class="border-b border-gray-200 hover:bg-gray-100">
+    @for (coin of coins; track coin.name) {
+    <tr class="border-b border-gray-200 hover:bg-gray-100">
       <td class="py-3 px-6 text-left">{{ coin.name }}</td>
       <td class="py-3 px-6 text-right">${{ coin.price | number: '1.0-2' }}</td>
       <td class="py-3 px-6 text-right" [ngClass]="{ 'text-red-500': coin.percent_change_1h < 0, 'text-green-700': coin.percent_change_24h > 0 }">
@@ -25,5 +26,6 @@
       </td>
       <td class="py-3 px-6 text-right">${{ coin.market_cap | number: '1.0-0' }}</td>
     </tr>
+  }
   </tbody>
 </table>
