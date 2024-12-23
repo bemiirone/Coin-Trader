@@ -22,9 +22,6 @@ import { selectAuthUser } from './users/store/auth/auth.selectors';
 export class AppComponent {
   users$!: Observable<User[]>;
   selectedUser$!: Observable<User | null>;
-  authUser$!: Observable<User | null>;
-  authUserId: string | null = null;
-  private destroy$ = new Subject<void>();
 
   constructor(private store: Store) {
   }
@@ -33,25 +30,6 @@ export class AppComponent {
     this.store.dispatch(CoinsActions.loadCoins());
     this.store.dispatch(UserActions.loadUsers());
     this.store.dispatch(TradeActions.loadTrades());
-    this.authUser$ = this.store.select(selectAuthUser);
-
-    this.authUser$
-      .pipe(
-        filter((user): user is User => !!user),
-        tap((user) => {
-          this.store.dispatch(UserActions.setSelectedUserId({ id: user._id }));
-        }),
-        catchError((error) => {
-          console.error('Error occurred:', error);
-          return [];
-        }),
-        takeUntil(this.destroy$)
-      )
-      .subscribe(); 
-  }
-
-  ngOnDestroy() {
-    this.destroy$.next();
-    this.destroy$.complete();
+    this.store.select(selectAuthUser);
   }
 }

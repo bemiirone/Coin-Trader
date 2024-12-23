@@ -3,15 +3,18 @@ import { Injectable } from '@angular/core';
 import { Actions, createEffect, ofType } from '@ngrx/effects';
 import { UserService } from '../user.service';
 import { UserActions, } from './user.actions';
-import { catchError, map, mergeMap, Observable, of } from 'rxjs';
+import { catchError, filter, map, mergeMap, Observable, of, tap } from 'rxjs';
 import { User } from '../user.model';
+import { Store } from '@ngrx/store';
+import { selectAuthUser } from './auth/auth.selectors';
 
 @Injectable()
 export class UserEffects {
   loadUsers$: Observable<ReturnType<typeof UserActions.loadUsersSuccess | typeof UserActions.loadUsersFailure>>;
   addUser$: Observable<ReturnType<typeof UserActions.addUserSuccess | typeof UserActions.addUserFailure>>;
   updatePortfolioTotal$: Observable<{ type: string, user: User } | { type: string, error: string }>;
-  constructor(private actions$: Actions, private userService: UserService) {
+  setSelectedUseId$: Observable<void>;
+  constructor(private actions$: Actions, private userService: UserService, private store: Store) {
     // Load users effect
     this.loadUsers$ = createEffect(() =>
       this.actions$.pipe(
@@ -24,6 +27,24 @@ export class UserEffects {
         )
       )
     );
+    
+    // Set selected user id effect
+    this.setSelectedUseId$ = createEffect(
+      () =>
+        this.store.select(selectAuthUser).pipe(
+          filter((user): user is User => !!user),
+          tap((user) => {
+            this.store.dispatch(UserActions.setSelectedUserId({ id: user._id }));
+          }),
+          map(() => void 0), 
+          catchError((error) => {
+            console.error('Error selecting user ID:', error);
+            return of(void 0);
+          })
+        ),
+      { dispatch: false }
+    );
+    
     // Add user effect
     this.addUser$ = createEffect(() =>
       this.actions$.pipe(
@@ -36,6 +57,7 @@ export class UserEffects {
         )
       )
     );
+    
     // Update user portfolio total and cash effect
     this.updatePortfolioTotal$ = createEffect(() =>
       this.actions$.pipe(
