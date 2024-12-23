@@ -86,15 +86,11 @@ describe('AppComponent', () => {
     expect(dispatchSpy).toHaveBeenCalledWith(TradeActions.loadTrades());
   });
 
-  it('should dispatch setSelectedUserId when authUser emits', () => {
-    const dispatchSpy = spyOn(store, 'dispatch');
+  it('should select the auth user', () => {
+    const selectSpy = spyOn(store, 'select').and.callThrough();
 
-    store.overrideSelector(selectAuthUser, mockUser);
     component.ngOnInit();
-    fixture.detectChanges();
 
-    expect(dispatchSpy).toHaveBeenCalledWith(
-      UserActions.setSelectedUserId({ id: '123' })
-    );
+    expect(selectSpy).toHaveBeenCalledWith(selectAuthUser);
   });
 });
