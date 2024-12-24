@@ -85,12 +85,4 @@ describe('AppComponent', () => {
     expect(dispatchSpy).toHaveBeenCalledWith(UserActions.loadUsers());
     expect(dispatchSpy).toHaveBeenCalledWith(TradeActions.loadTrades());
   });
-
-  it('should select the auth user', () => {
-    const selectSpy = spyOn(store, 'select').and.callThrough();
-
-    component.ngOnInit();
-
-    expect(selectSpy).toHaveBeenCalledWith(selectAuthUser);
-  });
 });

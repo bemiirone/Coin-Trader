@@ -30,6 +30,5 @@ export class AppComponent {
     this.store.dispatch(CoinsActions.loadCoins());
     this.store.dispatch(UserActions.loadUsers());
     this.store.dispatch(TradeActions.loadTrades());
-    this.store.select(selectAuthUser);
   }
 }
