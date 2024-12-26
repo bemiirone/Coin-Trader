@@ -1,5 +1,5 @@
 import { CommonModule } from '@angular/common';
-import { Component, Input, OnInit } from '@angular/core';
+import { ChangeDetectionStrategy, Component, Input, OnInit } from '@angular/core';
 import {
   AbstractControl,
   FormBuilder,
@@ -26,6 +26,7 @@ import { ModalComponent } from '../../shared/modal/modal.component';
 
 @Component({
   standalone: true,
+  changeDetection: ChangeDetectionStrategy.OnPush,
   selector: 'app-trade-form',
   templateUrl: './trade-form.component.html',
   imports: [CommonModule, FormsModule, ReactiveFormsModule, ModalComponent],

@@ -1,6 +1,6 @@
 import { map, Observable, of } from 'rxjs';
 import { CommonModule } from '@angular/common';
-import { Component, Input } from '@angular/core';
+import { ChangeDetectionStrategy, Component, Input } from '@angular/core';
 import { Store } from '@ngrx/store';
 import { selectCoinLoading, selectCoinError } from '../../coins/store/coins.selectors';
 import { Trade } from '../trades.model';
@@ -12,6 +12,7 @@ import { selectSelectedUser } from '../../users/store/user.selectors';
 @Component({
   selector: 'app-trade-list',
   standalone: true,
+  changeDetection: ChangeDetectionStrategy.OnPush,
   imports: [CommonModule],
   templateUrl: './trade-list.component.html',
   styleUrl: './trade-list.component.scss'
