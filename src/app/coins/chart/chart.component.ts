@@ -1,5 +1,5 @@
 import { CommonModule } from '@angular/common';
-import { Component, Input } from '@angular/core';
+import { ChangeDetectionStrategy, Component, Input } from '@angular/core';
 import { ChartConfiguration } from 'chart.js';
 import { BaseChartDirective } from 'ng2-charts';
 import { PickedCryptoData } from '../coins.model';
@@ -7,6 +7,7 @@ import { PickedCryptoData } from '../coins.model';
 @Component({
   selector: 'app-chart',
   standalone: true,
+  changeDetection: ChangeDetectionStrategy.OnPush,
   imports: [CommonModule, BaseChartDirective],
   templateUrl: './chart.component.html',
   styleUrl: './chart.component.scss'

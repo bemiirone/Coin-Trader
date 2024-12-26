@@ -1,5 +1,5 @@
 import { CommonModule } from '@angular/common';
-import { Component } from '@angular/core';
+import { ChangeDetectionStrategy, Component } from '@angular/core';
 import { Store } from '@ngrx/store';
 import { Observable, of } from 'rxjs';
 import { CoinData, PickedCryptoData } from './coins.model';
@@ -10,6 +10,7 @@ import { ChartComponent } from './chart/chart.component';
 @Component({
   selector: 'app-coins',
   standalone: true,
+  changeDetection: ChangeDetectionStrategy.OnPush,
   imports: [CommonModule, TableComponent, ChartComponent],
   templateUrl: './coins.component.html',
   styleUrl: './coins.component.scss'
