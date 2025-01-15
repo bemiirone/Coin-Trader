@@ -1,6 +1,5 @@
 import { createSelector, createFeatureSelector } from '@ngrx/store';
 import { CoinState } from './coins.reducer';
-import exp from 'constants';
 import { CoinData, PickedCryptoData, TradedCryptoData } from '../coins.model';
 
 export const selectCoinsState = createFeatureSelector<CoinState>('coins');
