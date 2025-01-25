@@ -12,5 +12,6 @@ import { PickedCryptoData } from '../coins.model';
 })
 export class TableComponent {
   @Input() coins: PickedCryptoData[] = [];
+  @Input() loading = false;
   constructor() {}
 }
