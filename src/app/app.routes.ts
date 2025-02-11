@@ -5,7 +5,7 @@ import { AuthGuard } from './users/auth.guard';
 
 export const routes: Routes = [
   {path: '', redirectTo: 'coins', pathMatch: 'full'},
-  {path: 'coins', component: DashboardComponent},
+  {path: 'coins', loadComponent: () => import('./dashboard/dashboard.component').then(c => c.DashboardComponent)},
   {path: 'trades', loadComponent: () => import('./trades/trades.component').then(c => c.TradesComponent), canActivate: [AuthGuard]},
   {path: 'form', component: TradeFormComponent, canActivate: [AuthGuard]},
 ];
