@@ -7,6 +7,9 @@ export const usersFeatureKey = 'users';
 
 export interface UserState extends EntityState<User> {
   selectedUserId: string | null;
+  addUserSuccess: boolean;
+  registrationError: string | null;
+  isRegistering: boolean;
 }
 
 export const adapter: EntityAdapter<User> = createEntityAdapter<User>({
@@ -15,6 +18,9 @@ export const adapter: EntityAdapter<User> = createEntityAdapter<User>({
 
 export const initialState: UserState = adapter.getInitialState({
   selectedUserId: null,
+  registrationError: null,
+  isRegistering: false,
+  addUserSuccess: false
 });
 
 export const reducer = createReducer(
@@ -32,10 +38,19 @@ export const reducer = createReducer(
     })
   ),
   on(UserActions.addUserSuccess,
-    (state, { user }) => adapter.addOne(user, state)
+    (state, { user }) => {
+      return {
+        ...adapter.addOne(user, state),
+        addUserSuccess: true
+      };
+    }
   ),
+
   on(UserActions.addUserFailure,
-    state => adapter.removeAll(state)
+    (state) => ({
+      ...state,
+      addUserSuccess: false
+    })
   ),
   on(UserActions.updateUserPortfolio, (state, { userId, portfolioTotal, cash }) =>
     adapter.updateOne(
@@ -45,7 +60,7 @@ export const reducer = createReducer(
       },
       state
     )
-  )
+  ),
 );
 export const usersFeature = createFeature({
   name: usersFeatureKey,

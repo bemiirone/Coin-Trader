@@ -6,11 +6,12 @@ import { CommonModule } from '@angular/common';
 import { Store, on } from '@ngrx/store';
 import { selectAuthUser } from '../users/store/auth/auth.selectors';
 import { AuthActions } from '../users/store/auth/auth.actions';
+import { RouterModule } from '@angular/router';
 
 @Component({
   selector: 'app-header',
   standalone: true,
-  imports: [CommonModule, FormsModule, ReactiveFormsModule],
+  imports: [CommonModule, FormsModule, ReactiveFormsModule, RouterModule],
   templateUrl: './header.component.html',
   styleUrl: './header.component.scss'
 })

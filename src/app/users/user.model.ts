@@ -4,7 +4,9 @@ export interface User {
   email: string;
   password: string;
   admin: boolean;
-  portfolio_total: number;
+  portfolio_total?: number;
   deposit: number;
-  cash: number;
+  cash?: number;
 }
+
+export type UserAdd = Omit<User, '_id'>;

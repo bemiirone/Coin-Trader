@@ -4,7 +4,7 @@ import { Actions, createEffect, ofType } from '@ngrx/effects';
 import { UserService } from '../user.service';
 import { UserActions, } from './user.actions';
 import { catchError, filter, map, mergeMap, Observable, of, tap } from 'rxjs';
-import { User } from '../user.model';
+import { User, UserAdd } from '../user.model';
 import { Store } from '@ngrx/store';
 import { selectAuthUser } from './auth/auth.selectors';
 
@@ -51,7 +51,7 @@ export class UserEffects {
         ofType(UserActions.addUser),
         mergeMap((action) =>
           this.userService.addUser(action.user).pipe(
-            map((user: User) => UserActions.addUserSuccess({ user })),
+            map((response: User) => UserActions.addUserSuccess({ user: response })),
             catchError((error) => of(UserActions.addUserFailure({ error })))
           )
         )

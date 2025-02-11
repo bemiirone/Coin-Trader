@@ -5,6 +5,7 @@ const express = require('express');
 const mongoose = require('mongoose');
 const bcrypt = require('bcrypt');
 const jwt = require('jsonwebtoken');
+const { type } = require('os');
 const SECRET_KEY = "test_secret_key"; 
 const app = express();
 
@@ -19,11 +20,13 @@ mongoose.connect(process.env.MONGODB_URI)
 
 // User Schema and Model
 const userSchema = new mongoose.Schema({
-  name: String,
-  email: String,
-  password: String,
-  portfolio_total: Number,
+  name: { type: String, required: true },
+  email: { type: String, required: true },
+  password: { type: String, required: true },
+  portfolio_total: {Number, default: 0},
   cash: Number,
+  deposit:{type: Number, default: 0, required: true},
+  admin: { type: Boolean, default: false }
 });
 
 // Trade Schema and Model
@@ -87,11 +90,87 @@ app.patch('/api/users/:id', async (req, res) => {
 
 // Register
 app.post('/api/users/register', async (req, res) => {
-  const { name, email, password } = req.body;
-  const hashedPassword = await bcrypt.hash(password, 10);
-  const newUser = new User({ name, email, password: hashedPassword });
-  await newUser.save();
-  res.status(201).send({ message: 'User registered successfully' });
+  try {
+    const { name, email, password, deposit } = req.body;
+    
+    console.log('Received registration data:', { 
+      name, 
+      email, 
+      passwordReceived: !!password, 
+      deposit 
+    }); // Debug log
+    
+    // Validate required fields
+    if (!name || !email || !password || deposit === undefined) {
+      console.log('Validation failed:', { 
+        name: !name, 
+        email: !email, 
+        password: !password, 
+        deposit: deposit === undefined 
+      }); // Debug log
+      return res.status(400).json({ 
+        message: 'Missing required fields',
+        details: {
+          name: !name ? 'Name is required' : null,
+          email: !email ? 'Email is required' : null,
+          password: !password ? 'Password is required' : null,
+          deposit: deposit === undefined ? 'Deposit is required' : null
+        }
+      });
+    }
+
+    // Check if user already exists
+    const existingUser = await User.findOne({ email });
+    if (existingUser) {
+      return res.status(400).json({ 
+        message: 'Registration failed',
+        details: 'Email already registered'
+      });
+    }
+
+    // Ensure password is a string
+    const passwordString = String(password);
+
+    const hashedPassword = await bcrypt.hash(passwordString, 10);
+    const newUser = new User({ 
+      name, 
+      email, 
+      password: hashedPassword, 
+      deposit: Number(deposit), 
+      cash: Number(deposit),
+      portfolio_total: 0,
+      admin: false
+    });
+
+    await newUser.save();
+    console.log('User registered successfully:', { 
+      name, 
+      email, 
+      deposit,
+      userId: newUser._id 
+    });
+
+    res.status(201).json({ 
+        _id: newUser._id,
+        name: newUser.name,
+        email: newUser.email,
+        deposit: newUser.deposit,
+        cash: newUser.cash,
+        portfolio_total: newUser.portfolio_total,
+        admin: newUser.admin
+    });
+  } catch (error) {
+    console.error('Registration error details:', {
+      message: error.message,
+      stack: error.stack,
+      code: error.code
+    });
+    res.status(500).json({ 
+      message: 'Registration failed',
+      details: error.message || 'Internal server error',
+      code: error.code
+    });
+  }
 });
 
 // Login
