@@ -2,8 +2,8 @@ import { Component } from '@angular/core';
 import { FormBuilder, FormGroup, Validators, ReactiveFormsModule } from '@angular/forms';
 import { Store } from '@ngrx/store';
 import { UserActions } from '../store/user.actions';
-import { selectIsRegistering, selectRegistrationError } from '../store/user.selectors';
-import { AsyncPipe, NgClass, NgIf } from '@angular/common';
+import { selectAddUserSuccess, selectIsRegistering, selectRegistrationError } from '../store/user.selectors';
+import { CommonModule } from '@angular/common';
 import { Observable } from 'rxjs';
 
 @Component({
@@ -12,16 +12,15 @@ import { Observable } from 'rxjs';
   standalone: true,
   imports: [
     ReactiveFormsModule,
-    NgIf,
-    NgClass,
-    AsyncPipe
+    CommonModule,
   ]
 })
 export class RegisterComponent {
   registerForm: FormGroup;
   hidePassword = true;
   isRegistering$: Observable<boolean>;
-  registrationError$: Observable<string | null>;
+  success$: Observable<boolean>;
+  minimumDeposit = 100000;
 
   constructor(
     private fb: FormBuilder,
@@ -31,11 +30,11 @@ export class RegisterComponent {
       name: ['', [Validators.required]],
       email: ['', [Validators.required, Validators.email]],
       password: ['', [Validators.required, Validators.minLength(6)]],
-      deposit: ['', [Validators.required, Validators.min(0)]]
+      deposit: ['', [Validators.required, Validators.min(this.minimumDeposit)]]
     });
 
     this.isRegistering$ = this.store.select(selectIsRegistering);
-    this.registrationError$ = this.store.select(selectRegistrationError);
+    this.success$ = this.store.select(selectAddUserSuccess);
   }
 
   onSubmit() {

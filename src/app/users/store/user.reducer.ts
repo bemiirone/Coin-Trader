@@ -41,7 +41,8 @@ export const reducer = createReducer(
     (state, { user }) => {
       return {
         ...adapter.addOne(user, state),
-        addUserSuccess: true
+        addUserSuccess: true,
+        isRegistering: false,
       };
     }
   ),
