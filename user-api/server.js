@@ -23,7 +23,7 @@ const userSchema = new mongoose.Schema({
   name: { type: String, required: true },
   email: { type: String, required: true },
   password: { type: String, required: true },
-  portfolio_total: {Number, default: 0},
+  portfolio_total: {type: Number, default: 0},
   cash: Number,
   deposit:{type: Number, default: 0, required: true},
   admin: { type: Boolean, default: false }
