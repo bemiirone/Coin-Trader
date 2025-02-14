@@ -2,7 +2,7 @@
 const express = require('express');
 const axios = require('axios');
 const cors = require('cors');
-// import cncApi from environment
+const { environment } = require('../src/environments/environment'); 
 
 const app = express();
 const PORT = 5200;
@@ -13,9 +13,9 @@ app.use(cors({ origin: 'http://localhost:4200' }));
 // Proxy endpoint
 app.get('/api/cryptocurrency/listings/latest', async (req, res) => {
   try {
-    const response = await axios.get('https://pro-api.coinmarketcap.com/v1/cryptocurrency/listings/latest', {
+    const response = await axios.get(environment.cmcApi, {
       headers: {
-        'X-CMC_PRO_API_KEY': '5155ae49-602e-4b9b-af1c-efbc9f10f5f5', // Replace with your CoinMarketCap API key
+        'X-CMC_PRO_API_KEY': environment.cmcApiKey, 
       },
       params: {
         start: req.query.start,
