@@ -12,6 +12,7 @@ A simple Crypto coin trading app. Utilising MEAN stack technology
 - **Styling**: TailwindCSS
 
 ### Backend
+- **Language**: TypeScript
 - **Framework**: Express
 - **Database**: MongoDB
 
