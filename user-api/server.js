@@ -14,9 +14,17 @@ app.use(express.json());
 app.use(cors({ origin: 'http://localhost:4200' }));
 
 // Connect to MongoDB Atlas
-mongoose.connect(process.env.MONGODB_URI)
-.then(() => console.log('Connected to MongoDB Atlas'))
-.catch((err) => console.error('Error connecting to MongoDB', err));
+const connectDB = async () => {
+  try {
+    await mongoose.connect(process.env.MONGODB_URI);
+    console.log('Connected to MongoDB Atlas');
+  } catch (err) {
+    console.error('Error connecting to MongoDB:', err);
+    process.exit(1);
+  }
+};
+
+connectDB();
 
 // User Schema and Model
 const userSchema = new mongoose.Schema({
