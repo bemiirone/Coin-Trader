@@ -1,11 +1,8 @@
-import { Injectable } from '@angular/core';
 import { inject } from '@angular/core';
 import { HttpInterceptorFn } from '@angular/common/http';
-import { HttpInterceptor, HttpRequest, HttpHandler } from '@angular/common/http';
 import { Store } from '@ngrx/store';
 import { selectAuthToken } from './auth.selectors';
-import { firstValueFrom } from 'rxjs';
-import { first, switchMap, take } from 'rxjs/operators'
+import { switchMap, take } from 'rxjs/operators'
 
 export const authInterceptor: HttpInterceptorFn = (req, next) => {
   const store = inject(Store);
