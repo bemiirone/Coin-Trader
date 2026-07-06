@@ -2,26 +2,24 @@
   <div class="flex flex-col md:flex-row">
     <div class="flex-1 p-4">
       <app-card [title]="mainTitle">
-        <ng-container *ngIf="componentType === 'coins' else tradesList">
+        @if (componentType === 'coins') {
           <app-coins></app-coins>
-        </ng-container>
+        } @else {
+          <app-trade-list [trades]="trades" [user]="user"></app-trade-list>
+        }
       </app-card>
     </div>
 
     <div class="w-full md:w-1/4 p-4 bg-gray-100">
       <app-card [title]="sideTitle">
-        <ng-container *ngIf="authUser$ | async else welcome" >
+        @if (authUser$ | async) {
           <app-portfolio></app-portfolio>
-        </ng-container>
+        } @else {
+          <h1>Welcome to CoinTrader</h1>
+        }
       </app-card>
     </div>
   </div>
 </div>
-<ng-template #tradesList>
-  <app-trade-list [trades]="trades" [user]="user"></app-trade-list>
-</ng-template>
 
-<ng-template #welcome>
-  <h1>Welcome to CoinTrader</h1>
-</ng-template>
 

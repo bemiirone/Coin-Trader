@@ -1,4 +1,4 @@
-import { CommonModule } from '@angular/common';
+
 import { Component, Input } from '@angular/core';
 import { LayoutComponent } from '../shared/layout/layout.component';
 import { ComponentType } from '../shared/shared-model';
@@ -6,7 +6,7 @@ import { ComponentType } from '../shared/shared-model';
 @Component({
   selector: 'app-dashboard',
   standalone: true,
-  imports: [CommonModule, LayoutComponent],
+  imports: [LayoutComponent],
   templateUrl: './dashboard.component.html',
   styleUrl: './dashboard.component.scss',
 })

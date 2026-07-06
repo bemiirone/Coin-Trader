@@ -1,23 +1,21 @@
-<ng-container
-  *ngIf="{
-    portfolioValue: portfolioValue$ | async,
-    yield: yield$ | async,
-    cashBalance: cashBalance$ | async,
-    tradesValue: tradesValue$ | async,
-    topTrades: topTrades$ | async
-  } as data"
->
+@if ({
+  portfolioValue: portfolioValue$ | async,
+  yield: yield$ | async,
+  cashBalance: cashBalance$ | async,
+  tradesValue: tradesValue$ | async,
+  topTrades: topTrades$ | async
+  }; as data) {
   <div class="text-3xl font-bold portfolio-value">
     {{ data.portfolioValue | currency }}
   </div>
-  <ng-container *ngIf="data.yield as yield">
+  @if (data.yield; as yield) {
     <div
       class="text-2xl text-gray-500 yield"
       [ngClass]="{ 'text-green-600': yield > 0, 'text-red-600': yield < 0 }"
-    >
+      >
       {{ yield | number : "1.2-2" }}%
     </div>
-  </ng-container>
+  }
   <dl class="mt-4">
     <div class="flex justify-between">
       <dt class="text-lg font-medium text-gray-500">Cash Balance</dt>
@@ -38,31 +36,33 @@
       <tr>
         <th
           class="px-6 py-3 border-b-2 border-gray-300 text-left text-xs leading-4 font-medium text-gray-500 uppercase tracking-wider"
-        >
+          >
           Name
         </th>
         <th
           class="px-6 py-3 border-b-2 border-gray-300 text-left text-xs leading-4 font-medium text-gray-500 uppercase tracking-wider"
-        >
+          >
           % Change
         </th>
       </tr>
     </thead>
     <tbody>
-      <tr *ngFor="let trade of data.topTrades">
-        <td class="px-6 py-2 whitespace-no-wrap border-b border-gray-200">
-          {{ trade.name }}
-        </td>
-        <td
-          class="px-6 py-2 whitespace-no-wrap border-b border-gray-200"
+      @for (trade of data.topTrades; track trade) {
+        <tr>
+          <td class="px-6 py-2 whitespace-no-wrap border-b border-gray-200">
+            {{ trade.name }}
+          </td>
+          <td
+            class="px-6 py-2 whitespace-no-wrap border-b border-gray-200"
           [ngClass]="{
             'text-green-600': trade.value! > 0,
             'text-red-600': trade.value! < 0
           }"
-        >
-          {{ trade.value | number : "1.2-2" }}%
-        </td>
-      </tr>
+            >
+            {{ trade.value | number : "1.2-2" }}%
+          </td>
+        </tr>
+      }
     </tbody>
   </table>
-</ng-container>
+}

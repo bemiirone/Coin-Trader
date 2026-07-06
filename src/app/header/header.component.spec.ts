@@ -1,23 +1,27 @@
 import { ComponentFixture, TestBed } from '@angular/core/testing';
 import { ReactiveFormsModule } from '@angular/forms';
-import { Store, StoreModule } from '@ngrx/store';
+import { provideMockStore, MockStore } from '@ngrx/store/testing';
 import { of } from 'rxjs';
 import { HeaderComponent } from './header.component';
 import { User } from '../users/user.model';
 import { AuthActions } from '../users/store/auth/auth.actions';
-import { selectAuthUser } from '../users/store/auth/auth.selectors';
+import { provideRouter } from '@angular/router';
 
 describe('HeaderComponent', () => {
   let component: HeaderComponent;
   let fixture: ComponentFixture<HeaderComponent>;
-  let store: Store;
+  let store: MockStore;
 
   beforeEach(async () => {
     await TestBed.configureTestingModule({
-      imports: [ReactiveFormsModule, StoreModule.forRoot({}), HeaderComponent],
+      imports: [ReactiveFormsModule, HeaderComponent],
+      providers: [
+        provideMockStore(),
+        provideRouter([]),
+      ],
     }).compileComponents();
 
-    store = TestBed.inject(Store);
+    store = TestBed.inject(MockStore);
     fixture = TestBed.createComponent(HeaderComponent);
     component = fixture.componentInstance;
     fixture.detectChanges();

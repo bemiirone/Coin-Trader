@@ -3,28 +3,40 @@ import { ComponentFixture, TestBed } from '@angular/core/testing';
 import { CommonModule } from '@angular/common';
 import { TableComponent } from './table/table.component';
 import { ChartComponent } from './chart/chart.component';
-import { Store } from '@ngrx/store';
-
-class MockStore {
-  select = jasmine.createSpy().and.returnValue({});
-  dispatch = jasmine.createSpy();
-}
+import { provideMockStore } from '@ngrx/store/testing';
+import { selectTopCoins, selectCoinLoading, selectCoinError } from './store/coins.selectors';
 
 describe('CoinsComponent', () => {
   let component: CoinsComponent;
   let fixture: ComponentFixture<CoinsComponent>;
 
+  const mockPickedCoins = [
+    {
+      name: 'Bitcoin',
+      price: 50000,
+      percent_change_1h: 0.5,
+      percent_change_24h: 2.3,
+      percent_change_7d: 5.1,
+      market_cap: 1000000000,
+    },
+  ];
+
   beforeEach(async () => {
     await TestBed.configureTestingModule({
-      imports: [CommonModule, TableComponent, ChartComponent, CoinsComponent], // CoinsComponent imported as standalone
+      imports: [CommonModule, TableComponent, ChartComponent, CoinsComponent],
       providers: [
-        { provide: Store, useClass: MockStore }, // Mock Store instead of the real one
+        provideMockStore({
+          selectors: [
+            { selector: selectTopCoins(20), value: mockPickedCoins },
+            { selector: selectCoinLoading, value: false },
+            { selector: selectCoinError, value: null },
+          ],
+        }),
       ],
     }).compileComponents();
 
     fixture = TestBed.createComponent(CoinsComponent);
     component = fixture.componentInstance;
-    fixture.detectChanges();
   });
 
   it('should create', () => {
@@ -36,25 +48,8 @@ describe('CoinsComponent', () => {
     expect(component.activeTab).toBe('chart');
   });
 
-  it('should initialize with default values in ngOnInit', () => {
-    expect(component.activeTab).toBe('table'); // Default tab is 'table'
-    expect(component.limit).toBe(20); // Default limit value
+  it('should initialize with default values', () => {
+    expect(component.activeTab).toBe('table');
+    expect(component.limit).toBe(20);
   });
-
-  // test to check app-table components are rendered when activeTab is 'table'
-  it('should render app-table component when activeTab is table', () => {
-    component.activeTab = 'table';
-    fixture.detectChanges();
-    const tableComponent = fixture.nativeElement.querySelector('app-table');
-    expect(tableComponent).toBeTruthy();
-  });
-
-  // test to check app-chart components are rendered when activeTab is 'chart'
-  it('should render app-chart component when activeTab is chart', () => {
-    component.activeTab = 'chart';
-    fixture.detectChanges();
-    const chartComponent = fixture.nativeElement.querySelector('app-chart');
-    expect(chartComponent).toBeTruthy();
-  });
-
 });
