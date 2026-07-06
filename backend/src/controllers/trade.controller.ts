@@ -34,7 +34,7 @@ export const createTrade = async (req: Request, res: Response) => {
     await trade.save();
 
     emitTradeNotification(wsServer.tradesNamespace, {
-      _id: trade._id.toString(),
+      _id: String(trade._id),
       user_id: trade.user_id,
       coin_id: trade.coin_id,
       symbol: trade.symbol,

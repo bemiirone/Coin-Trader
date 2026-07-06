@@ -69,7 +69,8 @@ export class WebSocketService {
       switchMap((token) => {
         const authToken = token ?? '';
 
-        this.socket = io('http://localhost:5001', {
+        // Connect to the /prices namespace for real-time price updates
+        this.socket = io('http://localhost:5001/prices', {
           auth: { token: authToken },
           transports: ['websocket'],
           autoConnect: true,

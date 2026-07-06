@@ -13,44 +13,31 @@ export class CoinsEffects {
   private coinsService = inject(CoinsService);
   private wsService = inject(WebSocketService);
 
-  loadCoins$: Observable<
-    ReturnType<
-      | typeof CoinsActions.loadCoinsSuccess
-      | typeof CoinsActions.loadCoinsFailure
-    >
-  >;
-
-  priceUpdateFromWebSocket$: Observable<
-    ReturnType<typeof CoinsActions.priceUpdate>
-  >;
-
-  constructor() {
-    this.loadCoins$ = createEffect(() =>
-      this.actions$.pipe(
-        ofType(CoinsActions.loadCoins),
-        mergeMap(() =>
-          this.coinsService.getCoins().pipe(
-            map((coinsSuccess: CoinResponse) =>
-              CoinsActions.loadCoinsSuccess({ coinsSuccess })
-            ),
-            catchError((error) =>
-              of(
-                CoinsActions.loadCoinsFailure({
-                  error: error.message || 'Failed to load coins',
-                })
-              )
+  loadCoins$ = createEffect(() =>
+    this.actions$.pipe(
+      ofType(CoinsActions.loadCoins),
+      mergeMap(() =>
+        this.coinsService.getCoins().pipe(
+          map((coinsSuccess: CoinResponse) =>
+            CoinsActions.loadCoinsSuccess({ coinsSuccess })
+          ),
+          catchError((error) =>
+            of(
+              CoinsActions.loadCoinsFailure({
+                error: error.message || 'Failed to load coins',
+              })
             )
           )
         )
       )
-    );
+    )
+  );
 
-    this.priceUpdateFromWebSocket$ = createEffect(() =>
-      this.wsService.getPriceUpdates$().pipe(
-        map((priceUpdate) =>
-          CoinsActions.priceUpdate({ prices: [priceUpdate] })
-        )
+  priceUpdateFromWebSocket$ = createEffect(() =>
+    this.wsService.getPriceUpdates$().pipe(
+      map((priceUpdate) =>
+        CoinsActions.priceUpdate({ prices: [priceUpdate] })
       )
-    );
-  }
+    )
+  );
 }

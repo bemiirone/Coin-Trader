@@ -1,9 +1,9 @@
-import { Component, Input } from '@angular/core';
+import { Component, OnInit } from '@angular/core';
+import { AsyncPipe } from '@angular/common';
 import { User } from '../users/user.model';
-import { FormBuilder, FormGroup, FormsModule, ReactiveFormsModule, Validators } from '@angular/forms';
+import { FormBuilder, FormGroup, ReactiveFormsModule, Validators } from '@angular/forms';
 import { Observable } from 'rxjs';
-import { CommonModule } from '@angular/common';
-import { Store, on } from '@ngrx/store';
+import { Store } from '@ngrx/store';
 import { selectAuthUser } from '../users/store/auth/auth.selectors';
 import { AuthActions } from '../users/store/auth/auth.actions';
 import { RouterModule } from '@angular/router';
@@ -11,15 +11,15 @@ import { RouterModule } from '@angular/router';
 @Component({
   selector: 'app-header',
   standalone: true,
-  imports: [CommonModule, FormsModule, ReactiveFormsModule, RouterModule],
+  imports: [ReactiveFormsModule, RouterModule, AsyncPipe],
   templateUrl: './header.component.html',
   styleUrl: './header.component.scss'
 })
-export class HeaderComponent {
+export class HeaderComponent implements OnInit {
   user$!: Observable<User | null>;
   loginForm!: FormGroup;
 
-  constructor(private fb: FormBuilder, private store: Store) {}
+  constructor(private fb: FormBuilder, private store: Store) { }
   ngOnInit() {
     this.user$ = this.store.select(selectAuthUser);
     this.loginForm = this.fb.group({
