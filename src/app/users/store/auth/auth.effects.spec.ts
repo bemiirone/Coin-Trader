@@ -8,7 +8,7 @@ import { Store } from '@ngrx/store';
 import { CoinsActions } from '../../../coins/store/coins.actions';
 import { cold, hot } from 'jasmine-marbles';
 
-fdescribe('AuthEffects', () => {
+describe('AuthEffects', () => {
   let actions$: Observable<any>;
   let effects: AuthEffects;
   let userService: jasmine.SpyObj<UserService>;

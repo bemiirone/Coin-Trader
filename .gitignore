@@ -47,3 +47,4 @@ user-api/node_modules
 .env
 update.js
 backend/node_modules
+spec.md

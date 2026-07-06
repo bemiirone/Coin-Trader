@@ -13,13 +13,14 @@ import { usersFeature } from './users/store/user.reducer';
 import { UserEffects } from './users/store/user.effects';
 import { TradesEffects } from './trades/store/trades.effects';
 import { tradesFeature } from './trades/store/trades.reducer';
-import { ModalModule } from 'ngx-bootstrap/modal';
 import { AuthEffects } from './users/store/auth/auth.effects';
 import { authInterceptor } from './users/store/auth/auth.interceptor';
 import { authFeature } from './users/store/auth/auth.reducer';
+import { websocketFeature } from './websocket/websocket.reducer';
+import { WebSocketEffects } from './websocket/websocket.effects';
 
 const devtoolsOptions = {
-  maxAge: 25, // Retains last 25 states
+  maxAge: 25,
 };
 export const appConfig: ApplicationConfig = {
   providers: [
@@ -31,10 +32,11 @@ export const appConfig: ApplicationConfig = {
       users: usersFeature.reducer,
       trades: tradesFeature.reducer,
       auth: authFeature.reducer,
+      websocket: websocketFeature.reducer,
     }),
-    provideEffects([CoinsEffects, UserEffects, TradesEffects, AuthEffects]),
+    provideEffects([CoinsEffects, UserEffects, TradesEffects, AuthEffects, WebSocketEffects]),
     provideHttpClient(withFetch(), withInterceptors([authInterceptor])),
-    importProvidersFrom([StoreDevtoolsModule.instrument(devtoolsOptions), ModalModule.forRoot()]),
+    importProvidersFrom([StoreDevtoolsModule.instrument(devtoolsOptions)]),
     provideCharts(withDefaultRegisterables()),
-],
+  ],
 };

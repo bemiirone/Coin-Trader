@@ -3,6 +3,8 @@ import { User, IUser } from '../models/user.model';
 import bcrypt from 'bcrypt';
 import jwt from 'jsonwebtoken';
 import { env } from '../config/env';
+import { emitPortfolioUpdate } from '../sockets/socket-handlers';
+import { wsServer } from '../server';
 
 const SECRET_KEY = env.SECRET_KEY || 'test_secret_key';
 
@@ -52,4 +54,36 @@ export const loginUser = async (req: Request, res: Response) => {
 
   const token = jwt.sign({ id: user._id, admin: user.admin }, SECRET_KEY, { expiresIn: '1h' });
   res.send({ token, user });
+};
+
+export const updateUserPortfolioAndCash = async (req: Request, res: Response) => {
+  try {
+    const { id } = req.params;
+    const { portfolio_total, cash } = req.body;
+
+    const updatedUser = await User.findByIdAndUpdate(
+      id,
+      { portfolio_total, cash },
+      { new: true, runValidators: true }
+    );
+
+    if (!updatedUser) {
+      return res.status(404).json({ message: 'User not found' });
+    }
+
+    emitPortfolioUpdate(wsServer.portfolioNamespace, {
+      userId: id,
+      portfolio_total: updatedUser.portfolio_total,
+      cash: updatedUser.cash,
+      deposit: updatedUser.deposit,
+    });
+
+    res.json(updatedUser);
+  } catch (error) {
+    if (error instanceof Error) {
+      res.status(500).json({ error: error.message });
+    } else {
+      res.status(500).json({ error: 'Failed to update user' });
+    }
+  }
 };

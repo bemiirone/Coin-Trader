@@ -7,7 +7,7 @@ export const coinsFeatureKey = 'coins';
 export interface CoinState {
   loading: boolean;
   error: string | null;
-  data: CoinResponse | null; // Storing the entire response here
+  data: CoinResponse | null;
 }
 
 export const initialState: CoinState = {
@@ -34,7 +34,37 @@ export const reducer = createReducer(
     ...state,
     error: error,
     loading: false,
-  }))
+  })),
+  on(CoinsActions.priceUpdate, (state, { prices }) => {
+    if (!state.data) return state;
+
+    const updatedData = {
+      ...state.data,
+      data: state.data.data.map((coin) => {
+        const priceUpdate = prices.find((p) => p.coin_id === coin.id);
+        if (!priceUpdate) return coin;
+
+        return {
+          ...coin,
+          quote: {
+            ...coin.quote,
+            USD: {
+              ...coin.quote.USD,
+              price: priceUpdate.price,
+              percent_change_24h: priceUpdate.change24h,
+              market_cap: priceUpdate.marketCap,
+              volume_24h: priceUpdate.volume24h,
+            },
+          },
+        };
+      }),
+    };
+
+    return {
+      ...state,
+      data: updatedData,
+    };
+  })
 );
 
 export const coinsFeature = createFeature({
