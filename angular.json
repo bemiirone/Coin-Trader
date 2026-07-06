@@ -3,7 +3,7 @@
   "version": 1,
   "newProjectRoot": "projects",
   "projects": {
-    "cryto-trader": {
+    "crypto-trader": {
       "projectType": "application",
       "schematics": {
         "@schematics/angular:component": {
@@ -17,7 +17,7 @@
         "build": {
           "builder": "@angular-devkit/build-angular:application",
           "options": {
-            "outputPath": "dist/cryto-trader",
+            "outputPath": "dist/crypto-trader",
             "index": "src/index.html",
             "browser": "src/main.ts",
             "polyfills": [
@@ -75,10 +75,10 @@
           "builder": "@angular-devkit/build-angular:dev-server",
           "configurations": {
             "production": {
-              "buildTarget": "cryto-trader:build:production"
+              "buildTarget": "crypto-trader:build:production"
             },
             "development": {
-              "buildTarget": "cryto-trader:build:development"
+              "buildTarget": "crypto-trader:build:development"
             }
           },
           "defaultConfiguration": "development"

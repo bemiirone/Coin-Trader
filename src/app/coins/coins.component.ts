@@ -2,7 +2,7 @@ import { CommonModule } from '@angular/common';
 import { ChangeDetectionStrategy, Component } from '@angular/core';
 import { Store } from '@ngrx/store';
 import { Observable, of } from 'rxjs';
-import { CoinData, PickedCryptoData } from './coins.model';
+import { PickedCryptoData } from './coins.model';
 import {selectCoinError, selectCoinLoading, selectTopCoins } from './store/coins.selectors';
 import { TableComponent } from './table/table.component';
 import { ChartComponent } from './chart/chart.component';
@@ -16,7 +16,6 @@ import { ChartComponent } from './chart/chart.component';
   styleUrl: './coins.component.scss'
 })
 export class CoinsComponent {
-  coins$: Observable<CoinData[]> = of([]);
   topCoins$: Observable<PickedCryptoData[]> = of([]);
   loading$: Observable<boolean> = of(false);
   error$: Observable<string | null> = of(null);

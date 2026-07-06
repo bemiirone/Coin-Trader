@@ -6,8 +6,6 @@ import { env } from '../config/env';
 import { emitPortfolioUpdate } from '../sockets/socket-handlers';
 import { wsServer } from '../server';
 
-const SECRET_KEY = env.SECRET_KEY || 'test_secret_key';
-
 export const getUsers = async (req: Request, res: Response) => {
   try {
     const users = await User.find();
@@ -52,7 +50,7 @@ export const loginUser = async (req: Request, res: Response) => {
     return res.status(401).send({ message: 'Invalid credentials' });
   }
 
-  const token = jwt.sign({ id: user._id, admin: user.admin }, SECRET_KEY, { expiresIn: '1h' });
+  const token = jwt.sign({ id: user._id, admin: user.admin }, env.SECRET_KEY, { expiresIn: '1h' });
   res.send({ token, user });
 };
 

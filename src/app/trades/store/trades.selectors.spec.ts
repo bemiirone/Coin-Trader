@@ -3,7 +3,6 @@ import { TradeState, adapter, initialState } from './trades.reducer';
 import { Trade } from '../trades.model';
 import { User } from '../../users/user.model';
 import { TradedCryptoData } from '../../coins/coins.model';
-import e from 'express';
 
 describe('Trades Selectors', () => {
   let mockState: TradeState;

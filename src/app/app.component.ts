@@ -5,8 +5,6 @@ import { HeaderComponent } from './header/header.component';
 import { SidebarComponent } from './sidebar/sidebar.component';
 import { Store } from '@ngrx/store';
 import { UserActions } from './users/store/user.actions';
-import {  Observable} from 'rxjs';
-import { User } from './users/user.model';
 
 import { CoinsActions } from './coins/store/coins.actions';
 import { TradeActions } from './trades/store/trades.actions';
@@ -24,11 +22,6 @@ import { filter, take } from 'rxjs/operators';
 })
 export class AppComponent {
   private store = inject(Store);
-  users$!: Observable<User[]>;
-  selectedUser$!: Observable<User | null>;
-
-  constructor() {
-  }
 
   ngOnInit() {
     this.store.dispatch(CoinsActions.loadCoins());

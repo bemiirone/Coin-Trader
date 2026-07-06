@@ -3,10 +3,9 @@ import { ComponentType } from '../shared/shared-model';
 import { CommonModule } from '@angular/common';
 import { LayoutComponent } from '../shared/layout/layout.component';
 import { Store } from '@ngrx/store';
-import { Observable, of, tap } from 'rxjs';
-import { selectTrades, selectUserBuyTrades, selectUserTrades } from './store/trades.selectors';
+import { Observable, of } from 'rxjs';
+import { selectUserTrades } from './store/trades.selectors';
 import { User } from '../users/user.model';
-import { selectSelectedUser } from '../users/store/user.selectors';
 import { Trade } from './trades.model';
 import { selectAuthUser } from '../users/store/auth/auth.selectors';
 
@@ -22,8 +21,8 @@ export class TradesComponent {
   portfolioTitle = 'Portfolio value';
   componentType: ComponentType = ComponentType.Trades;
   trades$: Observable<Trade[]> = of([]);
-  allTrades$: Observable<Trade[]> = of([]);
   user$: Observable<User | null> = of({} as User);
+
   constructor(private store: Store) {}
 
   ngOnInit() {

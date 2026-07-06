@@ -1,6 +1,6 @@
 import { map, Observable, of } from 'rxjs';
 import { CommonModule } from '@angular/common';
-import { ChangeDetectionStrategy, Component, Input } from '@angular/core';
+import { ChangeDetectionStrategy, Component, Input, OnDestroy } from '@angular/core';
 import { Store } from '@ngrx/store';
 import { selectCoinLoading, selectCoinError } from '../../coins/store/coins.selectors';
 import { Trade } from '../trades.model';
@@ -17,7 +17,7 @@ import { selectSelectedUser } from '../../users/store/user.selectors';
   templateUrl: './trade-list.component.html',
   styleUrl: './trade-list.component.scss'
 })
-export class TradeListComponent {
+export class TradeListComponent implements OnDestroy {
   @Input() trades: Trade[] | null = [];
   @Input()user: User | null = {} as User;
   loading$: Observable<boolean> = of(false);
@@ -48,6 +48,5 @@ export class TradeListComponent {
   }
 
   ngOnDestroy(): void {
-    this.store.select(selectSelectedUser).subscribe().unsubscribe();
   }
 }

@@ -12,21 +12,6 @@ export const getTrades = async (req: Request, res: Response) => {
   }
 };
 
-export const getTradesByUserId = async (req: Request, res: Response) => {
-  try {
-    const { user_id } = req.params;
-    const trades = await Trade.find({ user_id });
-
-    if (!trades || trades.length === 0) {
-      return res.status(404).json({ message: 'No trades found for this user' });
-    }
-
-    return res.json(trades);
-  } catch (error) {
-    return res.status(500).json({ error: 'Error fetching user trades' });
-  }
-};
-
 export const createTrade = async (req: Request, res: Response) => {
   try {
     const trade = new Trade(req.body);

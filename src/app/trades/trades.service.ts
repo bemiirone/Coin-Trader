@@ -2,12 +2,13 @@ import { HttpClient } from '@angular/common/http';
 import { Injectable } from '@angular/core';
 import { Trade } from './trades.model';
 import { Observable } from 'rxjs';
+import { environment } from '../../environments/environment';
 
 @Injectable({
   providedIn: 'root'
 })
 export class TradesService {
-  private apiUrl = 'http://localhost:5001/api/trades'
+  private apiUrl = `${environment.backendUrl}/api/trades`
 
   constructor(private http: HttpClient) {}
 

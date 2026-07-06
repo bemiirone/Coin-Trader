@@ -1,6 +1,5 @@
 import { createFeatureSelector, createSelector } from '@ngrx/store';
 import { UserState, adapter, usersFeature } from './user.reducer';
-import e from 'express';
 
 export const selectUserState = createFeatureSelector<UserState>('users');
 const { selectAll, selectIds, selectEntities, selectTotal } = adapter.getSelectors(selectUserState);

@@ -5,6 +5,7 @@ import { Observable, Subject, throwError, timer } from 'rxjs';
 import { catchError, switchMap, take, timeout } from 'rxjs/operators';
 import { Store } from '@ngrx/store';
 import { selectAuthToken } from '../users/store/auth/auth.selectors';
+import { environment } from '../../environments/environment';
 
 export interface PriceUpdate {
   coin_id: number;
@@ -70,7 +71,7 @@ export class WebSocketService {
         const authToken = token ?? '';
 
         // Connect to the /prices namespace for real-time price updates
-        this.socket = io('http://localhost:5001/prices', {
+        this.socket = io(`${environment.backendUrl}/prices`, {
           auth: { token: authToken },
           transports: ['websocket'],
           autoConnect: true,
