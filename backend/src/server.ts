@@ -3,10 +3,12 @@ dotenv.config();
 import express from 'express';
 import cors from 'cors';
 import mongoose from 'mongoose';
+import { createServer } from 'http';
 import { env } from './config/env';
 
 import userRoutes from './routes/user.routes';
 import tradeRoutes from './routes/trade.routes';
+import { initializeWebSocket } from './sockets';
 
 const app = express();
 
@@ -22,4 +24,11 @@ app.use('/api/users', userRoutes);
 app.use('/api/trades', tradeRoutes);
 
 const PORT = env.PORT || 5001;
-app.listen(PORT, () => console.log(`Server running on port ${PORT}`));
+const httpServer = createServer(app);
+
+// Initialize WebSocket server
+const wsServer = initializeWebSocket(httpServer);
+
+httpServer.listen(PORT, () => console.log(`Server running on port ${PORT}`));
+
+export { app, httpServer, wsServer };
