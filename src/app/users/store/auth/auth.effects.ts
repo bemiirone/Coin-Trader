@@ -24,7 +24,10 @@ export class AuthEffects {
             localStorage.setItem('authUser', JSON.stringify(user));
             localStorage.setItem('authToken', token);
           }),
-          catchError((error) => of(AuthActions.loginFailure({ error })))
+          catchError((error) => {
+            const errorMessage = error?.error?.message || error?.message || 'Login failed';
+            return of(AuthActions.loginFailure({ error: errorMessage }));
+          })
         )
       )
     )
@@ -85,7 +88,10 @@ export class AuthEffects {
       mergeMap(({ email }) =>
         this.userService.forgotPassword(email).pipe(
           map(() => AuthActions.forgotPasswordSuccess()),
-          catchError((error) => of(AuthActions.forgotPasswordFailure({ error })))
+          catchError((error) => {
+            const errorMessage = error?.error?.message || error?.message || 'Failed to request password reset';
+            return of(AuthActions.forgotPasswordFailure({ error: errorMessage }));
+          })
         )
       )
     )
@@ -97,7 +103,10 @@ export class AuthEffects {
       mergeMap(({ token, password }) =>
         this.userService.resetPassword(token, password).pipe(
           map(() => AuthActions.resetPasswordSuccess()),
-          catchError((error) => of(AuthActions.resetPasswordFailure({ error })))
+          catchError((error) => {
+            const errorMessage = error?.error?.message || error?.message || 'Failed to reset password';
+            return of(AuthActions.resetPasswordFailure({ error: errorMessage }));
+          })
         )
       )
     )
