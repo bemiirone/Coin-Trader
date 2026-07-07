@@ -42,7 +42,7 @@ export interface PortfolioUpdate {
 })
 export class WebSocketService {
   private socket: Socket | null = null;
-  private priceUpdateSubject = new Subject<PriceUpdate>();
+  private priceUpdateSubject = new Subject<PriceUpdate[]>();
   private tradeNotificationSubject = new Subject<TradeNotification>();
   private portfolioUpdateSubject = new Subject<PortfolioUpdate>();
   private connectionSubject = new Subject<boolean>();
@@ -94,10 +94,12 @@ export class WebSocketService {
     if (!this.socket) return;
 
     this.socket.on('connect', () => {
+      console.log('WebSocket connected');
       this.connectionSubject.next(true);
     });
 
     this.socket.on('disconnect', () => {
+      console.log('WebSocket disconnected');
       this.connectionSubject.next(false);
     });
 
@@ -105,7 +107,8 @@ export class WebSocketService {
       console.error('WebSocket error:', error);
     });
 
-    this.socket.on('price_update', (data: PriceUpdate) => {
+    this.socket.on('price_update', (data: PriceUpdate[]) => {
+      console.log(`WebSocket received ${data.length} price updates`);
       this.priceUpdateSubject.next(data);
     });
 
@@ -126,7 +129,7 @@ export class WebSocketService {
     this.connectionSubject.next(false);
   }
 
-  getPriceUpdates$(): Observable<PriceUpdate> {
+  getPriceUpdates$(): Observable<PriceUpdate[]> {
     return this.priceUpdateSubject.asObservable();
   }
 

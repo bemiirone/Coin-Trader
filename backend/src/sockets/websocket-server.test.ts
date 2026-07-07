@@ -24,6 +24,11 @@ const mockPortfolioNs = {
   sockets: new Map(),
 };
 
+const mockPriceBroadcaster = {
+  start: vi.fn(),
+  stop: vi.fn(),
+};
+
 vi.mock('socket.io', () => ({
   Server: vi.fn(() => mockServer),
 }));
@@ -32,6 +37,10 @@ vi.mock('./socket-handlers', () => ({
   setupPricesNamespace: vi.fn(() => mockPricesNs),
   setupTradesNamespace: vi.fn(() => mockTradesNs),
   setupPortfolioNamespace: vi.fn(() => mockPortfolioNs),
+}));
+
+vi.mock('../services/price-broadcaster', () => ({
+  createPriceBroadcaster: vi.fn(() => mockPriceBroadcaster),
 }));
 
 vi.mock('../config/env', () => ({
@@ -45,6 +54,8 @@ vi.mock('../config/env', () => ({
     SMTP_PASS: '',
     SMTP_FROM: 'noreply@cryptotrader.com',
     FRONTEND_URL: 'http://localhost:4200',
+    CMC_API_KEY: 'test-cmc-key',
+    CMC_API_URL: 'https://pro-api.coinmarketcap.com/v1/cryptocurrency/listings/latest',
   },
 }));
 
@@ -103,59 +114,14 @@ describe('WebSocket Server', () => {
       expect(result).toHaveProperty('portfolioNamespace');
     });
 
-    it('should broadcast price updates every 2 seconds', async () => {
-      mockPricesNs.sockets = new Map([['socket1', {}], ['socket2', {}]]);
-
+    it('should initialize price broadcaster with 30 second interval', async () => {
       const { initializeWebSocket } = await import('./websocket-server');
+      const { createPriceBroadcaster } = await import('../services/price-broadcaster');
+
       initializeWebSocket(mockHttpServer);
 
-      vi.advanceTimersByTime(2000);
-
-      expect(mockPricesNs.emit).toHaveBeenCalledTimes(3);
-      expect(mockPricesNs.emit).toHaveBeenCalledWith('price_update', expect.objectContaining({
-        coin_id: expect.any(Number),
-        symbol: expect.any(String),
-        name: expect.any(String),
-        price: expect.any(Number),
-        change24h: expect.any(Number),
-        marketCap: expect.any(Number),
-        volume24h: expect.any(Number),
-      }));
-    });
-
-    it('should generate price updates with variations', async () => {
-      const { initializeWebSocket } = await import('./websocket-server');
-      initializeWebSocket(mockHttpServer);
-
-      vi.advanceTimersByTime(2000);
-
-      const calls = mockPricesNs.emit.mock.calls;
-      const btcUpdate = calls.find((call: any[]) => call[1].symbol === 'BTC')?.[1];
-      const ethUpdate = calls.find((call: any[]) => call[1].symbol === 'ETH')?.[1];
-      const usdtUpdate = calls.find((call: any[]) => call[1].symbol === 'USDT')?.[1];
-
-      expect(btcUpdate).toBeDefined();
-      expect(ethUpdate).toBeDefined();
-      expect(usdtUpdate).toBeDefined();
-
-      expect(btcUpdate.price).toBeGreaterThan(0);
-      expect(ethUpdate.price).toBeGreaterThan(0);
-      expect(usdtUpdate.price).toBeGreaterThan(0);
-    });
-
-    it('should broadcast to correct number of clients', async () => {
-      mockPricesNs.sockets = new Map([
-        ['socket1', {}],
-        ['socket2', {}],
-        ['socket3', {}],
-      ]);
-
-      const { initializeWebSocket } = await import('./websocket-server');
-      initializeWebSocket(mockHttpServer);
-
-      vi.advanceTimersByTime(2000);
-
-      expect(mockPricesNs.emit).toHaveBeenCalledTimes(3);
+      expect(createPriceBroadcaster).toHaveBeenCalledWith(mockPricesNs);
+      expect(mockPriceBroadcaster.start).toHaveBeenCalledWith(30000);
     });
   });
 });

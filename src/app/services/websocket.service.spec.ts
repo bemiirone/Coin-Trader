@@ -89,24 +89,35 @@ describe('WebSocketService', () => {
   });
 
   describe('getPriceUpdates$()', () => {
-    it('should emit price updates', () => {
-      const priceUpdate: PriceUpdate = {
-        coin_id: 1,
-        symbol: 'BTC',
-        name: 'Bitcoin',
-        price: 42500,
-        change24h: 2.5,
-        marketCap: 850000000000,
-        volume24h: 25000000000,
-      };
+    it('should emit price update arrays', () => {
+      const priceUpdates: PriceUpdate[] = [
+        {
+          coin_id: 1,
+          symbol: 'BTC',
+          name: 'Bitcoin',
+          price: 42500,
+          change24h: 2.5,
+          marketCap: 850000000000,
+          volume24h: 25000000000,
+        },
+        {
+          coin_id: 2,
+          symbol: 'ETH',
+          name: 'Ethereum',
+          price: 2300,
+          change24h: 1.8,
+          marketCap: 280000000000,
+          volume24h: 12000000000,
+        },
+      ];
 
-      let received: PriceUpdate | undefined;
+      let received: PriceUpdate[] | undefined;
       service.getPriceUpdates$().subscribe((data) => { received = data; });
 
       const priceSubject = (service as any).priceUpdateSubject;
-      priceSubject.next(priceUpdate);
+      priceSubject.next(priceUpdates);
 
-      expect(received).toEqual(priceUpdate);
+      expect(received).toEqual(priceUpdates);
     });
   });
 

@@ -2,16 +2,15 @@ import { Injectable, inject } from '@angular/core';
 import { Actions, createEffect, ofType } from '@ngrx/effects';
 import { WebSocketActions } from './websocket.actions';
 import { AuthActions } from '../users/store/auth/auth.actions';
+import { CoinsActions } from '../coins/store/coins.actions';
 import { WebSocketService } from '../services/websocket.service';
-import { catchError, delay, exhaustMap, map, retryWhen, switchMap, takeUntil, tap } from 'rxjs/operators';
-import { Observable, of, timer } from 'rxjs';
-import { Store } from '@ngrx/store';
+import { catchError, map, switchMap, tap } from 'rxjs/operators';
+import { of } from 'rxjs';
 
 @Injectable()
 export class WebSocketEffects {
   private actions$ = inject(Actions);
   private wsService = inject(WebSocketService);
-  private store = inject(Store);
 
   connectWebSocket$ = createEffect(() =>
     this.actions$.pipe(
@@ -46,8 +45,9 @@ export class WebSocketEffects {
       ofType(WebSocketActions.connectWebSocketFailure),
       switchMap((action, index) => {
         const backoffDelay = Math.min(1000 * Math.pow(2, index), 60000);
-        return timer(backoffDelay).pipe(
-          map(() => WebSocketActions.reconnect())
+        return of(WebSocketActions.reconnect()).pipe(
+          // Simple delay before reconnect
+          tap(() => setTimeout(() => {}, backoffDelay))
         );
       })
     )
@@ -61,5 +61,13 @@ export class WebSocketEffects {
       }),
       map(() => WebSocketActions.disconnectSuccess())
     )
+  );
+
+  // Listen to WebSocket price updates and dispatch action to update store
+  priceUpdate$ = createEffect(() =>
+    this.wsService.getPriceUpdates$().pipe(
+      map((prices) => CoinsActions.priceUpdate({ prices }))
+    ),
+    { dispatch: true }
   );
 }

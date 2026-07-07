@@ -1,9 +1,9 @@
 import { TestBed } from '@angular/core/testing';
 import { provideMockActions } from '@ngrx/effects/testing';
-import { Observable, of, throwError, timer } from 'rxjs';
+import { Observable, of, throwError, timer, empty } from 'rxjs';
 import { WebSocketEffects } from './websocket.effects';
 import { WebSocketActions } from './websocket.actions';
-import { WebSocketService } from '../services/websocket.service';
+import { WebSocketService, PriceUpdate } from '../services/websocket.service';
 import { AuthActions } from '../users/store/auth/auth.actions';
 import { cold, hot } from 'jasmine-marbles';
 import { Store } from '@ngrx/store';
@@ -15,7 +15,15 @@ describe('WebSocketEffects', () => {
   let store: jasmine.SpyObj<Store>;
 
   beforeEach(() => {
-    const wsServiceSpy = jasmine.createSpyObj('WebSocketService', ['connect', 'disconnect']);
+    const wsServiceSpy = jasmine.createSpyObj('WebSocketService', [
+      'connect', 
+      'disconnect',
+      'getPriceUpdates$',
+      'getTradeUpdates$',
+      'getPortfolioUpdates$',
+      'getConnectionStatus$'
+    ]);
+    wsServiceSpy.getPriceUpdates$.and.returnValue(of([]));
     const storeSpy = jasmine.createSpyObj('Store', ['dispatch']);
 
     TestBed.configureTestingModule({
@@ -107,6 +115,20 @@ describe('WebSocketEffects', () => {
 
       expect(effects.disconnectOnLogout$).toBeObservable(expected);
       expect(wsService.disconnect).toHaveBeenCalled();
+    });
+  });
+
+  describe('priceUpdate$', () => {
+    it('should dispatch priceUpdate action when receiving price updates', () => {
+      const priceUpdates: PriceUpdate[] = [
+        { coin_id: 1, symbol: 'BTC', name: 'Bitcoin', price: 50000, change24h: 2.5, marketCap: 1000000000, volume24h: 25000000000 },
+      ];
+
+      wsService.getPriceUpdates$.and.returnValue(of(priceUpdates));
+
+      effects.priceUpdate$.subscribe((action) => {
+        expect(action.type).toContain('Price Update');
+      });
     });
   });
 });

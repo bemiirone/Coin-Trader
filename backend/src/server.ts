@@ -10,6 +10,7 @@ import { env } from './config/env';
 import userRoutes from './routes/user.routes';
 import tradeRoutes from './routes/trade.routes';
 import passwordResetRoutes from './routes/password-reset.routes';
+import coinsRoutes from './routes/coins.routes';
 import { initializeWebSocket } from './sockets';
 
 const app = express();
@@ -33,6 +34,7 @@ mongoose.connect(env.MONGODB_URI as string)
 app.use('/api/users', userRoutes);
 app.use('/api/users/password-reset', passwordResetRoutes);
 app.use('/api/trades', tradeRoutes);
+app.use('/api/coins', coinsRoutes);
 
 const PORT = env.PORT || 5001;
 const httpServer = createServer(app);

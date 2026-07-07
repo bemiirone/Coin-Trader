@@ -12,6 +12,8 @@ interface EnvConfig {
   SMTP_PASS: string;
   SMTP_FROM: string;
   FRONTEND_URL: string;
+  CMC_API_KEY: string;
+  CMC_API_URL: string;
 }
 
 const getEnv = (): EnvConfig => {
@@ -29,6 +31,8 @@ const getEnv = (): EnvConfig => {
     SMTP_PASS: process.env['SMTP_PASS'] || '',
     SMTP_FROM: process.env['SMTP_FROM'] || 'noreply@cryptotrader.com',
     FRONTEND_URL: process.env['FRONTEND_URL'] || 'http://localhost:4200',
+    CMC_API_KEY: process.env['CMC_API_KEY'] || '',
+    CMC_API_URL: process.env['CMC_API_URL'] || 'https://pro-api.coinmarketcap.com/v1/cryptocurrency/listings/latest',
   };
 };
 

@@ -18,21 +18,16 @@ export class CoinsService {
 
   public getCoins() {
     const params = {
-      start: '1',
-      limit: '500',
-      convert: 'USD'
+      limit: '500'
     };
-    return this.http.get<CoinResponse>(`${environment.cmcApi}`, {
-      headers: {
-        'X-CMC_PRO_API_KEY': `${environment.cmcApiKey}`
-      },
+    return this.http.get<CoinResponse>(`${environment.backendUrl}/api/coins`, {
       params: params
     });
   }
 
   /**
    * Get coins with real-time price updates via WebSocket
-   * Fetches initial coins from HTTP, then streams real-time price updates
+   * Fetches initial coins from backend HTTP, then streams real-time price updates
    */
   public getCoinsWithRealtimeUpdates(): Observable<CoinResponse> {
     return this.getCoins().pipe(
