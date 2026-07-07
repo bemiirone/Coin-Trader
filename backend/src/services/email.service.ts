@@ -34,5 +34,23 @@ export const sendPasswordResetEmail = async (to: string, resetUrl: string): Prom
     `,
   };
 
-  await transporter.sendMail(mailOptions);
+  console.log('   Preparing to send email...');
+  console.log(`   From: ${env.SMTP_FROM}`);
+  console.log(`   To: ${to}`);
+
+  try {
+    await transporter.sendMail(mailOptions);
+    console.log('   Email sent via nodemailer');
+  } catch (error) {
+    console.log('   Nodemailer error:');
+    if (error instanceof Error) {
+      console.log(`     Message: ${error.message}`);
+      console.log(`     Code: ${(error as any).code || 'N/A'}`);
+      console.log(`     Command: ${(error as any).command || 'N/A'}`);
+      console.log(`     Response: ${(error as any).response || 'N/A'}`);
+    } else {
+      console.log(`     Error: ${JSON.stringify(error, null, 2)}`);
+    }
+    throw error;
+  }
 };
