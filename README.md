@@ -5,7 +5,7 @@ A simple Crypto coin trading app. Utilising MEAN stack technology
 ## Technical Description
 
 ### Frontend
-- **Framework**: Angular 18
+- **Framework**: Angular 21
 - **Language**: TypeScript
 - **State Management**: NgRx
 - **Testing**: Jasmine
@@ -15,7 +15,7 @@ A simple Crypto coin trading app. Utilising MEAN stack technology
 - **Language**: TypeScript
 - **Framework**: Express
 - **Database**: MongoDB
-- **Proxy server**: Websockets
+- **Proxy server**: WebSocket
 
 ### Features
 - Real-time cryptocurrency price tracking
