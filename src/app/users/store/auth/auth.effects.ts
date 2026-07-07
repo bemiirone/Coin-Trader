@@ -78,4 +78,28 @@ export class AuthEffects {
     },
     { dispatch: true }
   );
+
+  forgotPassword$ = createEffect(() =>
+    this.actions$.pipe(
+      ofType(AuthActions.forgotPassword),
+      mergeMap(({ email }) =>
+        this.userService.forgotPassword(email).pipe(
+          map(() => AuthActions.forgotPasswordSuccess()),
+          catchError((error) => of(AuthActions.forgotPasswordFailure({ error })))
+        )
+      )
+    )
+  );
+
+  resetPassword$ = createEffect(() =>
+    this.actions$.pipe(
+      ofType(AuthActions.resetPassword),
+      mergeMap(({ token, password }) =>
+        this.userService.resetPassword(token, password).pipe(
+          map(() => AuthActions.resetPasswordSuccess()),
+          catchError((error) => of(AuthActions.resetPasswordFailure({ error })))
+        )
+      )
+    )
+  );
 }

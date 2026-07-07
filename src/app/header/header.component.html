@@ -10,6 +10,7 @@
         placeholder="Email"
         required
         class="border p-2 rounded"
+        (input)="onFormChange()"
         />
       <input
         type="password"
@@ -17,13 +18,20 @@
         placeholder="Password"
         required
         class="border p-2 rounded"
+        (input)="onFormChange()"
         />
       <button type="submit" class="bg-blue-500 text-white p-2 rounded" [disabled]="loginForm.invalid">
         Login
       </button>
     </form>
-    <div class="mt-2">
+    @if (error$ | async; as error) {
+      <div class="mt-2 p-2 bg-red-100 border border-red-400 text-red-700 rounded text-sm">
+        {{ error }}
+      </div>
+    }
+    <div class="mt-2 flex gap-4">
       <a [routerLink]="'/auth/register'" class="text-blue-500 text-sm hover:underline">Sign up</a>
+      <a [routerLink]="'/auth/forgot-password'" class="text-blue-500 text-sm hover:underline">Forgot password?</a>
     </div>
   }
 </div>

@@ -9,6 +9,7 @@ import { env } from './config/env';
 
 import userRoutes from './routes/user.routes';
 import tradeRoutes from './routes/trade.routes';
+import passwordResetRoutes from './routes/password-reset.routes';
 import { initializeWebSocket } from './sockets';
 
 const app = express();
@@ -22,7 +23,7 @@ const limiter = rateLimit({
 
 app.use(limiter);
 app.use(express.json());
-app.use(cors({ origin: 'http://localhost:4200' }));
+app.use(cors({ origin: env.FRONTEND_URL || 'http://localhost:4200' }));
 
 // MongoDB Connection
 mongoose.connect(env.MONGODB_URI as string)
@@ -30,6 +31,7 @@ mongoose.connect(env.MONGODB_URI as string)
   .catch((err) => console.error('Error connecting to MongoDB', err));
 
 app.use('/api/users', userRoutes);
+app.use('/api/users/password-reset', passwordResetRoutes);
 app.use('/api/trades', tradeRoutes);
 
 const PORT = env.PORT || 5001;

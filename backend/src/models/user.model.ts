@@ -8,6 +8,8 @@ export interface IUser extends Document {
   cash: number;
   deposit: number;
   admin: boolean;
+  resetPasswordToken?: string;
+  resetPasswordExpires?: Date;
 }
 
 const UserSchema = new Schema<IUser>({
@@ -17,7 +19,9 @@ const UserSchema = new Schema<IUser>({
   portfolio_total: { type: Number, default: 0 },
   cash: { type: Number, default: 0 },
   deposit: { type: Number, default: 0, required: true },
-  admin: { type: Boolean, default: false }
+  admin: { type: Boolean, default: false },
+  resetPasswordToken: { type: String },
+  resetPasswordExpires: { type: Date }
 });
 
 export const User = mongoose.model<IUser>('User', UserSchema);

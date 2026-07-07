@@ -37,4 +37,12 @@ export class UserService {
     return this.http.post<{ user: User; token: string }>(`${this.apiUrl}/login`, { email, password });
   }
 
+  forgotPassword(email: string): Observable<{ message: string }> {
+    return this.http.post<{ message: string }>(`${this.apiUrl}/password-reset/forgot-password`, { email });
+  }
+
+  resetPassword(token: string, password: string): Observable<{ message: string }> {
+    return this.http.post<{ message: string }>(`${this.apiUrl}/password-reset/reset-password`, { token, password });
+  }
+
 }
