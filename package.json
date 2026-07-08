@@ -10,7 +10,8 @@
     "serve:ssr:crypto-trader": "node dist/crypto-trader/server/server.mjs",
     "dev": "concurrently \"npm run start\" \"npm run backend:dev\"",
     "start:all": "concurrently \"npm run start\" \"npm run backend:dev\"",
-    "backend:dev": "cd backend && npm run dev"
+    "backend:dev": "cd backend && npm run dev",
+    "backend:test": "cd backend && npm run test"
   },
   "private": true,
   "dependencies": {

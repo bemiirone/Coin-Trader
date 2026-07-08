@@ -48,3 +48,4 @@ user-api/node_modules
 update.js
 backend/node_modules
 spec.md
+WEBSOCKET_ARCHITECTURE.md

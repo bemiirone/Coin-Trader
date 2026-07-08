@@ -17,7 +17,7 @@ import { selectSelectedUser } from '../../users/store/user.selectors';
   templateUrl: './trade-list.component.html',
   styleUrl: './trade-list.component.scss'
 })
-export class TradeListComponent implements OnDestroy {
+export class TradeListComponent  {
   @Input() trades: Trade[] | null = [];
   @Input()user: User | null = {} as User;
   loading$: Observable<boolean> = of(false);
@@ -47,6 +47,4 @@ export class TradeListComponent implements OnDestroy {
     });
   }
 
-  ngOnDestroy(): void {
-  }
 }

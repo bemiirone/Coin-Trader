@@ -7,8 +7,10 @@
     "types": [
       "jasmine",
       "node"
-    ]
+    ],
+    "skipLibCheck": true
   },
+  "files": [],
   "include": [
     "src/**/*.spec.ts",
     "src/**/*.d.ts"

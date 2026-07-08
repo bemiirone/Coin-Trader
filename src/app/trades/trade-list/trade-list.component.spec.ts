@@ -1,8 +1,9 @@
+/// <reference types="jasmine" />
+
 import { TestBed, ComponentFixture } from '@angular/core/testing';
 import { TradeListComponent } from './trade-list.component';
 import { provideMockStore, MockStore } from '@ngrx/store/testing';
 import { BsModalService} from 'ngx-bootstrap/modal';
-import { of } from 'rxjs';
 import { Trade } from '../trades.model';
 import { User } from '../../users/user.model';
 import { selectCoinLoading, selectCoinError } from '../../coins/store/coins.selectors';
@@ -119,14 +120,6 @@ describe('TradeListComponent', () => {
     component.openModal();
 
     expect(consoleErrorSpy).toHaveBeenCalledWith('User data not available!');
-  });
-
-  it('should unsubscribe from store on ngOnDestroy', () => {
-    // Use a spy to check if unsubscribe is called
-    const unsubscribeSpy = spyOn(store, 'select').and.returnValue(of(null));
-
-    component.ngOnDestroy();
-    expect(unsubscribeSpy).toHaveBeenCalled();
   });
 
   it('should correctly display trade details in the table', () => {
